@@ -1,0 +1,5 @@
+*.pdf
+.midpoints.tex
+instrumentation-cheat-sheet.*
+!instrumentation-cheat-sheet.bib
+!instrumentation-cheat-sheet.tex

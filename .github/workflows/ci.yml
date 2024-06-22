@@ -1,0 +1,45 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  CI:
+    runs-on: macos-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Install TeX Live
+      run: |
+        curl --location --remote-name --show-error --silent http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+        tar -xf install-tl-unx.tar.gz
+        cd install-tl-20*
+        echo -e 'selected_scheme scheme-basic\nTEXDIR /usr/local/texlive\noption_doc 0\noption_src 0' > texlive.profile
+        sudo ./install-tl -no-gui -profile=texlive.profile
+        echo /usr/local/texlive/bin/universal-darwin >> $GITHUB_PATH
+
+    - name: Install TeX packages
+      run: >
+        sudo tlmgr install
+        biber
+        biblatex
+        biblatex-chicago
+        csquotes
+        fontspec
+        libertinus-fonts
+        pgf
+
+    - name: Install font
+      run: sudo ln -s /usr/local/texlive/texmf-dist/fonts/opentype/public/libertinus-fonts /Library/Fonts
+
+    - name: Install LilyPond
+      run: brew install lilypond
+
+    - name: Create cheat sheet
+      run: make
+
+    - name: Archive PDF
+      uses: actions/upload-artifact@main
+      with:
+        name: artifacts
+        path: instrumentation-cheat-sheet.pdf

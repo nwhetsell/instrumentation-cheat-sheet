@@ -1,0 +1,553 @@
+\documentclass{article}
+
+\usepackage[american]{babel}
+\usepackage{csquotes}
+
+\usepackage[
+  landscape,
+  margin=0.5in
+]{geometry}
+\setlength\parindent{0sp}
+\setlength\parskip{0.25cm}
+
+\usepackage[
+  backend=biber,
+  isbn=false,
+]{biblatex-chicago}
+\bibliography{instrumentation-cheat-sheet}
+
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{etoolbox}
+\usepackage{multicol}
+
+\usepackage[no-config]{fontspec}
+\setmainfont{Libertinus Sans}[Numbers=Proportional]
+\newfontfamily\symbolFont{Libertinus Serif}
+
+\usepackage{newunicodechar}
+\newunicodechar{♯}{{\symbolFont\char`\♯}}
+\newunicodechar{♭}{\hspace{-0.15ex}{\symbolFont\char`\♭}\hspace{-0.15ex}}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+
+\definecolor{primary-ambitus-color}{gray}{0.55}
+\definecolor{secondary-ambitus-color}{gray}{0.72}
+\definecolor{ambitus-bracket-color}{gray}{0.5}
+\definecolor{white-note-guide-color}{gray}{0.97}
+\definecolor{black-key-color}{gray}{0.3}
+\definecolor{black-note-guide-color}{gray}{0.93}
+\definecolor{c-label-color}{gray}{0.7}
+
+\tikzset{instrument label/.style={}}
+\tikzset{annotation/.style={font=\itshape, text badly ragged}}
+
+% Change this to 2 for Ableton Live octave numbers.
+\def\octaveOffset{1}
+
+% Useful for entering ambitus
+\newtoggle{showMIDINoteNumbers}
+% \toggletrue{showMIDINoteNumbers}
+
+\usepackage[hidelinks]{hyperref}
+
+\makeatletter
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                     {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                     {2.3ex \@plus.2ex}%
+                                     {\normalfont\normalsize\bfseries}}%
+\makeatother
+
+\begin{document}
+\pagenumbering{gobble}
+
+\section*{Instrumentation Cheat Sheet}
+
+\def\totalNoteCount{90}
+\pgfmathsetmacro{\blackKeyWidth}{\textwidth / \totalNoteCount}
+
+\begin{tikzpicture}[
+  every node/.style={
+    node font=\tiny,
+    inner sep=0,
+    outer sep=0
+  },
+  x=\blackKeyWidth
+]
+  \def\keyboardHeight{1}
+  \def\noteGuideMinY{2.7}
+  \def\noteGuideMaxY{13.8}
+
+  \path[use as bounding box] (0, -\noteGuideMinY) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideMaxY);
+
+  % Draw white note guides.
+  \def\EFSeparation{0.05}
+  \NewDocumentCommand\AToDGuidePaths{}{
+    % A
+    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+    % B
+    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(3, -\keyboardHeight)
+    % D
+    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+  }
+  \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
+  \filldraw[
+    draw=white-note-guide-color,
+    fill=white-note-guide-color
+  ]
+    (0, 0)
+    \foreach \octave in { 0, ..., \lastOctave } {
+      \AToDGuidePaths
+      % E
+      rectangle ++(1 - \EFSeparation, -\noteGuideMinY) ++(-1 + \EFSeparation,  \noteGuideMinY) ++(0,  \keyboardHeight)
+      rectangle ++(1 - \EFSeparation,  \noteGuideMaxY) ++(-1 + \EFSeparation, -\noteGuideMaxY) ++(1 + \EFSeparation, -\keyboardHeight)
+      % F
+      rectangle ++(1 - \EFSeparation, -\noteGuideMinY) ++(-1 + \EFSeparation,  \noteGuideMinY) ++(0,  \keyboardHeight)
+      rectangle ++(1 - \EFSeparation,  \noteGuideMaxY) ++(-1 + \EFSeparation, -\noteGuideMaxY) ++(2 - \EFSeparation, -\keyboardHeight)
+      % G
+      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+    }
+    \AToDGuidePaths;
+
+  % Draw black note guides.
+  \NewDocumentCommand\BFlatToCSharpGuidePaths{}{
+    % A♯/B♭
+    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(3, -\keyboardHeight)
+    % C♯/D♭
+    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+  }
+  \filldraw[
+    draw=black-note-guide-color,
+    fill=black-note-guide-color
+  ]
+    (1, 0)
+    \foreach \octave in { 0, ..., \lastOctave } {
+      \BFlatToCSharpGuidePaths
+      % D♯/E♭
+      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(3, -\keyboardHeight)
+      % F♯/G♭
+      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+      % G♯/A♭
+      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+    }
+    \BFlatToCSharpGuidePaths;
+
+  % Draw the keyboard.
+  \pgfmathsetmacro{\blackKeyHeight}{0.625 * \keyboardHeight}
+  \pgfmathsetmacro{\whiteToBlackKeyDistance}{\keyboardHeight - \blackKeyHeight}
+  \begin{scope}[
+    draw=black-key-color,
+    fill=black-key-color
+  ]
+    \NewDocumentCommand\AToCSharpKeyPaths{}{
+      ++( 1.5, 0) -- ++(0, \whiteToBlackKeyDistance)
+      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % A♯/B♭
+      ++( 1  , -\keyboardHeight) -- ++(0, \keyboardHeight)
+      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % C♯/D♭
+    }
+    \filldraw (0, 0)
+    \foreach \octave in { 0, ..., \lastOctave } {
+      \AToCSharpKeyPaths
+      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % D♯/E♭
+      ++( 1  , -\keyboardHeight) -- ++(0, \keyboardHeight)
+      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % F♯/G♭
+      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % G♯/A♭
+      ++( 0  , -\keyboardHeight)
+    }
+    \AToCSharpKeyPaths;
+
+    \draw (0, 0) rectangle ++(\totalNoteCount, \keyboardHeight);
+  \end{scope}
+
+  % Label all C notes.
+  \begin{scope}[
+    anchor=north west,
+    minimum width=\blackKeyWidth,
+    text=c-label-color
+  ]
+    \foreach \noteNumber in { 24, 36, ..., 108 } {
+      \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
+      \path
+        (\noteNumber - 21, \keyboardHeight)
+        node[yshift=-0.75ex] { C\octave }
+        ++(0, \noteGuideMaxY)
+        node { C\octave };
+    }
+  \end{scope}
+
+  % Add MIDI note numbers.
+  \iftoggle{showMIDINoteNumbers}{
+    \begin{scope}[
+      anchor=mid west,
+      minimum width=\blackKeyWidth,
+    ]
+      \foreach \noteNumber in { 21, ..., 110 } {
+        \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
+        \pgfmathparse{
+          \pitchNumber ==  1 ||
+          \pitchNumber ==  3 ||
+          \pitchNumber ==  6 ||
+          \pitchNumber ==  8 ||
+          \pitchNumber == 10
+        }
+        \ifnum\pgfmathresult>0\relax
+          \def\noteNumberColor{white}
+        \else
+          \def\noteNumberColor{black}
+        \fi
+        \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5*\keyboardHeight) { \noteNumber };
+      }
+    \end{scope}
+  }{}
+
+  \def\ambitusBarHeight{0.155}
+  \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
+  \gdef\ambitusBarOffset{0}
+  \def\ambitusBarSeparation{0.45}
+
+  \ExplSyntaxOn
+
+  \seq_const_from_clist:Nn \note_names { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
+  \NewDocumentCommand { \noteName } { m }
+    {
+      \seq_item:Nn \note_names { \int_mod:nn { #1 } { 12 } + 1 }
+      \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
+    }
+
+  \def\lowNodeName{}
+  \def\highNodeName{}
+
+  \NewDocumentCommand\drawAmbitus{s m o m o m o o}{
+    \IfBooleanF{#1}{
+      \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1 + \ambitusBarSeparation}
+      \xdef\ambitusBarOffset{\ambitusBarOffset}
+    }
+    \pgfmathsetmacro{\bottomNote}{#4 - 21}
+    \def\noteCount{\numexpr #6 - #4 + 1}
+    \IfValueT{#7}{
+      \tl_set:Nn \l_tmpa_tl { #7 }
+      \tl_replace_all:Nnn \l_tmpa_tl { ♭ } { -flat }
+      \tl_remove_all:Nn \l_tmpa_tl { . }
+      \tl_remove_all:Nn \l_tmpa_tl { ( }
+      \tl_remove_all:Nn \l_tmpa_tl { ) }
+      \edef\lowNodeName{\l_tmpa_tl-low}
+      \edef\highNodeName{\l_tmpa_tl-high}
+    }
+
+    \begin{scope}[node~ distance=0]
+      \path (\bottomNote, \keyboardHeight + \ambitusBarOffset * \ambitusBarHeight)
+        node[anchor=south~ west, text=white] (\lowNodeName) {
+          \IfValueTF{#3}{#3}{\noteName{#4}}
+        }
+        node[base~ left=of~ \lowNodeName, xshift=\labelOffset, instrument~ label] { \IfValueT{#7}{#7} }
+        [fill=#2, rounded~ corners=0.5bp] rectangle ++(\noteCount, \ambitusBarHeight)
+        node[anchor=north~ east, text=white] (\highNodeName) {
+          \ifnum \noteCount>1\relax
+            \IfValueTF{#5}{#5}{\noteName{#6}}
+          \fi
+        };
+    \end{scope}
+  }
+
+  \ExplSyntaxOff
+
+  \NewDocumentCommand\drawPrimaryAmbitus{s o m o m o}{
+    \IfBooleanTF{#1}
+      {\drawAmbitus*{primary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
+      {\drawAmbitus{primary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
+  }
+  \NewDocumentCommand\drawSecondaryAmbitus{s o m o m o}{
+    \IfBooleanTF{#1}
+      {\drawAmbitus*{secondary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
+      {\drawAmbitus{secondary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
+  }
+
+  \NewDocumentEnvironment{instrumentFamily}{}{
+    \def\defaultInstrumentFamilySeparation{1.5}
+    \gdef\instrumentFamilySeparation{\defaultInstrumentFamilySeparation}
+  }{
+    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + \instrumentFamilySeparation}
+    \xdef\ambitusBarOffset{\ambitusBarOffset}
+
+    \gdef\instrumentFamilySeparation{\defaultInstrumentFamilySeparation}
+  }
+
+  \NewDocumentEnvironment{bracketedAmbitus}{m o}{
+    \def\ambitusBarSeparation{0.25}
+
+    \newtoggle{didRun}
+
+    \NewCommandCopy\drawAmbitusOriginal\drawAmbitus
+    \RenewDocumentCommand\drawAmbitus{s m o m o m o}{
+      \iftoggle{didRun}{
+        \def\lowNodeName{}
+        \def\highNodeName{high}
+      }{
+        \def\lowNodeName{low}
+        \def\highNodeName{}
+        \toggletrue{didRun}
+      }
+
+      \IfBooleanTF{##1}
+        {\drawAmbitusOriginal*{##2}[##3]{##4}[##5]{##6}[##7]}
+        {\drawAmbitusOriginal{##2}[##3]{##4}[##5]{##6}[##7]}
+    }
+
+    \begin{scope}[name prefix = #1-]
+  }{
+    \end{scope}
+
+    \path[draw=ambitus-bracket-color]
+      let \p1=(#1-low), \p2=(#1-high) in
+      (\x1 - 0.25 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
+      (\x1 - 0.75 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
+      (\x1 - 0.75 * \blackKeyWidth, \y2 + 0.5 * \ambitusBarHeight cm)
+      node[midway, anchor=mid east, xshift=\labelOffset] (#1-midpoint) { #1 \IfValueT{#2}{#2} } --
+      (\x1 - 0.25 * \blackKeyWidth, \y2 + 0.5 * \ambitusBarHeight cm)
+      % let \p3=(#1-midpoint) in
+      % (\x1 - 0.75 * \blackKeyWidth, \y3) -- (\x1 - \blackKeyWidth, \y3)
+      ;
+
+    \RenewCommandCopy\drawAmbitus\drawAmbitusOriginal
+
+    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1}
+    \xdef\ambitusBarOffset{\ambitusBarOffset}
+
+    \gdef\instrumentFamilySeparation{1}
+  }
+
+  \NewDocumentEnvironment{compactAmbitus}{}{\def\ambitusBarSeparation{0}}{}
+
+  \begin{scope}[
+    minimum height=\ambitusBarHeight cm,
+    minimum width=\blackKeyWidth
+  ]
+    \begin{instrumentFamily}
+      \begin{bracketedAmbitus}{Contrabass}
+        \begin{compactAmbitus}
+          \drawSecondaryAmbitus{24}{28}
+          \drawSecondaryAmbitus*{40}{52}
+          \drawPrimaryAmbitus*{28}{40}
+          \drawSecondaryAmbitus{45}{57}
+          \drawPrimaryAmbitus*{33}{45}
+          \drawSecondaryAmbitus{50}{62}
+          \drawPrimaryAmbitus*{38}{50}
+          \drawSecondaryAmbitus{54}{67}
+          \drawPrimaryAmbitus*{43}{55}
+        \end{compactAmbitus}
+        \drawPrimaryAmbitus{40}{40}[Cb. harmonics]
+        \drawPrimaryAmbitus*{45}{45}
+        \drawPrimaryAmbitus*{47}{47}
+        \drawPrimaryAmbitus*{50}{50}
+        \drawSecondaryAmbitus*{84}{89}
+        \drawPrimaryAmbitus*{52}{84}
+      \end{bracketedAmbitus}
+
+      \begin{bracketedAmbitus}{Cello}
+        \begin{compactAmbitus}
+          \drawSecondaryAmbitus{36}{60}
+          \drawPrimaryAmbitus*{36}{53}
+          \drawSecondaryAmbitus{60}{67}
+          \drawPrimaryAmbitus*{43}{60}
+          \drawSecondaryAmbitus{67}{74}
+          \drawPrimaryAmbitus*{50}{67}
+          \drawSecondaryAmbitus{81}{82}
+          \drawPrimaryAmbitus*{57}{81}
+        \end{compactAmbitus}
+        \drawPrimaryAmbitus{48}{48}[Vcl. harmonics]
+        \drawPrimaryAmbitus*{55}{55}
+        \drawSecondaryAmbitus*{89}{95}
+        \drawPrimaryAmbitus*{60}{89}
+
+        \path
+          let \p1=(Vcl harmonics-high) in
+          node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth]
+          at (96.5 - 21, \y1 + 0.5*\ambitusBarHeight cm) {
+            On all stringed instruments, higher harmonics are possible but not always available in sample sets.
+          };
+      \end{bracketedAmbitus}
+
+      \begin{bracketedAmbitus}{Viola}
+        \begin{compactAmbitus}
+          \drawPrimaryAmbitus{48}{72}
+          \drawPrimaryAmbitus{55}{79}
+          \drawPrimaryAmbitus{62}{86}
+          \drawPrimaryAmbitus{69}{93}
+        \end{compactAmbitus}
+        \drawPrimaryAmbitus{60}{60}[Vla. harmonics]
+        \drawPrimaryAmbitus*{67}{67}
+        \drawSecondaryAmbitus*{100}{101}
+        \drawPrimaryAmbitus*{72}{100}
+      \end{bracketedAmbitus}
+
+      \begin{bracketedAmbitus}{Violin}
+        \begin{compactAmbitus}
+          \drawPrimaryAmbitus{55}{79}
+          \drawPrimaryAmbitus{62}{86}
+          \drawPrimaryAmbitus{69}{93}
+          \drawPrimaryAmbitus{76}{100}
+        \end{compactAmbitus}
+        \drawPrimaryAmbitus{67}{67}[Vln. harmonics]
+        \drawPrimaryAmbitus*{74}{74}
+        \drawSecondaryAmbitus*{108}{110}
+        \drawPrimaryAmbitus*{79}{108}
+      \end{bracketedAmbitus}
+    \end{instrumentFamily}
+
+    \begin{instrumentFamily}
+      \drawPrimaryAmbitus{21}{108}[Piano]
+      \drawPrimaryAmbitus[C♭0]{23}[G♯7]{104}[Harp]
+      \drawSecondaryAmbitus{36}{48}[Marimba]
+      \drawPrimaryAmbitus*{48}{96}
+      \drawSecondaryAmbitus{58}{65}[Xylophone]
+      \drawPrimaryAmbitus*{65}{108}
+      \drawSecondaryAmbitus{48}{53}[Vibraphone]
+      \drawPrimaryAmbitus*{53}{89}
+      \drawPrimaryAmbitus{60}{108}[Celesta]
+      \drawSecondaryAmbitus{72}{79}[Glockenspiel]
+      \drawPrimaryAmbitus*{79}{108}
+      \drawPrimaryAmbitus{84}{108}[Crotales]
+      \begin{bracketedAmbitus}{Timpani}
+        \begin{compactAmbitus}
+          \drawSecondaryAmbitus{36}{45}
+          \drawPrimaryAmbitus{41}{48}
+          \drawPrimaryAmbitus{46}{53}
+          \drawPrimaryAmbitus{50}{57}
+          \drawSecondaryAmbitus{53}{61}
+        \end{compactAmbitus}
+      \end{bracketedAmbitus}
+    \end{instrumentFamily}
+
+    \begin{instrumentFamily}
+      \drawPrimaryAmbitus{22}{63}[B♭ Tuba]
+      \drawPrimaryAmbitus{26}{64}[C Tuba]
+      \drawPrimaryAmbitus{34}{77}[Bass Trombone]
+      \drawPrimaryAmbitus{40}{77}[Trombone]
+      \drawSecondaryAmbitus{51}{52}[B♭ Trumpet]
+      \drawPrimaryAmbitus*{52}{82}
+      \drawSecondaryAmbitus{53}{54}[C Trumpet]
+      \drawPrimaryAmbitus*{54}{84}
+      \drawPrimaryAmbitus{31}{77}[French Horn]
+
+      \path
+        let \p1=(C Trumpet-low) in
+        node[annotation, anchor=north west, text width=7.5*\blackKeyWidth]
+        at (0, \y1) {
+          Lower pedal tones are possible on brass instruments.
+        };
+    \end{instrumentFamily}
+
+    \begin{instrumentFamily}
+      \drawSecondaryAmbitus{36}{37}[Baritone Saxophone]
+      \drawPrimaryAmbitus*{37}{75}
+      \drawPrimaryAmbitus{44}{82}[Tenor Saxophone]
+      \drawPrimaryAmbitus{49}{87}[Alto Saxophone]
+      \drawPrimaryAmbitus{56}{94}[Soprano Saxophone]
+
+      \path
+        let \p1=(Soprano Saxophone-high) in
+        node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth]
+        at (\x1 + \blackKeyWidth, \y1 + \ambitusBarHeight cm) {
+          Higher notes are possible on wind instruments, but increasingly difficult to sound and not always available in sample sets.
+        };
+    \end{instrumentFamily}
+
+    \begin{instrumentFamily}
+      \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
+      \drawSecondaryAmbitus{21}{22}[Contrabassoon]
+      \tikzset{instrument label/.style={}}
+      \drawPrimaryAmbitus*{22}{60}
+      \drawSecondaryAmbitus{34}{77}[Bassoon]
+      \drawPrimaryAmbitus*{34}{75}
+      \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
+      \drawPrimaryAmbitus{22}{67}[Contrabass Clarinet]
+      \tikzset{instrument label/.style={}}
+      \drawSecondaryAmbitus{34}{83}[Bass Clarinet]
+      \drawPrimaryAmbitus*{34}{79}
+      \drawPrimaryAmbitus{50}{91}[B♭ Clarinet]
+      \drawPrimaryAmbitus{55}{95}[E♭ Clarinet]
+      \drawPrimaryAmbitus{52}{83}[English Horn]
+      \drawSecondaryAmbitus{58}{96}
+      \drawPrimaryAmbitus*{58}{91}[Oboe]
+      \drawPrimaryAmbitus{55}{88}[Alto Flute]
+      \drawSecondaryAmbitus{59}{60}[Flute]
+      \drawPrimaryAmbitus*{60}{98}
+      \drawPrimaryAmbitus{74}{108}[Piccolo]
+    \end{instrumentFamily}
+  \end{scope}
+
+  \input .midpoints
+  \pgfmathsetmacro{\scaleFactor}{(87 * \blackKeyWidth) / (\maxNoteMidpoint - \minNoteMidpoint)}
+  \path
+    let \p1=(Piccolo-high) in
+    (0.5 * \blackKeyWidth - \minNoteMidpoint * \scaleFactor, 0)
+    node[anchor=north west] {
+      \includegraphics[scale=\scaleFactor]{notes-bottom.pdf}
+    }
+    ++(0, \y1 - \ambitusBarHeight cm)
+    node[anchor=south west] {
+      \includegraphics[scale=\scaleFactor, trim={0 108bp 0 0}, clip]{notes-top.pdf}
+    };
+\end{tikzpicture}
+
+\clearpage
+
+\begin{multicols*}{3}
+  \scriptsize
+
+  This cheat sheet uses “Yamaha” octaves (the default in Apple Logic).
+  Subtract 1 for “Roland” octaves (used in Ableton Live).
+  For more information about instruments and orchestration:
+
+  \begin{tabular}{@{}l>{\addfontfeature{Numbers=Monospaced}}r>{\addfontfeature{Numbers=Monospaced}}r@{}} \toprule
+    & \multicolumn{2}{c}{Page No.} \\ \cmidrule(){2-3}
+    Instrument & \citeauthor{adler} & \citeauthor{blatter} \\ \midrule
+    Flute & \notecite[189]{adler} & \notecite[90]{blatter} \\
+    Alto Flute & \notecite[201]{adler} & \notecite[90]{blatter} \\
+    Oboe & \notecite[204]{adler} & \notecite[98]{blatter} \\
+    English Horn & \notecite[209]{adler} & \notecite[98]{blatter} \\
+    Clarinets & \notecite[217]{adler}, \notecite[224]{adler} & \notecite[105]{blatter} \\
+    Bassoon & \notecite[235]{adler} & \notecite[116]{blatter} \\
+    Contrabassoon & \notecite[240]{adler} & \notecite[116]{blatter} \\ \midrule
+    Saxophones & \notecite[231]{adler} & \notecite[126]{blatter} \\ \midrule
+    French Horn & \notecite[337]{adler} & \notecite[148]{blatter} \\
+    Trumpets & \notecite[351]{adler} & \notecite[159]{blatter} \\
+    Trombones & \notecite[368]{adler} & \notecite[169]{blatter} \\
+    Tubas & \notecite[377]{adler} & \notecite[178]{blatter} \\ \midrule
+    Timpani & \notecite[485]{adler} & \notecite[209]{blatter} \\ \midrule
+    Crotales & \notecite[481]{adler} & \notecite[206]{blatter} \\
+    Glockenspiel & \notecite[479]{adler} & \notecite[205]{blatter} \\
+    Celesta & \notecite[528]{adler} & \notecite[206]{blatter} \\
+    Vibraphone & \notecite[477]{adler} & \notecite[205]{blatter} \\
+    Xylophone & \notecite[475]{adler} & \notecite[204]{blatter} \\
+    Marimba & \notecite[476]{adler} & \notecite[204]{blatter} \\ \midrule
+    Harp & \notecite[95]{adler} & \notecite[252]{blatter} \\
+    Piano & \notecite[521]{adler} & \notecite[242]{blatter} \\ \midrule
+    Violin & \notecite[57]{adler} & \notecite[49]{blatter}, \notecite[441]{blatter} \\
+    Viola & \notecite[71]{adler} & \notecite[56]{blatter}, \notecite[442]{blatter} \\
+    Cello & \notecite[81]{adler} & \notecite[60]{blatter}, \notecite[443]{blatter} \\
+    Contrabass & \notecite[89]{adler} & \notecite[67]{blatter}, \notecite[444]{blatter} \\ \bottomrule
+  \end{tabular}
+
+  \nocite{vienna-academy}
+
+  \renewcommand*\bibfont{\scriptsize}
+  \printbibliography
+\end{multicols*}
+
+\end{document}
