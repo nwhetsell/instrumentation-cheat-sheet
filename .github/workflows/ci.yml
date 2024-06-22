@@ -24,6 +24,7 @@ jobs:
         biber
         biblatex
         biblatex-chicago
+        booktabs
         csquotes
         fontspec
         libertinus-fonts
