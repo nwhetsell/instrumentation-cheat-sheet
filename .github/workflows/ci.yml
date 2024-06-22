@@ -26,6 +26,7 @@ jobs:
         biblatex-chicago
         booktabs
         csquotes
+        datetime2
         fontspec
         libertinus-fonts
         newunicodechar
