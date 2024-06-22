@@ -84,7 +84,6 @@
   \path[use as bounding box] (0, -\noteGuideMinY) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideMaxY);
 
   % Draw white note guides.
-  \def\EFSeparation{0.05}
   \NewDocumentCommand\AToDGuidePaths{}{
     % A
     rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
@@ -97,6 +96,7 @@
     rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
   }
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
+  \def\EFSeparation{0.05}
   \filldraw[
     draw=white-note-guide-color,
     fill=white-note-guide-color
@@ -377,8 +377,8 @@
 
         \path
           let \p1=(Vcl harmonics-high) in
-          node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth]
-          at (96.5 - 21, \y1 + 0.5*\ambitusBarHeight cm) {
+          (96.5 - 21, \y1 + 0.5*\ambitusBarHeight cm)
+          node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth] {
             On all stringed instruments, higher harmonics are possible but not always available in sample sets.
           };
       \end{bracketedAmbitus}
@@ -447,8 +447,8 @@
 
       \path
         let \p1=(C Trumpet-low) in
-        node[annotation, anchor=north west, text width=7.5*\blackKeyWidth]
-        at (0, \y1) {
+        (0, \y1)
+        node[annotation, anchor=north west, text width=7.5*\blackKeyWidth] {
           Lower pedal tones are possible on brass instruments.
         };
     \end{instrumentFamily}
@@ -462,8 +462,8 @@
 
       \path
         let \p1=(Soprano Saxophone-high) in
-        node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth]
-        at (\x1 + \blackKeyWidth, \y1 + \ambitusBarHeight cm) {
+        (\x1 + \blackKeyWidth, \y1 + \ambitusBarHeight cm)
+        node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth] {
           Higher notes are possible on wind instruments, but increasingly difficult to sound and not always available in sample sets.
         };
     \end{instrumentFamily}
