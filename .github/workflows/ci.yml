@@ -33,7 +33,7 @@ jobs:
       run: sudo ln -s /usr/local/texlive/texmf-dist/fonts/opentype/public/libertinus-fonts /Library/Fonts
 
     - name: Install LilyPond
-      run: brew install nwhetsell/lilypond/lilypond-unstable
+      run: brew install nwhetsell/lilypond/lilypond-unstable && brew link lilypond-unstable
 
     - name: Create cheat sheet
       run: make
