@@ -28,6 +28,7 @@ jobs:
         csquotes
         fontspec
         libertinus-fonts
+        newunicodechar
         pgf
         xstring
 
