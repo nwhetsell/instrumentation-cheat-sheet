@@ -28,6 +28,7 @@ jobs:
         fontspec
         libertinus-fonts
         pgf
+        xstring
 
     - name: Install font
       run: sudo ln -s /usr/local/texlive/texmf-dist/fonts/opentype/public/libertinus-fonts /Library/Fonts
