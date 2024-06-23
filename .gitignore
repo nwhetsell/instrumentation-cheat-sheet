@@ -1,5 +1,5 @@
 *.pdf
-.midpoints.tex
+.note-metrics.tex
 instrumentation-cheat-sheet.*
 !instrumentation-cheat-sheet.bib
 !instrumentation-cheat-sheet.tex
