@@ -30,6 +30,7 @@ jobs:
         fontspec
         libertinus-fonts
         newunicodechar
+        pdfcrop
         pgf
         xstring
 

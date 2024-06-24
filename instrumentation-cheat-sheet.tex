@@ -83,11 +83,12 @@
 ]
   \def\noteGuideMaxY{13.8}
   \def\keyboardHeight{1}
+  \def\notePadding{0.1}
 
   \input .note-metrics
   \pgfmathsetmacro{\noteImageScaleFactor}{(87 * \blackKeyWidth) / (\maxNoteMidpoint - \minNoteMidpoint)}
 
-  \pgfmathsetmacro{\noteGuideMinY}{\noteImageScaleFactor * (-\minNoteY + 6) * 2.54/72.27}
+  \pgfmathsetmacro{\noteGuideMinY}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \notePadding}
 
   \path[use as bounding box] (0, -\noteGuideMinY) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideMaxY);
 
@@ -502,13 +503,13 @@
 
   \path
     let \p1=(Piccolo-high) in
-    (0.5 * \blackKeyWidth - \minNoteMidpoint * \noteImageScaleFactor, 0)
+    (0.5 * \blackKeyWidth - \minNoteMidpoint * \noteImageScaleFactor, -\notePadding)
     node[anchor=north west] {
       \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
     }
-    ++(0, \y1 - \ambitusBarHeight cm)
+    ++(0, \y1 - \ambitusBarHeight cm + \notePadding cm)
     node[anchor=south west] {
-      \includegraphics[scale=\noteImageScaleFactor, trim={0 108bp 0 0}, clip]{notes-top.pdf}
+      \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
     };
 \end{tikzpicture}
 
