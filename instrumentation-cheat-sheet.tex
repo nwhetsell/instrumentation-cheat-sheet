@@ -184,12 +184,13 @@
     \draw (0, 0) rectangle ++(\totalNoteCount, \keyboardHeight);
   \end{scope}
 
-  % Label all C notes.
+  % Label notes.
   \begin{scope}[
     anchor=north west,
     minimum width=\blackKeyWidth,
     text=c-label-color
   ]
+    % Label Cs.
     \foreach \noteNumber in { 24, 36, ..., 108 } {
       \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
       \path
@@ -198,6 +199,12 @@
         ++(0, \noteGuideMaxY)
         node { C\octave };
     }
+    % Label concert pitch (A above middle C).
+    \path
+      (69 - 21, \keyboardHeight)
+      node[yshift=-0.75ex] { A4 }
+      ++(0, \noteGuideMaxY)
+      node { A4 };
   \end{scope}
 
   % Add MIDI note numbers.
