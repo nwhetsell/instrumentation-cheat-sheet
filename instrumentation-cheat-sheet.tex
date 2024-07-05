@@ -81,14 +81,35 @@
   },
   x=\blackKeyWidth
 ]
-  \def\noteGuideTop{14}
-  \def\keyboardHeight{1}
-  \def\notePadding{0.1}
-
   \input .note-metrics
   \pgfmathsetmacro{\noteImageScaleFactor}{(87 * \blackKeyWidth) / (\maxNoteMidpoint - \minNoteMidpoint)}
 
-  \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \notePadding}
+  \def\ambitusBarHeight{0.155}
+  \def\ambitusBarSeparation{0.45}
+
+  \newdimen\notesTopHeight
+  \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
+
+  % Number of instruments, except strings and timpani
+  \def\separatedInstrumentCount{31}
+
+  \pgfmathsetmacro{\noteGuideTop}{
+    (
+      \separatedInstrumentCount + (\separatedInstrumentCount - 4) * \ambitusBarSeparation +
+      % strings
+      4 * (6 + 0.25) +
+      % timpani
+      5 +
+      % instrument family separation
+      4 * 2
+    ) * \ambitusBarHeight +
+    \notesTopHeight * 2.54/72.27
+  }
+
+  \def\bottomNotePadding{0.1}
+  \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \bottomNotePadding}
+
+  \def\keyboardHeight{1}
 
   \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideTop);
 
@@ -234,10 +255,8 @@
     \end{scope}
   }{}
 
-  \def\ambitusBarHeight{0.155}
   \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
   \gdef\ambitusBarOffset{0}
-  \def\ambitusBarSeparation{0.45}
 
   \ExplSyntaxOn
 
@@ -347,7 +366,7 @@
     \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1}
     \xdef\ambitusBarOffset{\ambitusBarOffset}
 
-    \gdef\instrumentFamilySeparation{1}
+    \gdef\instrumentFamilySeparation{0.5}
   }
 
   \NewDocumentEnvironment{compactAmbitus}{}{\def\ambitusBarSeparation{0}}{}
@@ -514,11 +533,11 @@
 
   \path
     let \p1=(Piccolo-high) in
-    (0.5 * \blackKeyWidth - \minNoteMidpoint * \noteImageScaleFactor, -\notePadding)
+    (0.5 * \blackKeyWidth - \minNoteMidpoint * \noteImageScaleFactor, -\bottomNotePadding)
     node[anchor=north west] {
       \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
     }
-    ++(0, \y1 - \ambitusBarHeight cm + \notePadding cm)
+    ++(0, \y1 - \ambitusBarHeight cm + \bottomNotePadding cm)
     node[anchor=south west] {
       \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
     };
