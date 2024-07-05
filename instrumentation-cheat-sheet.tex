@@ -200,11 +200,13 @@
         node { C\octave };
     }
     % Label concert pitch (A above middle C).
+    \def\noteNumber{69}
+    \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
     \path
-      (69 - 21, \keyboardHeight)
-      node[yshift=-0.75ex] { A4 }
+      (\noteNumber - 21, \keyboardHeight)
+      node[yshift=-0.75ex] { A\octave }
       ++(0, \noteGuideMaxY)
-      node { A4 };
+      node { A\octave };
   \end{scope}
 
   % Add MIDI note numbers.
