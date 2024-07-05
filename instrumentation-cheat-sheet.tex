@@ -81,28 +81,28 @@
   },
   x=\blackKeyWidth
 ]
-  \def\noteGuideMaxY{14}
+  \def\noteGuideTop{14}
   \def\keyboardHeight{1}
   \def\notePadding{0.1}
 
   \input .note-metrics
   \pgfmathsetmacro{\noteImageScaleFactor}{(87 * \blackKeyWidth) / (\maxNoteMidpoint - \minNoteMidpoint)}
 
-  \pgfmathsetmacro{\noteGuideMinY}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \notePadding}
+  \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \notePadding}
 
-  \path[use as bounding box] (0, -\noteGuideMinY) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideMaxY);
+  \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideTop);
 
   % Draw white note guides.
   \NewDocumentCommand\AToDGuidePaths{}{
     % A
-    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
     % B
-    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(3, -\keyboardHeight)
+    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(3, -\keyboardHeight)
     % D
-    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
   }
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
   \def\EFSeparation{0.05}
@@ -114,25 +114,25 @@
     \foreach \octave in { 0, ..., \lastOctave } {
       \AToDGuidePaths
       % E
-      rectangle ++(1 - \EFSeparation, -\noteGuideMinY) ++(-1 + \EFSeparation,  \noteGuideMinY) ++(0,  \keyboardHeight)
-      rectangle ++(1 - \EFSeparation,  \noteGuideMaxY) ++(-1 + \EFSeparation, -\noteGuideMaxY) ++(1 + \EFSeparation, -\keyboardHeight)
+      rectangle ++(1 - \EFSeparation, -\noteGuideBottom) ++(-1 + \EFSeparation,  \noteGuideBottom) ++(0,  \keyboardHeight)
+      rectangle ++(1 - \EFSeparation,  \noteGuideTop) ++(-1 + \EFSeparation, -\noteGuideTop) ++(1 + \EFSeparation, -\keyboardHeight)
       % F
-      rectangle ++(1 - \EFSeparation, -\noteGuideMinY) ++(-1 + \EFSeparation,  \noteGuideMinY) ++(0,  \keyboardHeight)
-      rectangle ++(1 - \EFSeparation,  \noteGuideMaxY) ++(-1 + \EFSeparation, -\noteGuideMaxY) ++(2 - \EFSeparation, -\keyboardHeight)
+      rectangle ++(1 - \EFSeparation, -\noteGuideBottom) ++(-1 + \EFSeparation,  \noteGuideBottom) ++(0,  \keyboardHeight)
+      rectangle ++(1 - \EFSeparation,  \noteGuideTop) ++(-1 + \EFSeparation, -\noteGuideTop) ++(2 - \EFSeparation, -\keyboardHeight)
       % G
-      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
     }
     \AToDGuidePaths;
 
   % Draw black note guides.
   \NewDocumentCommand\BFlatToCSharpGuidePaths{}{
     % A♯/B♭
-    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(3, -\keyboardHeight)
+    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(3, -\keyboardHeight)
     % C♯/D♭
-    rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
   }
   \filldraw[
     draw=black-note-guide-color,
@@ -142,14 +142,14 @@
     \foreach \octave in { 0, ..., \lastOctave } {
       \BFlatToCSharpGuidePaths
       % D♯/E♭
-      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(3, -\keyboardHeight)
+      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(3, -\keyboardHeight)
       % F♯/G♭
-      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
       % G♯/A♭
-      rectangle ++(1, -\noteGuideMinY) ++(-1,  \noteGuideMinY) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideMaxY) ++(-1, -\noteGuideMaxY) ++(2, -\keyboardHeight)
+      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
+      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
     }
     \BFlatToCSharpGuidePaths;
 
@@ -196,7 +196,7 @@
       \path
         (\noteNumber - 21, \keyboardHeight)
         node[yshift=-0.75ex] { C\octave }
-        ++(0, \noteGuideMaxY)
+        ++(0, \noteGuideTop)
         node { C\octave };
     }
     % Label concert pitch (A above middle C).
@@ -205,7 +205,7 @@
     \path
       (\noteNumber - 21, \keyboardHeight)
       node[yshift=-0.75ex] { A\octave }
-      ++(0, \noteGuideMaxY)
+      ++(0, \noteGuideTop)
       node { A\octave };
   \end{scope}
 
