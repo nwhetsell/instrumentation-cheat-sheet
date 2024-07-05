@@ -27,6 +27,7 @@ jobs:
         booktabs
         csquotes
         datetime2
+        datetime2-english
         fontspec
         libertinus-fonts
         newunicodechar
