@@ -91,7 +91,7 @@
   \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
 
   % Number of instruments, except strings and timpani
-  \def\separatedInstrumentCount{31}
+  \def\separatedInstrumentCount{33}
 
   \pgfmathsetmacro{\noteGuideTop}{
     (
@@ -457,6 +457,8 @@
       \drawSecondaryAmbitus{48}{53}[Vibraphone]
       \drawPrimaryAmbitus*{53}{89}
       \drawPrimaryAmbitus{60}{108}[Celesta]
+      \drawSecondaryAmbitus{52}{79}[Tubular Bells]
+      \drawPrimaryAmbitus*{60}{77}
       \drawSecondaryAmbitus{72}{79}[Glockenspiel]
       \drawPrimaryAmbitus*{79}{108}
       \drawPrimaryAmbitus{84}{108}[Crotales]
@@ -519,6 +521,8 @@
       \tikzset{instrument label/.style={}}
       \drawSecondaryAmbitus{34}{83}[Bass Clarinet]
       \drawPrimaryAmbitus*{34}{79}
+      \drawSecondaryAmbitus{42}{84}[E♭ Alto Clarinet]
+      \drawPrimaryAmbitus*{43}{79}
       \drawPrimaryAmbitus{50}{91}[B♭ Clarinet]
       \drawPrimaryAmbitus{55}{95}[E♭ Clarinet]
       \drawPrimaryAmbitus{52}{83}[English Horn]
@@ -543,7 +547,7 @@
     };
 \end{tikzpicture}
 
-\vfil
+\vfill
 \hfill\tiny\DTMsetstyle{iso}\today
 
 \clearpage
@@ -560,6 +564,7 @@
     English Horn & 5th down \\
     E♭ Clarinet & minor~3rd up \\
     B♭ Clarinet & 2nd down \\
+    E♭ Alto Clarinet & minor 6th down \\
     Bass Clarinet & 2nd + octave down \\
     Contrabass Clarinet & 2nd + 2 octaves down \\
     Contrabassoon &  octave down \\ \midrule
@@ -594,7 +599,7 @@
     Alto Flute & \notecite[201]{adler} & \notecite[90]{blatter} \\
     Oboe & \notecite[204]{adler} & \notecite[98]{blatter} \\
     English Horn & \notecite[209]{adler} & \notecite[98]{blatter} \\
-    Clarinets & \notecite[217]{adler}, \notecite[224]{adler} & \notecite[105]{blatter} \\
+    Clarinets & \notecite[217]{adler}, \notecite[224]{adler}, \notecite[228]{adler} & \notecite[105]{blatter} \\
     Bassoon & \notecite[235]{adler} & \notecite[116]{blatter} \\
     Contrabassoon & \notecite[240]{adler} & \notecite[116]{blatter} \\ \midrule
     Saxophones & \notecite[231]{adler} & \notecite[126]{blatter} \\ \midrule
@@ -610,6 +615,7 @@
     Timpani & \notecite[485]{adler} & \notecite[209]{blatter} \\ \midrule
     Crotales & \notecite[481]{adler} & \notecite[206]{blatter} \\
     Glockenspiel & \notecite[479]{adler} & \notecite[205]{blatter} \\
+    Tubular Bells & \notecite[480]{adler} & \notecite[205]{blatter} \\
     Celesta & \notecite[528]{adler} & \notecite[206]{blatter} \\
     Vibraphone & \notecite[477]{adler} & \notecite[205]{blatter} \\
     Xylophone & \notecite[475]{adler} & \notecite[204]{blatter} \\
