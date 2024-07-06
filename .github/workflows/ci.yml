@@ -30,6 +30,7 @@ jobs:
         datetime2-english
         fontspec
         libertinus-fonts
+        multirow
         newunicodechar
         pdfcrop
         pgf
