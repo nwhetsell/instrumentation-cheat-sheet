@@ -595,7 +595,11 @@
 
   For more information about instruments and orchestration:
 
-  \begin{tabular}[t]{@{}l>{\addfontfeature{Numbers={Lining,Monospaced}}}r>{\addfontfeature{Numbers={Lining,Monospaced}}}r>{\addfontfeature{Numbers={Lining,Monospaced}}}r@{}} \toprule
+  \newcolumntype{R}{>{\addfontfeature{Numbers={Lining,Monospaced}}}r}
+
+  % A longtable environment would be preferred, but longtable can’t be used in a
+  % multicols environment.
+  \begin{tabular}[t]{@{}lRRR@{}} \toprule
                         & \multicolumn{3}{c}{Page No.} \\ \cmidrule(){2-4}
     Instrument          & \citeauthor{adler}    & \citeauthor{blatter}    & \citeauthor{forsyth} \\ \midrule
     Piccolo             & \notecite[198]{adler} & \multirow{3}{*}{\notecite[90]{blatter}}  & \notecite[198]{forsyth} \\
@@ -618,7 +622,7 @@
     Timpani             & \notecite[485]{adler} & \notecite[209]{blatter} & \notecite[41]{forsyth} \\ \bottomrule
   \end{tabular}
 
-  \begin{tabular}[t]{@{}l>{\addfontfeature{Numbers={Lining,Monospaced}}}r>{\addfontfeature{Numbers={Lining,Monospaced}}}r>{\addfontfeature{Numbers={Lining,Monospaced}}}r@{}} \toprule
+  \begin{tabular}[t]{@{}lRRR@{}} \toprule
                      & \multicolumn{3}{c}{Page No.} \\ \cmidrule(){2-4}
     Instrument       & \citeauthor{adler}    & \citeauthor{blatter}    & \citeauthor{forsyth} \\ \midrule
     Crotales         & \notecite[481]{adler} & \notecite[206]{blatter} & — \\
