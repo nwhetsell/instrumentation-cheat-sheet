@@ -552,7 +552,7 @@
 
 \clearpage
 
-\begin{multicols*}{3}
+\begin{multicols*}{4}
   \scriptsize
   \addfontfeature{Numbers=OldStyle}
 
@@ -597,47 +597,53 @@
 
   \newcolumntype{R}{>{\addfontfeature{Numbers={Lining,Monospaced}}}r}
 
+  \newlength\instrumentWidth
+  \settowidth{\instrumentWidth}{Contrabass Clarinet}
+
+  \addtolength{\tabcolsep}{-0.4em}
+
   % A longtable environment would be preferred, but longtable can’t be used in a
   % multicols environment.
-  \begin{tabular}[t]{@{}lRRR@{}} \toprule
+  \begin{tabular}[t]{@{}p{\instrumentWidth}RRR@{}} \toprule
                         & \multicolumn{3}{c}{Page No.} \\ \cmidrule(){2-4}
     Instrument          & \citeauthor{adler}    & \citeauthor{blatter}    & \citeauthor{forsyth} \\ \midrule
     Piccolo             & \notecite[198]{adler} & \multirow{3}{*}{\notecite[90]{blatter}}  & \notecite[198]{forsyth} \\
     Flute               & \notecite[189]{adler} &                         & \notecite[182]{forsyth} \\
-    Alto Flute          & \notecite[201]{adler} &                         & \notecite[196]{forsyth} \\
+    Alto Flute          & \notecite[201]{adler} &                         & \notecite[196]{forsyth} \\ \specialrule{\cmidrulewidth}{0.5\aboverulesep}{0.5\belowrulesep}
     Oboe                & \notecite[204]{adler} & \multirow{2}{*}{\notecite[98]{blatter}}  & \notecite[204]{forsyth} \\
-    English Horn        & \notecite[209]{adler} &                         & \notecite[220]{forsyth} \\
+    English Horn        & \notecite[209]{adler} &                         & \notecite[220]{forsyth} \\ \specialrule{\cmidrulewidth}{0.5\aboverulesep}{0.5\belowrulesep}
     E♭ Clarinet         & \notecite[224]{adler} & \multirow{5}{*}{\notecite[105]{blatter}} & \notecite[278]{forsyth} \\
     B♭ Clarinet         & \notecite[217]{adler} &                         & \notecite[251]{forsyth} \\
     E♭ Alto Clarinet    & \notecite[228]{adler} &                         & \notecite[282]{forsyth} \\
     Bass Clarinet       & \notecite[225]{adler} &                         & \notecite[272]{forsyth} \\
-    Contrabass Clarinet & \notecite[230]{adler} &                         & \notecite[286]{forsyth} \\
+    Contrabass Clarinet & \notecite[230]{adler} &                         & \notecite[286]{forsyth} \\ \specialrule{\cmidrulewidth}{0.5\aboverulesep}{0.5\belowrulesep}
     Bassoon             & \notecite[235]{adler} & \multirow{2}{*}{\notecite[116]{blatter}} & \notecite[229]{forsyth} \\
     Contrabassoon       & \notecite[240]{adler} &                         & \notecite[246]{forsyth} \\ \midrule
     Saxophones          & \notecite[231]{adler} & \notecite[126]{blatter} & \notecite[166]{forsyth} \\ \midrule
     French Horn         & \notecite[337]{adler} & \notecite[148]{blatter} & \notecite[109]{forsyth} \\
     Trumpets            & \notecite[357]{adler} & \notecite[159]{blatter} & \notecite[89]{forsyth} \\
     Trombones           & \notecite[368]{adler} & \notecite[169]{blatter} & \notecite[133]{forsyth} \\
-    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter} & \notecite[151]{forsyth} \\ \midrule
-    Timpani             & \notecite[485]{adler} & \notecite[209]{blatter} & \notecite[41]{forsyth} \\ \bottomrule
+    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter} & \notecite[151]{forsyth} \\ \bottomrule
   \end{tabular}
 
-  \begin{tabular}[t]{@{}lRRR@{}} \toprule
-                     & \multicolumn{3}{c}{Page No.} \\ \cmidrule(){2-4}
-    Instrument       & \citeauthor{adler}    & \citeauthor{blatter}    & \citeauthor{forsyth} \\ \midrule
-    Crotales         & \notecite[481]{adler} & \notecite[206]{blatter} & — \\
-    Glockenspiel     & \notecite[479]{adler} & \notecite[205]{blatter} & \notecite[60]{forsyth} \\
-    Tubular Bells    & \notecite[480]{adler} & \notecite[205]{blatter} & \notecite[53]{forsyth} \\
-    Celesta          & \notecite[528]{adler} & \notecite[206]{blatter} & \notecite[64]{forsyth} \\
-    Vibraphone       & \notecite[477]{adler} & \notecite[205]{blatter} & — \\
-    Xylophone        & \notecite[475]{adler} & \notecite[204]{blatter} & \notecite[66]{forsyth} \\
-    Marimba          & \notecite[476]{adler} & \notecite[204]{blatter} & — \\ \midrule
-    Harp             & \notecite[95]{adler}  & \notecite[252]{blatter} & \notecite[461]{forsyth} \\
-    Piano            & \notecite[521]{adler} & \notecite[242]{blatter} & — \\ \midrule
-    Violin           & \notecite[57]{adler}  & \notecite[49]{blatter}, \notecite[441]{blatter} & \notecite[303]{forsyth} \\
-    Viola            & \notecite[71]{adler}  & \notecite[56]{blatter}, \notecite[442]{blatter} & \notecite[381]{forsyth} \\
-    Cello            & \notecite[81]{adler}  & \notecite[60]{blatter}, \notecite[443]{blatter} & \notecite[409]{forsyth} \\
-    Contrabass       & \notecite[89]{adler}  & \notecite[67]{blatter}, \notecite[444]{blatter} & \notecite[436]{forsyth} \\ \bottomrule
+  \emph{(Page numbers of references, cont.)}\\
+  \begin{tabular}[t]{@{}p{\instrumentWidth}RRR@{}} \toprule
+                        & \multicolumn{3}{c}{Page No.} \\ \cmidrule(){2-4}
+    Instrument          & \citeauthor{adler}    & \citeauthor{blatter}    & \citeauthor{forsyth} \\ \midrule
+    Timpani             & \notecite[485]{adler} & \notecite[209]{blatter} & \notecite[41]{forsyth} \\ \midrule
+    Crotales            & \notecite[481]{adler} & \notecite[206]{blatter} & — \\
+    Glockenspiel        & \notecite[479]{adler} & \notecite[205]{blatter} & \notecite[60]{forsyth} \\
+    Tubular Bells       & \notecite[480]{adler} & \notecite[205]{blatter} & \notecite[53]{forsyth} \\
+    Celesta             & \notecite[528]{adler} & \notecite[206]{blatter} & \notecite[64]{forsyth} \\
+    Vibraphone          & \notecite[477]{adler} & \notecite[205]{blatter} & — \\
+    Xylophone           & \notecite[475]{adler} & \notecite[204]{blatter} & \notecite[66]{forsyth} \\
+    Marimba             & \notecite[476]{adler} & \notecite[204]{blatter} & — \\ \midrule
+    Harp                & \notecite[95]{adler}  & \notecite[252]{blatter} & \notecite[461]{forsyth} \\
+    Piano               & \notecite[521]{adler} & \notecite[242]{blatter} & — \\ \midrule
+    Violin              & \notecite[57]{adler}  & \notecite[49]{blatter}, \notecite[441]{blatter} & \notecite[303]{forsyth} \\
+    Viola               & \notecite[71]{adler}  & \notecite[56]{blatter}, \notecite[442]{blatter} & \notecite[381]{forsyth} \\
+    Cello               & \notecite[81]{adler}  & \notecite[60]{blatter}, \notecite[443]{blatter} & \notecite[409]{forsyth} \\
+    Contrabass          & \notecite[89]{adler}  & \notecite[67]{blatter}, \notecite[444]{blatter} & \notecite[436]{forsyth} \\ \bottomrule
   \end{tabular}
 
   \nocite{vienna-academy}
