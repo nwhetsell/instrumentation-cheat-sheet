@@ -5,10 +5,12 @@
 
 \usepackage[
   landscape,
-  margin=0.5in
+  margin=0.5in,
+  footskip=0.25in
 ]{geometry}
-\setlength\parindent{0sp}
-\setlength\parskip{0.25cm}
+\parindent=0sp
+\parskip=0.25cm
+\topskip=1sp
 
 \usepackage[
   backend=biber,
@@ -19,6 +21,7 @@
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{datetime2}
+\usepackage{fancyhdr}
 \usepackage{multicol}
 \usepackage{multirow}
 
@@ -67,6 +70,11 @@
 
 \begin{document}
 \pagenumbering{gobble}
+\pagestyle{fancyplain}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0sp}
+\renewcommand{\footrulewidth}{0sp}
+\rfoot{\fancyplain{}{\tiny\DTMsetstyle{iso}\today}}
 
 \section*{Instrumentation Cheat Sheet}
 
@@ -91,7 +99,7 @@
   \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
 
   % Number of instruments, except strings and timpani
-  \def\separatedInstrumentCount{33}
+  \def\separatedInstrumentCount{35}
 
   \pgfmathsetmacro{\noteGuideTop}{
     (
@@ -476,6 +484,8 @@
     \begin{instrumentFamily}
       \drawPrimaryAmbitus{22}{63}[B♭ Tuba]
       \drawPrimaryAmbitus{26}{64}[C Tuba]
+      \drawPrimaryAmbitus{35}{77}[F Wagner Tuba]
+      \drawPrimaryAmbitus{40}{77}[B♭ Wagner Tuba]
       \drawPrimaryAmbitus{34}{77}[Bass Trombone]
       \drawPrimaryAmbitus{40}{77}[Trombone]
       \drawSecondaryAmbitus{51}{52}[B♭ Trumpet]
@@ -547,9 +557,6 @@
     };
 \end{tikzpicture}
 
-\vfill
-\hfill\tiny\DTMsetstyle{iso}\today
-
 \clearpage
 
 \begin{multicols*}{4}
@@ -576,6 +583,8 @@
                             5th down, treble \& new bass clef \\
                             4th up, old bass clef
                           \end{tabular} \\
+    F Wagner Tuba       & 5th down \\
+    B♭ Wagner Tuba      & 2nd down \\
     B♭ Piccolo Trumpet  & minor 7th up \\
     B♭ Trumpet          & 2nd down \\ \midrule
     Crotales            & 2 octaves up \\
@@ -622,13 +631,17 @@
     French Horn         & \notecite[337]{adler} & \notecite[148]{blatter} & \notecite[109]{forsyth} \\
     Trumpets            & \notecite[357]{adler} & \notecite[159]{blatter} & \notecite[89]{forsyth} \\
     Trombones           & \notecite[368]{adler} & \notecite[169]{blatter} & \notecite[133]{forsyth} \\
-    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter} & \notecite[151]{forsyth} \\ \bottomrule
+    Wagner Tubas        & —                     & \notecite[148]{blatter} & \notecite[153]{forsyth} \\ \bottomrule
   \end{tabular}
+
+  % \vfill\null
+  \columnbreak
 
   \emph{(Page numbers of references, cont.)}\\
   \begin{tabular}[t]{@{}p{\instrumentWidth}RRR@{}} \toprule
                         & \multicolumn{3}{c}{Page No.} \\ \cmidrule(){2-4}
     Instrument          & \citeauthor{adler}    & \citeauthor{blatter}    & \citeauthor{forsyth} \\ \midrule
+    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter} & \notecite[151]{forsyth} \\ \midrule
     Timpani             & \notecite[485]{adler} & \notecite[209]{blatter} & \notecite[41]{forsyth} \\ \midrule
     Crotales            & \notecite[481]{adler} & \notecite[206]{blatter} & — \\
     Glockenspiel        & \notecite[479]{adler} & \notecite[205]{blatter} & \notecite[60]{forsyth} \\
