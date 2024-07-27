@@ -7,13 +7,13 @@ To create it yourself, you need [TeX Live](https://tug.org/texlive/), [biber](ht
 On macOS, the easiest way to install these is probably using [Homebrew](https://brew.sh):
 
 ```sh
-brew install texlive nwhetsell/biber/biber@2.19 nwhetsell/lilypond/lilypond-unstable
+brew install biber texlive nwhetsell/lilypond/lilypond-unstable
 ```
 
-After either adding the `biber` and `lilypond` executables to your `PATH` or linking them—
+After either adding the `lilypond` executable to your `PATH` or linking it—
 
 ```sh
-brew link biber@2.19 lilypond-unstable
+brew link lilypond-unstable
 ```
 
 —you should be able to create the cheat sheet by running:
