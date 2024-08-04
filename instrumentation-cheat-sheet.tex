@@ -386,38 +386,38 @@
     \begin{instrumentFamily}
       \begin{bracketedAmbitus}{Contrabass}
         \begin{compactAmbitus}
-          \drawSecondaryAmbitus{24}{28}
-          \drawSecondaryAmbitus*{40}{52}
+          \drawSecondaryAmbitus{24}[]{28}
+          \drawSecondaryAmbitus*[]{40}{52}
           \drawPrimaryAmbitus*{28}{40}
-          \drawSecondaryAmbitus{45}{57}
+          \drawSecondaryAmbitus[]{45}{57}
           \drawPrimaryAmbitus*{33}{45}
-          \drawSecondaryAmbitus{50}{62}
+          \drawSecondaryAmbitus[]{50}{62}
           \drawPrimaryAmbitus*{38}{50}
-          \drawSecondaryAmbitus{54}{67}
+          \drawSecondaryAmbitus[]{55}{67}
           \drawPrimaryAmbitus*{43}{55}
         \end{compactAmbitus}
         \drawPrimaryAmbitus{40}{40}[Cb. harmonics]
         \drawPrimaryAmbitus*{45}{45}
         \drawPrimaryAmbitus*{47}{47}
         \drawPrimaryAmbitus*{50}{50}
-        \drawSecondaryAmbitus*{84}{89}
+        \drawSecondaryAmbitus*[]{84}{89}
         \drawPrimaryAmbitus*{52}{84}
       \end{bracketedAmbitus}
 
       \begin{bracketedAmbitus}{Cello}
         \begin{compactAmbitus}
-          \drawSecondaryAmbitus{36}{60}
+          \drawSecondaryAmbitus[]{36}{60}
           \drawPrimaryAmbitus*{36}{53}
-          \drawSecondaryAmbitus{60}{67}
+          \drawSecondaryAmbitus[]{60}{67}
           \drawPrimaryAmbitus*{43}{60}
-          \drawSecondaryAmbitus{67}{74}
+          \drawSecondaryAmbitus[]{67}{74}
           \drawPrimaryAmbitus*{50}{67}
-          \drawSecondaryAmbitus{81}{82}
+          \drawSecondaryAmbitus[]{81}{82}
           \drawPrimaryAmbitus*{57}{81}
         \end{compactAmbitus}
         \drawPrimaryAmbitus{48}{48}[Vcl. harmonics]
         \drawPrimaryAmbitus*{55}{55}
-        \drawSecondaryAmbitus*{89}{95}
+        \drawSecondaryAmbitus*[]{89}{95}
         \drawPrimaryAmbitus*{60}{89}
 
         \path
@@ -437,7 +437,7 @@
         \end{compactAmbitus}
         \drawPrimaryAmbitus{60}{60}[Vla. harmonics]
         \drawPrimaryAmbitus*{67}{67}
-        \drawSecondaryAmbitus*{100}{101}
+        \drawSecondaryAmbitus*[]{100}{101}
         \drawPrimaryAmbitus*{72}{100}
       \end{bracketedAmbitus}
 
@@ -450,7 +450,7 @@
         \end{compactAmbitus}
         \drawPrimaryAmbitus{67}{67}[Vln. harmonics]
         \drawPrimaryAmbitus*{74}{74}
-        \drawSecondaryAmbitus*{108}{110}
+        \drawSecondaryAmbitus*[]{108}{110}
         \drawPrimaryAmbitus*{79}{108}
       \end{bracketedAmbitus}
     \end{instrumentFamily}
@@ -458,16 +458,16 @@
     \begin{instrumentFamily}
       \drawPrimaryAmbitus{21}{108}[Piano]
       \drawPrimaryAmbitus[C♭0]{23}[G♯7]{104}[Harp]
-      \drawSecondaryAmbitus{36}{48}[Marimba]
+      \drawSecondaryAmbitus{36}[]{48}[Marimba]
       \drawPrimaryAmbitus*{48}{96}
-      \drawSecondaryAmbitus{58}{65}[Xylophone]
+      \drawSecondaryAmbitus{58}[]{65}[Xylophone]
       \drawPrimaryAmbitus*{65}{108}
-      \drawSecondaryAmbitus{48}{53}[Vibraphone]
+      \drawSecondaryAmbitus{48}[]{53}[Vibraphone]
       \drawPrimaryAmbitus*{53}{89}
       \drawPrimaryAmbitus{60}{108}[Celesta]
       \drawSecondaryAmbitus{52}{79}[Tubular Bells]
       \drawPrimaryAmbitus*{60}{77}
-      \drawSecondaryAmbitus{72}{79}[Glockenspiel]
+      \drawSecondaryAmbitus{72}[]{79}[Glockenspiel]
       \drawPrimaryAmbitus*{79}{108}
       \drawPrimaryAmbitus{84}{108}[Crotales]
       \begin{bracketedAmbitus}{Timpani}
@@ -488,9 +488,9 @@
       \drawPrimaryAmbitus{40}{77}[B♭ Wagner Tuba]
       \drawPrimaryAmbitus{34}{77}[Bass Trombone]
       \drawPrimaryAmbitus{40}{77}[Trombone]
-      \drawSecondaryAmbitus{51}{52}[B♭ Trumpet]
+      \drawSecondaryAmbitus{51}[]{52}[B♭ Trumpet]
       \drawPrimaryAmbitus*{52}{82}
-      \drawSecondaryAmbitus{53}{54}[C Trumpet]
+      \drawSecondaryAmbitus{53}[]{54}[C Trumpet]
       \drawPrimaryAmbitus*{54}{84}
       \drawSecondaryAmbitus{62}{64}[B♭ Piccolo Trumpet]
       \drawPrimaryAmbitus*{64}{91}
@@ -505,7 +505,7 @@
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
-      \drawSecondaryAmbitus{36}{37}[Baritone Saxophone]
+      \drawSecondaryAmbitus{36}[]{37}[Baritone Saxophone]
       \drawPrimaryAmbitus*{37}{75}
       \drawPrimaryAmbitus{44}{82}[Tenor Saxophone]
       \drawPrimaryAmbitus{49}{87}[Alto Saxophone]
@@ -521,25 +521,25 @@
 
     \begin{instrumentFamily}
       \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
-      \drawSecondaryAmbitus{21}{22}[Contrabassoon]
+      \drawSecondaryAmbitus{21}[]{22}[Contrabassoon]
       \tikzset{instrument label/.style={}}
       \drawPrimaryAmbitus*{22}{60}
-      \drawSecondaryAmbitus{34}{77}[Bassoon]
+      \drawSecondaryAmbitus[]{34}{77}[Bassoon]
       \drawPrimaryAmbitus*{34}{75}
       \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
       \drawPrimaryAmbitus{22}{67}[Contrabass Clarinet]
       \tikzset{instrument label/.style={}}
-      \drawSecondaryAmbitus{34}{83}[Bass Clarinet]
+      \drawSecondaryAmbitus[]{34}{83}[Bass Clarinet]
       \drawPrimaryAmbitus*{34}{79}
       \drawSecondaryAmbitus{42}{84}[E♭ Alto Clarinet]
       \drawPrimaryAmbitus*{43}{79}
       \drawPrimaryAmbitus{50}{91}[B♭ Clarinet]
       \drawPrimaryAmbitus{55}{95}[E♭ Clarinet]
       \drawPrimaryAmbitus{52}{83}[English Horn]
-      \drawSecondaryAmbitus{58}{96}
+      \drawSecondaryAmbitus[]{58}{96}
       \drawPrimaryAmbitus*{58}{91}[Oboe]
       \drawPrimaryAmbitus{55}{88}[Alto Flute]
-      \drawSecondaryAmbitus{59}{60}[Flute]
+      \drawSecondaryAmbitus{59}[]{60}[Flute]
       \drawPrimaryAmbitus*{60}{98}
       \drawPrimaryAmbitus{74}{108}[Piccolo]
     \end{instrumentFamily}
