@@ -1,5 +1,6 @@
 *.pdf
 .note-metrics.tex
+.octave-offset.tex
 instrumentation-cheat-sheet.*
 !instrumentation-cheat-sheet.bib
 !instrumentation-cheat-sheet.tex

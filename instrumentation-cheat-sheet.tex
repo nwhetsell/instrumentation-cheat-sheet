@@ -48,8 +48,7 @@
 \tikzset{instrument label/.style={}}
 \tikzset{annotation/.style={font=\itshape, text badly ragged}}
 
-% Change this to 2 for Ableton Live octave numbers.
-\def\octaveOffset{1}
+\input .octave-offset.tex
 
 % Useful for entering ambitus
 \newtoggle{showMIDINoteNumbers}
@@ -594,10 +593,19 @@
     Contrabass          & octave down \\ \bottomrule
   \end{tabular}
 
+
   \section*{Note Names}
 
-  Note names use “Yamaha” octaves (the default in Apple Logic, concert pitch is {\addfontfeature{Numbers=Lining}A4}).
-  Subtract 1 for “Roland” octaves (used in Ableton Live, concert pitch is {\addfontfeature{Numbers=Lining}A3}).
+  \def\yamahaOctaves{“Yamaha” octaves (the default in Apple Logic, concert pitch is {\addfontfeature{Numbers=Lining}A4})}
+  \def\rolandOctaves{“Roland” octaves (used in Ableton Live, concert pitch is {\addfontfeature{Numbers=Lining}A3})}
+
+  Note names have
+  \ifnum\octaveOffset>1\relax
+    \rolandOctaves. Add 1 for \yamahaOctaves.
+  \else
+    \yamahaOctaves. Subtract 1 for \rolandOctaves.
+  \fi
+
 
   \section*{Page Numbers of References}
 
