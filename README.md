@@ -1,9 +1,15 @@
 # Instrumentation Cheat Sheet
 
 This is a “cheat sheet” that shows ranges of musical instruments in a compact format.
-You can download it [here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v7/instrumentation-cheat-sheet.pdf).
+There are two versions:
+one with “Yamaha” octave numbers (the default in Apple Logic, concert pitch is A4),
+and one with “Roland” octave numbers (used in Ableton Live, concert pitch is A3).
+You can download the version with “Yamaha” octave numbers
+[here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v8/instrumentation-cheat-sheet-a4-concert.pdf),
+and the version with “Roland” octave numbers
+[here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v8/instrumentation-cheat-sheet-a3-concert.pdf).
 
-To create it yourself, you need [TeX Live](https://tug.org/texlive/), [biber](https://sourceforge.net/projects/biblatex-biber/), and [LilyPond](https://lilypond.org) v2.25.3 or later (for [`\musicLength`](https://gitlab.com/lilypond/lilypond/-/commit/8c34733e3173649f7e66cbb07ce03225ca33c0e1)).
+To create the cheat sheet yourself, you need [TeX Live](https://tug.org/texlive/), [biber](https://sourceforge.net/projects/biblatex-biber/), and [LilyPond](https://lilypond.org) v2.25.3 or later (for [`\musicLength`](https://gitlab.com/lilypond/lilypond/-/commit/8c34733e3173649f7e66cbb07ce03225ca33c0e1)).
 On macOS, the easiest way to install these is probably using [Homebrew](https://brew.sh):
 
 ```sh
