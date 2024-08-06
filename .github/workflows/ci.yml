@@ -34,6 +34,7 @@ jobs:
         newunicodechar
         pdfcrop
         pgf
+        tex-gyre
         xstring
 
     - name: Install font

@@ -27,6 +27,7 @@
 
 \usepackage[no-config]{fontspec}
 \setmainfont{Libertinus Sans}[Numbers=Proportional]
+\setmonofont{TeX Gyre Cursor}
 \newfontfamily\symbolFont{Libertinus Serif}
 
 \usepackage{newunicodechar}
@@ -73,6 +74,7 @@
 \fancyhf{}
 \renewcommand{\headrulewidth}{0sp}
 \renewcommand{\footrulewidth}{0sp}
+\lfoot{\fancyplain{}{\tiny commit \ttfamily \input|"git rev-parse --short HEAD"}}
 \rfoot{\fancyplain{}{\tiny\DTMsetstyle{iso}\today}}
 
 \section*{Instrumentation Cheat Sheet}
