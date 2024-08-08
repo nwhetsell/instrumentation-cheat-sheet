@@ -18,7 +18,7 @@ instrumentation-cheat-sheet-a3-concert.pdf : instrumentation-cheat-sheet.tex ins
 	for _ in {1..2}; do lualatex -interaction=errorstopmode --shell-escape instrumentation-cheat-sheet.tex; done
 	mv instrumentation-cheat-sheet.pdf instrumentation-cheat-sheet-a3-concert.pdf
 
-$(notes) : %.pdf: %.ly
+$(notes) : %.pdf: %.ly notes.ily
 	lilypond $<
 	pdfcrop $*.pdf
 	mv $*-crop.pdf $*.pdf
