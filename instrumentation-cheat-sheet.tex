@@ -9,7 +9,7 @@
   footskip=0.25in
 ]{geometry}
 \parindent=0sp
-\parskip=0.25cm
+\parskip=0.125cm
 \topskip=1sp
 
 \usepackage[
@@ -79,6 +79,7 @@
 \rfoot{\fancyplain{}{\tiny\DTMsetstyle{iso}\today}}
 
 \section*{Instrumentation Cheat Sheet}
+\vfil
 
 \def\totalNoteCount{90}
 \pgfmathsetmacro{\blackKeyWidth}{\textwidth / \totalNoteCount}
@@ -646,7 +647,8 @@
     French Horn         & \notecite[337]{adler} & \notecite[148]{blatter}                         & \notecite[109]{forsyth} \\
     Trumpets            & \notecite[357]{adler} & \notecite[159]{blatter}                         & \notecite[89]{forsyth}  \\
     Trombones           & \notecite[368]{adler} & \notecite[169]{blatter}                         & \notecite[133]{forsyth} \\
-    Wagner Tubas        & —                     & \notecite[148]{blatter}                         & \notecite[153]{forsyth} \\ \bottomrule
+    Wagner Tubas        & —                     & \notecite[148]{blatter}                         & \notecite[153]{forsyth} \\
+    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter}                         & \notecite[151]{forsyth} \\ \bottomrule
   \end{tabular}
 
   % \vfill\null
@@ -656,7 +658,6 @@
   \begin{tabular}[t]{@{}p{\instrumentWidth}RRR@{}} \toprule
                         & \multicolumn{3}{c}{Page Numbers} \\ \cmidrule(){2-4}
     Instrument          & \citeauthor{adler}    & \citeauthor{blatter}                            & \citeauthor{forsyth}    \\ \midrule
-    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter}                         & \notecite[151]{forsyth} \\ \midrule
     Timpani             & \notecite[485]{adler} & \notecite[209]{blatter}                         & \notecite[41]{forsyth}  \\ \midrule
     Crotales            & \notecite[481]{adler} & \notecite[206]{blatter}                         & —                       \\
     Glockenspiel        & \notecite[479]{adler} & \notecite[205]{blatter}                         & \notecite[60]{forsyth}  \\
@@ -676,6 +677,8 @@
   \nocite{vienna-academy}
 
   \renewcommand*\bibfont{\scriptsize}
+  \setlength\bibhang{10pt}
+  \setlength\bibitemsep{\parskip}
   \printbibliography
 
 
