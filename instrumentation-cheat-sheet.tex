@@ -97,44 +97,59 @@
 
   \def\ambitusBarHeight{0.155}
   \def\ambitusBarSeparation{0.45}
+  \pgfmathsetmacro{\keyboardHeight}{6 * \ambitusBarHeight}
+  \def\keyboardPaddingBelow{1}
+  \def\keyboardPaddingAbove{1}
+
+  % Number of percussion instruments, except timpani
+  \def\percussionInstrumentCount{9}
+  % Number of wind instruments
+  \def\windInstrumentCount{26}
 
   \newdimen\notesTopHeight
   \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
 
-  % Number of instruments, except strings and timpani
-  \def\separatedInstrumentCount{35}
+  \pgfmathsetmacro{\keyboardYOffset}{
+    (
+      % strings
+      4 * (5 + 0.25) + 3
+      % timpani
+      + 5
+      % instrument family separation
+      + 2
+      % instruments
+      + (\percussionInstrumentCount - 3) * (1 + \ambitusBarSeparation)
+      % padding
+      + \keyboardPaddingBelow
+    ) * \ambitusBarHeight
+  }
 
   \pgfmathsetmacro{\noteGuideTop}{
+    \keyboardYOffset + \keyboardHeight +
     (
-      \separatedInstrumentCount + (\separatedInstrumentCount - 4) * \ambitusBarSeparation +
-      % strings
-      4 * (6 + 0.25) +
-      % timpani
-      5 +
+      % padding
+      \keyboardPaddingAbove
+      % instruments
+      + \windInstrumentCount * (1 + \ambitusBarSeparation) - 3 * \ambitusBarSeparation
       % instrument family separation
-      4 * 2
-    ) * \ambitusBarHeight +
-    \notesTopHeight * 2.54/72.27
+      + 2 * 2
+    ) * \ambitusBarHeight
+    + \notesTopHeight * 2.54/72.27
   }
 
   \def\bottomNotePadding{0.1}
   \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \bottomNotePadding}
 
-  \def\keyboardHeight{1}
-
-  \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \keyboardHeight + \noteGuideTop);
+  \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \noteGuideTop);
 
   % Draw white note guides.
   \NewDocumentCommand\AToDGuidePaths{}{
     % A
-    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
+    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
     % B
-    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(3, -\keyboardHeight)
+    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(2, -\noteGuideBottom - \noteGuideTop)
     % D
-    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
+    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
   }
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
   \def\EFSeparation{0.05}
@@ -142,56 +157,51 @@
     draw=white-note-guide-color,
     fill=white-note-guide-color
   ]
-    (0, 0)
+    (0, -\noteGuideBottom)
     \foreach \octave in { 0, ..., \lastOctave } {
       \AToDGuidePaths
       % E
-      rectangle ++(1 - \EFSeparation, -\noteGuideBottom) ++(-1 + \EFSeparation,  \noteGuideBottom) ++(0,  \keyboardHeight)
-      rectangle ++(1 - \EFSeparation,  \noteGuideTop) ++(-1 + \EFSeparation, -\noteGuideTop) ++(1 + \EFSeparation, -\keyboardHeight)
+      rectangle ++(1 - \EFSeparation, \noteGuideBottom + \noteGuideTop) ++(2 * \EFSeparation, -\noteGuideBottom - \noteGuideTop)
       % F
-      rectangle ++(1 - \EFSeparation, -\noteGuideBottom) ++(-1 + \EFSeparation,  \noteGuideBottom) ++(0,  \keyboardHeight)
-      rectangle ++(1 - \EFSeparation,  \noteGuideTop) ++(-1 + \EFSeparation, -\noteGuideTop) ++(2 - \EFSeparation, -\keyboardHeight)
+      rectangle ++(1 - \EFSeparation, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
       % G
-      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
+      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
     }
     \AToDGuidePaths;
 
   % Draw black note guides.
   \NewDocumentCommand\BFlatToCSharpGuidePaths{}{
     % A♯/B♭
-    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(3, -\keyboardHeight)
+    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(2, -\noteGuideBottom - \noteGuideTop)
     % C♯/D♭
-    rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-    rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
+    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
   }
   \filldraw[
     draw=black-note-guide-color,
     fill=black-note-guide-color
   ]
-    (1, 0)
+    (1, -\noteGuideBottom)
     \foreach \octave in { 0, ..., \lastOctave } {
       \BFlatToCSharpGuidePaths
       % D♯/E♭
-      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(3, -\keyboardHeight)
+      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(2, -\noteGuideBottom - \noteGuideTop)
       % F♯/G♭
-      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
+      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
       % G♯/A♭
-      rectangle ++(1, -\noteGuideBottom) ++(-1,  \noteGuideBottom) ++(0,  \keyboardHeight)
-      rectangle ++(1,  \noteGuideTop) ++(-1, -\noteGuideTop) ++(2, -\keyboardHeight)
+      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
     }
     \BFlatToCSharpGuidePaths;
 
   % Draw the keyboard.
   \pgfmathsetmacro{\blackKeyHeight}{0.625 * \keyboardHeight}
   \pgfmathsetmacro{\whiteToBlackKeyDistance}{\keyboardHeight - \blackKeyHeight}
+  \begin{scope}[yshift=\keyboardYOffset cm]
   \begin{scope}[
     draw=black-key-color,
     fill=black-key-color
   ]
+    \draw[fill=white] (0, 0) rectangle (\totalNoteCount, \keyboardHeight);
+
     \NewDocumentCommand\AToCSharpKeyPaths{}{
       ++( 1.5, 0) -- ++(0, \whiteToBlackKeyDistance)
       ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % A♯/B♭
@@ -212,8 +222,6 @@
       ++( 0  , -\keyboardHeight)
     }
     \AToCSharpKeyPaths;
-
-    \draw (0, 0) rectangle ++(\totalNoteCount, \keyboardHeight);
   \end{scope}
 
   % Label notes.
@@ -227,9 +235,12 @@
       \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
       \path
         (\noteNumber - 21, \keyboardHeight)
-        node[yshift=-0.75ex] { C\octave }
-        ++(0, \noteGuideTop)
+        node[anchor=north west] { C\octave }
+        ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
         node { C\octave };
+      \ifnum\noteNumber>24\relax
+        \path (\noteNumber - 21, -\noteGuideBottom - \keyboardYOffset) node[anchor=south west] { C\octave };
+      \fi
     }
     % Label concert pitch (A above middle C).
     \def\noteNumber{69}
@@ -237,7 +248,7 @@
     \path
       (\noteNumber - 21, \keyboardHeight)
       node[yshift=-0.75ex] { A\octave }
-      ++(0, \noteGuideTop)
+      ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
       node { A\octave };
   \end{scope}
 
@@ -265,9 +276,10 @@
       }
     \end{scope}
   }{}
+  \end{scope}
 
   \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
-  \gdef\ambitusBarOffset{0}
+  \gdef\ambitusBarOffset{-1 - \ambitusBarSeparation}
 
   \ExplSyntaxOn
 
@@ -299,7 +311,7 @@
     }
 
     \begin{scope}[node~ distance=0]
-      \path (\bottomNote, \keyboardHeight + \ambitusBarOffset * \ambitusBarHeight)
+      \path (\bottomNote, \ambitusBarOffset * \ambitusBarHeight)
         node[anchor=south~ west, text=white] (\lowNodeName) {
           \IfValueTF{#3}{#3}{\noteName{#4}}
         }
@@ -357,7 +369,7 @@
         {\drawAmbitusOriginal{##2}[##3]{##4}[##5]{##6}[##7]}
     }
 
-    \begin{scope}[name prefix = #1-]
+    \begin{scope}[name prefix=#1-]
   }{
     \end{scope}
 
@@ -467,12 +479,14 @@
       \drawPrimaryAmbitus*{65}{108}
       \drawSecondaryAmbitus{48}[]{53}[Vibraphone]
       \drawPrimaryAmbitus*{53}{89}
-      \drawPrimaryAmbitus{60}{108}[Celesta]
       \drawSecondaryAmbitus{52}{79}[Tubular Bells]
       \drawPrimaryAmbitus*{60}{77}
+      \drawPrimaryAmbitus{60}{108}[Celesta]
       \drawSecondaryAmbitus{72}[]{79}[Glockenspiel]
       \drawPrimaryAmbitus*{79}{108}
       \drawPrimaryAmbitus{84}{108}[Crotales]
+      \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset - 3 - 2 * \ambitusBarSeparation}
+      \xdef\ambitusBarOffset{\ambitusBarOffset}
       \begin{bracketedAmbitus}{Timpani}
         \begin{compactAmbitus}
           \drawSecondaryAmbitus{36}{45}
@@ -483,6 +497,9 @@
         \end{compactAmbitus}
       \end{bracketedAmbitus}
     \end{instrumentFamily}
+
+    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset - 1 + \keyboardHeight/\ambitusBarHeight + \keyboardPaddingAbove}
+    \xdef\ambitusBarOffset{\ambitusBarOffset}
 
     \begin{instrumentFamily}
       \drawPrimaryAmbitus{22}{63}[B♭ Tuba]
