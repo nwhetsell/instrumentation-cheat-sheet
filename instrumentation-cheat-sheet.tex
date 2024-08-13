@@ -249,7 +249,9 @@
         (\noteNumber - 21, \keyboardHeight)
         node[yshift=-0.75ex] { A\octave }
         ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
-        node { A\octave };
+        node { A\octave }
+        ++(0, -\noteGuideBottom - \noteGuideTop)
+        node[anchor=south west] { A\octave };
     \end{scope}
 
     % Add MIDI note numbers.
