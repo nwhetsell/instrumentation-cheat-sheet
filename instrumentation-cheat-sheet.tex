@@ -196,86 +196,86 @@
   \pgfmathsetmacro{\blackKeyHeight}{0.625 * \keyboardHeight}
   \pgfmathsetmacro{\whiteToBlackKeyDistance}{\keyboardHeight - \blackKeyHeight}
   \begin{scope}[yshift=\keyboardYOffset cm]
-  \begin{scope}[
-    draw=black-key-color,
-    fill=black-key-color
-  ]
-    \draw[fill=white] (0, 0) rectangle (\totalNoteCount, \keyboardHeight);
+    \begin{scope}[
+      draw=black-key-color,
+      fill=black-key-color
+    ]
+      \draw[fill=white] (0, 0) rectangle (\totalNoteCount, \keyboardHeight);
 
-    \NewDocumentCommand\AToCSharpKeyPaths{}{
-      ++( 1.5, 0) -- ++(0, \whiteToBlackKeyDistance)
-      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % A♯/B♭
-      ++( 1  , -\keyboardHeight) -- ++(0, \keyboardHeight)
-      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
-      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % C♯/D♭
-    }
-    \filldraw (0, 0)
-    \foreach \octave in { 0, ..., \lastOctave } {
-      \AToCSharpKeyPaths
-      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
-      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % D♯/E♭
-      ++( 1  , -\keyboardHeight) -- ++(0, \keyboardHeight)
-      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
-      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % F♯/G♭
-      ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
-      ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % G♯/A♭
-      ++( 0  , -\keyboardHeight)
-    }
-    \AToCSharpKeyPaths;
-  \end{scope}
+      \NewDocumentCommand\AToCSharpKeyPaths{}{
+        ++( 1.5, 0) -- ++(0, \whiteToBlackKeyDistance)
+        ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % A♯/B♭
+        ++( 1  , -\keyboardHeight) -- ++(0, \keyboardHeight)
+        ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+        ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % C♯/D♭
+      }
+      \filldraw (0, 0)
+      \foreach \octave in { 0, ..., \lastOctave } {
+        \AToCSharpKeyPaths
+        ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+        ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % D♯/E♭
+        ++( 1  , -\keyboardHeight) -- ++(0, \keyboardHeight)
+        ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+        ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % F♯/G♭
+        ++( 1.5, -\keyboardHeight) -- ++(0, \whiteToBlackKeyDistance)
+        ++(-0.5, 0) rectangle ++(1, \blackKeyHeight) % G♯/A♭
+        ++( 0  , -\keyboardHeight)
+      }
+      \AToCSharpKeyPaths;
+    \end{scope}
 
-  % Label notes.
-  \begin{scope}[
-    anchor=north west,
-    minimum width=\blackKeyWidth,
-    text=c-label-color
-  ]
-    % Label Cs.
-    \foreach \noteNumber in { 24, 36, ..., 108 } {
+    % Label notes.
+    \begin{scope}[
+      anchor=north west,
+      minimum width=\blackKeyWidth,
+      text=c-label-color
+    ]
+      % Label Cs.
+      \foreach \noteNumber in { 24, 36, ..., 108 } {
+        \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
+        \path
+          (\noteNumber - 21, \keyboardHeight)
+          node[anchor=north west] { C\octave }
+          ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
+          node { C\octave };
+        \ifnum\noteNumber>24\relax
+          \path (\noteNumber - 21, -\noteGuideBottom - \keyboardYOffset) node[anchor=south west] { C\octave };
+        \fi
+      }
+      % Label concert pitch (A above middle C).
+      \def\noteNumber{69}
       \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
       \path
         (\noteNumber - 21, \keyboardHeight)
-        node[anchor=north west] { C\octave }
+        node[yshift=-0.75ex] { A\octave }
         ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
-        node { C\octave };
-      \ifnum\noteNumber>24\relax
-        \path (\noteNumber - 21, -\noteGuideBottom - \keyboardYOffset) node[anchor=south west] { C\octave };
-      \fi
-    }
-    % Label concert pitch (A above middle C).
-    \def\noteNumber{69}
-    \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
-    \path
-      (\noteNumber - 21, \keyboardHeight)
-      node[yshift=-0.75ex] { A\octave }
-      ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
-      node { A\octave };
-  \end{scope}
-
-  % Add MIDI note numbers.
-  \iftoggle{showMIDINoteNumbers}{
-    \begin{scope}[
-      anchor=mid west,
-      minimum width=\blackKeyWidth,
-    ]
-      \foreach \noteNumber in { 21, ..., 110 } {
-        \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
-        \pgfmathparse{
-          \pitchNumber ==  1 ||
-          \pitchNumber ==  3 ||
-          \pitchNumber ==  6 ||
-          \pitchNumber ==  8 ||
-          \pitchNumber == 10
-        }
-        \ifnum\pgfmathresult>0\relax
-          \def\noteNumberColor{white}
-        \else
-          \def\noteNumberColor{black}
-        \fi
-        \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5*\keyboardHeight) { \noteNumber };
-      }
+        node { A\octave };
     \end{scope}
-  }{}
+
+    % Add MIDI note numbers.
+    \iftoggle{showMIDINoteNumbers}{
+      \begin{scope}[
+        anchor=mid west,
+        minimum width=\blackKeyWidth,
+      ]
+        \foreach \noteNumber in { 21, ..., 110 } {
+          \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
+          \pgfmathparse{
+            \pitchNumber ==  1 ||
+            \pitchNumber ==  3 ||
+            \pitchNumber ==  6 ||
+            \pitchNumber ==  8 ||
+            \pitchNumber == 10
+          }
+          \ifnum\pgfmathresult>0\relax
+            \def\noteNumberColor{white}
+          \else
+            \def\noteNumberColor{black}
+          \fi
+          \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5*\keyboardHeight) { \noteNumber };
+        }
+      \end{scope}
+    }{}
   \end{scope}
 
   \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
