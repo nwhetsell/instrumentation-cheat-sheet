@@ -235,7 +235,7 @@
         \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
         \path
           (\noteNumber - 21, \keyboardHeight)
-          node[anchor=north west] { C\octave }
+          node[yshift=-0.75ex] { C\octave }
           ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
           node { C\octave };
         \ifnum\noteNumber>24\relax
