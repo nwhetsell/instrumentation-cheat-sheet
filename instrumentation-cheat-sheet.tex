@@ -144,7 +144,13 @@
 
   % Add frequencies.
   \pgfkeys{/pgf/number format/.cd,assume math mode=true,fixed,precision=1}
-  \pgfmathsetmacro{\maxFrequency}{4698.6362866785} % 3520 * pow(2, 5/12)
+
+  % The highest note is the D 5 half-steps above the 3,520 Hz A, so in most DAWs
+  % using 12-EDO tuning, the fundamental frequency of the D will be
+  % 3520 * pow(2, 5/12). Unfortunately, the PGF math engine is too imprecise to
+  % compute this accurately, so just use the raw value.
+  \def\maxFrequency{4698.6362866785}
+
   \newtoggle{didPrintFrequencyUnit}
   \foreach \frequency in {
       % Frequencies of A notes
@@ -156,7 +162,7 @@
       % Max frequency
       \maxFrequency
     } {
-      \pgfmathparse{(log10(\frequency) - log10(27.5)) * (89.5 - 0.5) / (log10(\maxFrequency) - log10(27.5)) + 0.5}
+      \pgfmathparse{(ln(\frequency) - ln(27.5)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(27.5)) + 0.5}
       \draw[c-label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
         \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
       };
