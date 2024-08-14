@@ -63,7 +63,7 @@
 
 \makeatletter
 \renewcommand\section{\@startsection {section}{1}{\z@}%
-                                     {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                     {-2ex \@plus -1ex \@minus -.2ex}%
                                      {1sp \@plus .2ex}%
                                      {\normalfont\normalsize}}%
 \makeatother
@@ -104,7 +104,7 @@
   % Number of percussion instruments, except timpani
   \def\percussionInstrumentCount{9}
   % Number of wind instruments
-  \def\windInstrumentCount{27}
+  \def\windInstrumentCount{30}
 
   \newdimen\notesTopHeight
   \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
@@ -507,6 +507,8 @@
       \drawPrimaryAmbitus{22}{63}[B♭ Tuba]
       \drawSecondaryAmbitus{24}[]{26}[C Tuba]
       \drawPrimaryAmbitus*{26}{64}
+      \drawPrimaryAmbitus{35}{72}[B♭ Euphonium]
+      \drawPrimaryAmbitus{40}{72}[B♭ Baritone]
       \drawPrimaryAmbitus{35}{77}[F Wagner Tuba]
       \drawPrimaryAmbitus{40}{77}[B♭ Wagner Tuba]
       \drawPrimaryAmbitus{34}{77}[Bass Trombone]
@@ -559,6 +561,8 @@
       \drawPrimaryAmbitus*{43}{79}
       \drawPrimaryAmbitus{50}{91}[B♭ Clarinet]
       \drawPrimaryAmbitus{55}{95}[E♭ Clarinet]
+      \drawSecondaryAmbitus[]{45}{84}
+      \drawPrimaryAmbitus*{45}{79}[Heckelphone]
       \drawPrimaryAmbitus{52}{83}[English Horn]
       \drawSecondaryAmbitus[]{58}{96}
       \drawPrimaryAmbitus*{58}{91}[Oboe]
@@ -594,6 +598,7 @@
     Instrument          & To Concert Pitch        \\ \midrule
     Alto Flute          & 4th down                \\
     English Horn        & 5th down                \\
+    Heckelphone         & octave down             \\
     E♭ Clarinet         & minor~3rd up            \\
     B♭ Clarinet         & 2nd down                \\
     E♭ Alto Clarinet    & minor 6th down          \\
@@ -612,7 +617,9 @@
     B♭ Trumpet          & 2nd down                \\
     B♭ Bass Trumpet     & 2nd + octave down       \\
     B♭ Wagner Tuba      & 2nd down                \\
-    F Wagner Tuba       & 5th down                \\ \midrule
+    F Wagner Tuba       & 5th down                \\
+    B♭ Baritone         & 2nd + octave down       \\
+    B♭ Euphonium        & 2nd + octave down       \\ \midrule
     Crotales            & 2 octaves up            \\
     Glockenspiel        & 2 octaves up            \\
     Celesta             & octave up               \\
@@ -655,8 +662,9 @@
     Piccolo             & \notecite[198]{adler} & \multirow{3}{*}{\notecite[90]{blatter}}         & \notecite[198]{forsyth} \\
     Flute               & \notecite[189]{adler} &                                                 & \notecite[182]{forsyth} \\
     Alto Flute          & \notecite[201]{adler} &                                                 & \notecite[196]{forsyth} \\ \thinrule
-    Oboe                & \notecite[204]{adler} & \multirow{2}{*}{\notecite[98]{blatter}}         & \notecite[204]{forsyth} \\
-    English Horn        & \notecite[209]{adler} &                                                 & \notecite[220]{forsyth} \\ \thinrule
+    Oboe                & \notecite[204]{adler} & \multirow{3}{*}{\notecite[98]{blatter}}         & \notecite[204]{forsyth} \\
+    English Horn        & \notecite[209]{adler} &                                                 & \notecite[220]{forsyth} \\
+    Heckelphone         & \notecite[216]{adler} &                                                 & \notecite[228]{forsyth} \\ \thinrule
     E♭ Clarinet         & \notecite[224]{adler} & \multirow{5}{*}{\notecite[105]{blatter}}        & \notecite[278]{forsyth} \\
     B♭ Clarinet         & \notecite[217]{adler} &                                                 & \notecite[251]{forsyth} \\
     E♭ Alto Clarinet    & \notecite[228]{adler} &                                                 & \notecite[282]{forsyth} \\
@@ -664,12 +672,7 @@
     Contrabass Clarinet & \notecite[230]{adler} &                                                 & \notecite[286]{forsyth} \\ \thinrule
     Bassoon             & \notecite[235]{adler} & \multirow{2}{*}{\notecite[116]{blatter}}        & \notecite[229]{forsyth} \\
     Contrabassoon       & \notecite[240]{adler} &                                                 & \notecite[246]{forsyth} \\ \midrule
-    Saxophones          & \notecite[231]{adler} & \notecite[126]{blatter}                         & \notecite[166]{forsyth} \\ \midrule
-    French Horn         & \notecite[337]{adler} & \notecite[148]{blatter}                         & \notecite[109]{forsyth} \\
-    Trumpets            & \notecite[357]{adler} & \notecite[159]{blatter}                         & \notecite[89]{forsyth}  \\
-    Trombones           & \notecite[368]{adler} & \notecite[169]{blatter}                         & \notecite[133]{forsyth} \\
-    Wagner Tubas        & —                     & \notecite[148]{blatter}                         & \notecite[153]{forsyth} \\
-    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter}                         & \notecite[151]{forsyth} \\ \bottomrule
+    Saxophones          & \notecite[231]{adler} & \notecite[126]{blatter}                         & \notecite[166]{forsyth} \\ \bottomrule
   \end{tabular}
 
   % \vfill\null
@@ -679,6 +682,11 @@
   \begin{tabular}[t]{@{}p{\instrumentWidth}RRR@{}} \toprule
                         & \multicolumn{3}{c}{Page Numbers} \\ \cmidrule(){2-4}
     Instrument          & \citeauthor{adler}    & \citeauthor{blatter}                            & \citeauthor{forsyth}    \\ \midrule
+    French Horn         & \notecite[337]{adler} & \notecite[148]{blatter}                         & \notecite[109]{forsyth} \\
+    Trumpets            & \notecite[357]{adler} & \notecite[159]{blatter}                         & \notecite[89]{forsyth}  \\
+    Trombones           & \notecite[368]{adler} & \notecite[169]{blatter}                         & \notecite[133]{forsyth} \\
+    Wagner Tubas        & —                     & \notecite[148]{blatter}                         & \notecite[153]{forsyth} \\
+    Tubas               & \notecite[377]{adler} & \notecite[178]{blatter}                         & \notecite[151]{forsyth} \\
     Timpani             & \notecite[485]{adler} & \notecite[209]{blatter}                         & \notecite[41]{forsyth}  \\ \midrule
     Crotales            & \notecite[481]{adler} & \notecite[206]{blatter}                         & —                       \\
     Glockenspiel        & \notecite[479]{adler} & \notecite[205]{blatter}                         & \notecite[60]{forsyth}  \\
