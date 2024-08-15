@@ -321,7 +321,7 @@
   \def\lowNodeName{}
   \def\highNodeName{}
 
-  \NewDocumentCommand\drawAmbitus{s m o m o m o o}{
+  \NewDocumentCommand\drawAmbitus{s m o m o m o o o}{
     \IfBooleanF{#1}{
       \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1 + \ambitusBarSeparation}
       \xdef\ambitusBarOffset{\ambitusBarOffset}
@@ -349,21 +349,22 @@
           \ifnum \noteCount>1\relax
             \IfValueTF{#5}{#5}{\noteName{#6}}
           \fi
-        };
+        }
+        node[base~ right=of~ \highNodeName, xshift=-\labelOffset] { \IfValueT{#8}{#8} };
     \end{scope}
   }
 
   \ExplSyntaxOff
 
-  \NewDocumentCommand\drawPrimaryAmbitus{s o m o m o}{
+  \NewDocumentCommand\drawPrimaryAmbitus{s o m o m o o}{
     \IfBooleanTF{#1}
-      {\drawAmbitus*{primary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
-      {\drawAmbitus{primary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
+      {\drawAmbitus*{primary-ambitus-color}[#2]{#3}[#4]{#5}[#6][#7]}
+      {\drawAmbitus{primary-ambitus-color}[#2]{#3}[#4]{#5}[#6][#7]}
   }
-  \NewDocumentCommand\drawSecondaryAmbitus{s o m o m o}{
+  \NewDocumentCommand\drawSecondaryAmbitus{s o m o m o o}{
     \IfBooleanTF{#1}
-      {\drawAmbitus*{secondary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
-      {\drawAmbitus{secondary-ambitus-color}[#2]{#3}[#4]{#5}[#6]}
+      {\drawAmbitus*{secondary-ambitus-color}[#2]{#3}[#4]{#5}[#6][#7]}
+      {\drawAmbitus{secondary-ambitus-color}[#2]{#3}[#4]{#5}[#6][#7]}
   }
 
   \NewDocumentEnvironment{instrumentFamily}{}{
@@ -499,20 +500,20 @@
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
-      \drawPrimaryAmbitus{21}{108}[Piano]
-      \drawPrimaryAmbitus[C♭0]{23}[G♯7]{104}[Harp]
+      \drawPrimaryAmbitus{21}{108}[Piano][Pno.]
+      \drawPrimaryAmbitus[C♭0]{23}[G♯7]{104}[Harp][Harp]
       \drawSecondaryAmbitus{36}[]{48}[Marimba]
-      \drawPrimaryAmbitus*{48}{96}
+      \drawPrimaryAmbitus*{48}{96}[][Mar.]
       \drawSecondaryAmbitus{58}[]{65}[Xylophone]
-      \drawPrimaryAmbitus*{65}{108}
+      \drawPrimaryAmbitus*{65}{108}[][Xyl.]
       \drawSecondaryAmbitus{48}[]{53}[Vibraphone]
-      \drawPrimaryAmbitus*{53}{89}
-      \drawSecondaryAmbitus{52}{79}[Tubular Bells]
+      \drawPrimaryAmbitus*{53}{89}[][Vib.]
+      \drawSecondaryAmbitus{52}{79}[Tubular Bells][T. bells]
       \drawPrimaryAmbitus*{60}{77}
-      \drawPrimaryAmbitus{60}{108}[Celesta]
+      \drawPrimaryAmbitus{60}{108}[Celesta][Cel.]
       \drawSecondaryAmbitus{72}[]{79}[Glockenspiel]
-      \drawPrimaryAmbitus*{79}{108}
-      \drawPrimaryAmbitus{84}{108}[Crotales]
+      \drawPrimaryAmbitus*{79}{108}[][Glck.]
+      \drawPrimaryAmbitus{84}{108}[Crotales][Crot.]
       \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset - 3 - 2 * \ambitusBarSeparation}
       \xdef\ambitusBarOffset{\ambitusBarOffset}
       \begin{bracketedAmbitus}{Timpani}
@@ -530,23 +531,23 @@
     \xdef\ambitusBarOffset{\ambitusBarOffset}
 
     \begin{instrumentFamily}
-      \drawPrimaryAmbitus{22}{63}[B♭ Tuba]
+      \drawPrimaryAmbitus{22}{63}[B♭ Tuba][B♭ Tuba]
       \drawSecondaryAmbitus{24}[]{26}[C Tuba]
-      \drawPrimaryAmbitus*{26}{64}
-      \drawPrimaryAmbitus{35}{72}[B♭ Euphonium]
-      \drawPrimaryAmbitus{40}{72}[B♭ Baritone]
-      \drawPrimaryAmbitus{35}{77}[F Wagner Tuba]
-      \drawPrimaryAmbitus{40}{77}[B♭ Wagner Tuba]
-      \drawPrimaryAmbitus{34}{77}[Bass Trombone]
-      \drawPrimaryAmbitus{40}{77}[Trombone]
-      \drawPrimaryAmbitus{40}{72}[B♭ Bass Trumpet]
+      \drawPrimaryAmbitus*{26}{64}[][C Tuba]
+      \drawPrimaryAmbitus{35}{72}[B♭ Euphonium][B♭ Euph.]
+      \drawPrimaryAmbitus{40}{72}[B♭ Baritone][B♭ Bar.]
+      \drawPrimaryAmbitus{35}{77}[F Wagner Tuba][F Wag.]
+      \drawPrimaryAmbitus{40}{77}[B♭ Wagner Tuba][B♭ Wag.]
+      \drawPrimaryAmbitus{34}{77}[Bass Trombone][B. Tbn.]
+      \drawPrimaryAmbitus{40}{77}[Trombone][Tbn.]
+      \drawPrimaryAmbitus{40}{72}[B♭ Bass Trumpet][B♭ B. Tpt.]
       \drawSecondaryAmbitus{51}[]{52}[B♭ Trumpet]
-      \drawPrimaryAmbitus*{52}{82}
+      \drawPrimaryAmbitus*{52}{82}[][B♭ Tpt.]
       \drawSecondaryAmbitus{53}[]{54}[C Trumpet]
-      \drawPrimaryAmbitus*{54}{84}
+      \drawPrimaryAmbitus*{54}{84}[][C Tpt.]
       \drawSecondaryAmbitus{62}{64}[B♭ Piccolo Trumpet]
-      \drawPrimaryAmbitus*{64}{91}
-      \drawPrimaryAmbitus{31}{77}[French Horn]
+      \drawPrimaryAmbitus*{64}{91}[][B♭ Picc. Tpt.]
+      \drawPrimaryAmbitus{31}{77}[French Horn][Hn.]
 
       \path
         let \p1=(C Trumpet-low) in
@@ -558,15 +559,15 @@
 
     \begin{instrumentFamily}
       \drawSecondaryAmbitus{36}[]{37}[Baritone Saxophone]
-      \drawPrimaryAmbitus*{37}{75}
-      \drawPrimaryAmbitus{44}{82}[Tenor Saxophone]
-      \drawPrimaryAmbitus{49}{87}[Alto Saxophone]
-      \drawPrimaryAmbitus{56}{94}[Soprano Saxophone]
+      \drawPrimaryAmbitus*{37}{75}[][Bar. Sax.]
+      \drawPrimaryAmbitus{44}{82}[Tenor Saxophone][T. Sax.]
+      \drawPrimaryAmbitus{49}{87}[Alto Saxophone][A. Sax.]
+      \drawPrimaryAmbitus{56}{94}[Soprano Saxophone][S. Sax.]
 
       \path
         let \p1=(Soprano Saxophone-high) in
-        (\x1 + \blackKeyWidth, \y1 + \ambitusBarHeight cm)
-        node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth] {
+        (\x1 + 3.5 * \blackKeyWidth, \y1 + \ambitusBarHeight cm)
+        node[annotation, anchor=mid west, text width=12*\blackKeyWidth] {
           Higher notes are possible on wind instruments, but increasingly difficult to sound and not always available in sample sets.
         };
     \end{instrumentFamily}
@@ -575,27 +576,27 @@
       \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
       \drawSecondaryAmbitus{21}[]{22}[Contrabassoon]
       \tikzset{instrument label/.style={}}
-      \drawPrimaryAmbitus*{22}{60}
-      \drawSecondaryAmbitus[]{34}{77}
+      \drawPrimaryAmbitus*{22}{60}[][Cbsn.]
+      \drawSecondaryAmbitus[]{34}{77}[][Bsn.]
       \drawPrimaryAmbitus*{34}{75}[Bassoon]
       \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
-      \drawPrimaryAmbitus{22}{67}[Contrabass Clarinet]
+      \drawPrimaryAmbitus{22}{67}[Contrabass Clarinet][Cb. Cl.]
       \tikzset{instrument label/.style={}}
-      \drawSecondaryAmbitus[]{34}{83}
+      \drawSecondaryAmbitus[]{34}{83}[][B.Cl.]
       \drawPrimaryAmbitus*{34}{79}[Bass Clarinet]
-      \drawSecondaryAmbitus{42}{84}[E♭ Alto Clarinet]
+      \drawSecondaryAmbitus{42}{84}[E♭ Alto Clarinet][A.Cl.]
       \drawPrimaryAmbitus*{43}{79}
-      \drawPrimaryAmbitus{50}{91}[B♭ Clarinet]
-      \drawPrimaryAmbitus{55}{95}[E♭ Clarinet]
-      \drawSecondaryAmbitus[]{45}{84}
+      \drawPrimaryAmbitus{50}{91}[B♭ Clarinet][B♭ Cl.]
+      \drawPrimaryAmbitus{55}{95}[E♭ Clarinet][E♭ Cl.]
+      \drawSecondaryAmbitus[]{45}{84}[][Heck.]
       \drawPrimaryAmbitus*{45}{79}[Heckelphone]
-      \drawPrimaryAmbitus{52}{83}[English Horn]
-      \drawSecondaryAmbitus[]{58}{96}
+      \drawPrimaryAmbitus{52}{83}[English Horn][EH]
+      \drawSecondaryAmbitus[]{58}{96}[][Ob.]
       \drawPrimaryAmbitus*{58}{91}[Oboe]
-      \drawPrimaryAmbitus{55}{88}[Alto Flute]
+      \drawPrimaryAmbitus{55}{88}[Alto Flute][A.Fl.]
       \drawSecondaryAmbitus{59}[]{60}[Flute]
-      \drawPrimaryAmbitus*{60}{98}
-      \drawPrimaryAmbitus{74}{108}[Piccolo]
+      \drawPrimaryAmbitus*{60}{98}[][Fl.]
+      \drawPrimaryAmbitus{74}{108}[Piccolo][Picc.]
     \end{instrumentFamily}
   \end{scope}
 
