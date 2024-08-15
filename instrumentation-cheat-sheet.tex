@@ -44,7 +44,7 @@
 \definecolor{white-note-guide-color}{gray}{0.975}
 \definecolor{black-key-color}{gray}{0.3}
 \definecolor{black-note-guide-color}{gray}{0.93}
-\definecolor{c-label-color}{gray}{0.7}
+\definecolor{label-color}{gray}{0.7}
 
 \tikzset{instrument label/.style={}}
 \tikzset{annotation/.style={font=\itshape, text badly ragged}}
@@ -163,7 +163,7 @@
       \maxFrequency
     } {
       \pgfmathparse{(ln(\frequency) - ln(27.5)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(27.5)) + 0.5}
-      \draw[c-label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
+      \draw[label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
         \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
       };
   }
@@ -254,7 +254,7 @@
     \begin{scope}[
       anchor=north west,
       minimum width=\blackKeyWidth,
-      text=c-label-color
+      text=label-color
     ]
       % Label Cs.
       \foreach \noteNumber in { 24, 36, ..., 108 } {
