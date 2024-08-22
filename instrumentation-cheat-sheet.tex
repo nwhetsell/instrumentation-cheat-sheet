@@ -162,7 +162,11 @@
       % Max frequency
       \maxFrequency
     } {
-      \pgfmathparse{(ln(\frequency) - ln(27.5)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(27.5)) + 0.5}
+      \pgfmathparse{
+        89 * ln(\frequency / 27.5) / ln(\maxFrequency / 27.5) + 0.5
+        % This is a simplification of
+        %   (ln(\frequency) - ln(27.5)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(27.5)) + 0.5
+      }
       \draw[label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
         \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
       };
