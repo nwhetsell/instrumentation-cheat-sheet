@@ -145,11 +145,13 @@
   % Add frequencies.
   \pgfkeys{/pgf/number format/.cd,assume math mode=true,fixed,precision=1}
 
-  % The highest note is the D five half-steps above the 3,520 Hz A, so in most
+  % The highest note is the D five half-steps above the A at 3520 Hz, so in most
   % DAWs using 12-EDO tuning, the fundamental frequency of the D will be
-  % 3520 * pow(2, 5/12). Unfortunately, the PGF math engine is too imprecise to
-  % compute this accurately, so just use the raw value.
-  \def\maxFrequency{4698.6362866785}
+  % 2^(5/12) * 3520 Hz. Use a LaTeX3 floating point expression because the PGF
+  % math engine is a bit too imprecise to compute this.
+  \ExplSyntaxOn
+  \def\maxFrequency{\fp_to_decimal:n {2^(5/12) * 3520}}
+  \ExplSyntaxOff
 
   \newtoggle{didPrintFrequencyUnit}
   \foreach \frequency in {
