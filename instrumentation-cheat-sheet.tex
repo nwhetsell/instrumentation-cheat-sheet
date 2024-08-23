@@ -1,6 +1,9 @@
 \documentclass{article}
 
 \usepackage[american]{babel}
+\hyphenation{
+Fab-Fil-ter
+}
 \usepackage{csquotes}
 
 \usepackage[
@@ -664,8 +667,8 @@
 
   \section*{Note Names}
 
-  \def\yamahaOctaves{“Yamaha” octaves (the default in Apple Logic, concert pitch is {\addfontfeature{Numbers=Lining}A4})}
   \def\rolandOctaves{“Roland” octaves (used in Ableton Live and Native Instruments Kontakt, concert pitch is {\addfontfeature{Numbers=Lining}A3})}
+  \def\yamahaOctaves{“Yamaha” octaves (Apple Logic’s default and used in FabFilter {\addfontfeature{Numbers=Lining}Pro-Q~3}, concert pitch is {\addfontfeature{Numbers=Lining}A4})}
 
   Note names have
   \ifnum\octaveOffset>1\relax
@@ -752,6 +755,9 @@
 
   % https://www.apple.com/legal/intellectual-property/trademark/appletmlist.html
   Apple and Logic are trademarks of Apple Inc., registered in the U.S. and other countries and regions.
+
+  % https://tsdr.uspto.gov/#caseNumber=79394860&caseSearchType=US_APPLICATION&caseType=DEFAULT&searchType=statusSearch
+  FabFilter is a trademark of FabFilter BV.
 
   % https://tsdr.uspto.gov/#caseNumber=73083201&caseSearchType=US_APPLICATION&caseType=DEFAULT&searchType=statusSearch
   Roland is a registered trademark of Roland Corporation.
