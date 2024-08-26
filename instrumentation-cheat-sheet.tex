@@ -146,7 +146,11 @@ Fab-Fil-ter
   \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \noteGuideTop);
 
   % Add frequencies.
-  \pgfkeys{/pgf/number format/.cd,assume math mode=true,fixed,precision=1}
+  \pgfkeys{/pgf/number format/.cd,
+    assume math mode=true, % don’t switch to math mode (which would use the wrong font)
+    fixed, % round numbers to a fixed number of digits after the decimal point
+    precision=1 % round to the nearest tenth
+  }
 
   % The highest note is the D five half-steps above the A at 3520 Hz, so in most
   % DAWs using 12-EDO tuning, the fundamental frequency of the D will be
