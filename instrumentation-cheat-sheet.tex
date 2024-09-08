@@ -41,22 +41,21 @@ Fab-Fil-ter
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
 
-\definecolor{primary-ambitus-color}{gray}{0.55}
+\definecolor{primary-ambitus-color}  {gray}{0.55}
 \definecolor{secondary-ambitus-color}{gray}{0.72}
-\definecolor{ambitus-bracket-color}{gray}{0.5}
-\definecolor{white-note-guide-color}{gray}{0.975}
-\definecolor{black-key-color}{gray}{0.3}
-\definecolor{black-note-guide-color}{gray}{0.93}
-\definecolor{label-color}{gray}{0.7}
+\definecolor{ambitus-bracket-color}  {gray}{0.5}
+\definecolor{white-note-guide-color} {gray}{0.975}
+\definecolor{black-key-color}        {gray}{0.3}
+\definecolor{black-note-guide-color} {gray}{0.93}
+\definecolor{note-label-color}       {gray}{0.7}
+\definecolor{frequency-label-color}  {gray}{0.7}
+\definecolor{white-note-number-color}{gray}{0.8}
+\definecolor{black-note-number-color}{gray}{0.525}
 
-\tikzset{instrument label/.style={}}
 \tikzset{annotation/.style={font=\itshape, text badly ragged}}
+\tikzset{instrument label/.style={}}
 
 \input .octave-offset.tex
-
-% Useful for entering ambitus
-\newtoggle{showMIDINoteNumbers}
-% \toggletrue{showMIDINoteNumbers}
 
 \usepackage[
   pdftitle={Instrumentation Cheat Sheet},
@@ -178,7 +177,7 @@ Fab-Fil-ter
         % This is a simplification of
         %   (ln(\frequency) - ln(\minFrequency)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(\minFrequency)) + 0.5
       }
-      \draw[label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
+      \draw[frequency-label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
         \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
       };
   }
@@ -269,7 +268,7 @@ Fab-Fil-ter
     \begin{scope}[
       anchor=north west,
       minimum width=\blackKeyWidth,
-      text=label-color
+      text=note-label-color
     ]
       % Label Cs.
       \foreach \noteNumber in { 24, 36, ..., 108 } {
@@ -296,7 +295,7 @@ Fab-Fil-ter
     \end{scope}
 
     % Add MIDI note numbers.
-    \iftoggle{showMIDINoteNumbers}{
+      \node[align=center, anchor=mid east, text=white-note-number-color] at (-0.1, 0.4 * \keyboardHeight) { MIDI\\[-0.5ex] note nos. };
       \begin{scope}[
         anchor=mid west,
         minimum width=\blackKeyWidth,
@@ -311,14 +310,13 @@ Fab-Fil-ter
             \pitchNumber == 10
           }
           \ifnum\pgfmathresult>0\relax
-            \def\noteNumberColor{white}
+            \def\noteNumberColor{black-note-number-color}
           \else
-            \def\noteNumberColor{black}
+            \def\noteNumberColor{white-note-number-color}
           \fi
-          \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5*\keyboardHeight) { \noteNumber };
+          \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5 * \keyboardHeight) { \noteNumber };
         }
       \end{scope}
-    }{}
   \end{scope}
 
   \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
