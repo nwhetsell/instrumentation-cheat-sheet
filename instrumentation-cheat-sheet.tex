@@ -295,28 +295,28 @@ Fab-Fil-ter
     \end{scope}
 
     % Add MIDI note numbers.
-      \node[align=center, anchor=mid east, text=white-note-number-color] at (-0.1, 0.4 * \keyboardHeight) { MIDI\\[-0.5ex] note nos. };
-      \begin{scope}[
-        anchor=mid west,
-        minimum width=\blackKeyWidth,
-      ]
-        \foreach \noteNumber in { 21, ..., 110 } {
-          \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
-          \pgfmathparse{
-            \pitchNumber ==  1 ||
-            \pitchNumber ==  3 ||
-            \pitchNumber ==  6 ||
-            \pitchNumber ==  8 ||
-            \pitchNumber == 10
-          }
-          \ifnum\pgfmathresult>0\relax
-            \def\noteNumberColor{black-note-number-color}
-          \else
-            \def\noteNumberColor{white-note-number-color}
-          \fi
-          \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5 * \keyboardHeight) { \noteNumber };
+    \node[align=center, anchor=mid east, text=white-note-number-color] at (-0.1, 0.4 * \keyboardHeight) { MIDI\\[-0.5ex] note nos. };
+    \begin{scope}[
+      anchor=mid west,
+      minimum width=\blackKeyWidth,
+    ]
+      \foreach \noteNumber in { 21, ..., 110 } {
+        \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
+        \pgfmathparse{
+          \pitchNumber ==  1 ||
+          \pitchNumber ==  3 ||
+          \pitchNumber ==  6 ||
+          \pitchNumber ==  8 ||
+          \pitchNumber == 10
         }
-      \end{scope}
+        \ifnum\pgfmathresult>0\relax
+          \def\noteNumberColor{black-note-number-color}
+        \else
+          \def\noteNumberColor{white-note-number-color}
+        \fi
+        \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5 * \keyboardHeight) { \noteNumber };
+      }
+    \end{scope}
   \end{scope}
 
   \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
