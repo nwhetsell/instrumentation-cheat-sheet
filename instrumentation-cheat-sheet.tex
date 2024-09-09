@@ -138,7 +138,8 @@ Fab-Fil-ter
   }
 
   \def\bottomNotePadding{0.1}
-  \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \bottomNotePadding}
+  \def\bottomNoteShift{0.25}
+  \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \bottomNotePadding - \bottomNoteShift}
 
   \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \noteGuideTop);
 
@@ -658,13 +659,15 @@ Fab-Fil-ter
     \end{instrumentFamily}
   \end{scope}
 
+  \pgfmathsetmacro{\noteImageXCoordinate}{0.5 - \minNoteMidpoint * \noteImageScaleFactor / \blackKeyWidth}
   \path
-    let \p1=(Piccolo-high) in
-    (0.5 * \blackKeyWidth - \minNoteMidpoint * \noteImageScaleFactor, -\bottomNotePadding)
+    (\noteImageXCoordinate, -\bottomNotePadding + \bottomNoteShift)
     node[anchor=north west] {
       \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
-    }
-    ++(0, \y1 - \ambitusBarHeight cm + \bottomNotePadding cm)
+    };
+  \path
+    let \p1=(Piccolo-high) in
+    (\noteImageXCoordinate, \y1 - \ambitusBarHeight cm)
     node[anchor=south west] {
       \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
     };
