@@ -295,7 +295,14 @@ Fab-Fil-ter
     \end{scope}
 
     % Add MIDI note numbers.
-    \node[align=center, anchor=mid east, text=white-note-number-color] at (-0.1, 0.4 * \keyboardHeight) { MIDI\\[-0.5ex] note nos. };
+    \node[
+      align=center,
+      anchor=south east,
+      inner xsep=1pt,
+      minimum height=\keyboardHeight cm,
+      text=white-note-number-color
+    ] at (0, 0) { MIDI\\[-0.5ex] note nos. };
+
     \begin{scope}[
       anchor=mid west,
       minimum width=\blackKeyWidth,
