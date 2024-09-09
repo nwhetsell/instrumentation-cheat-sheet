@@ -108,9 +108,6 @@ Fab-Fil-ter
   % Number of wind instruments
   \def\windInstrumentCount{30}
 
-  \newdimen\notesTopHeight
-  \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
-
   \pgfmathsetmacro{\keyboardYOffset}{
     (
       % strings
@@ -125,6 +122,9 @@ Fab-Fil-ter
       + \keyboardPaddingBelow
     ) * \ambitusBarHeight
   }
+
+  \newdimen\notesTopHeight
+  \settoheight{\notesTopHeight}{\includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}}
 
   \pgfmathsetmacro{\noteGuideTop}{
     \keyboardYOffset + \keyboardHeight +
