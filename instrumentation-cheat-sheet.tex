@@ -321,70 +321,87 @@ Fab-Fil-ter
   \ExplSyntaxOn
 
   \seq_const_from_clist:Nn \note_names { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
-  \NewDocumentCommand { \noteName } { m }
-    {
-      \seq_item:Nn \note_names { \int_mod:nn { #1 } { 12 } + 1 }
-      \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
-    }
+  \NewDocumentCommand { \noteName } { m } {
+    \seq_item:Nn \note_names { \int_mod:nn { #1 } { 12 } + 1 }
+    \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
+  }
 
   \def\lowNodeName{}
   \def\highNodeName{}
 
-  \int_new:N  \l_primary_note_start_int
-  \tl_new:N   \l_primary_note_start_label_tl
-  \int_new:N  \l_primary_note_end_int
-  \tl_new:N   \l_primary_note_end_label_tl
-  \tl_new:N   \l_primary_color_tl
-  \int_new:N  \l_secondary_note_start_int
-  \int_new:N  \l_secondary_note_end_int
-  \tl_new:N   \l_long_name_tl
-  \tl_new:N   \l_short_name_tl
-  \bool_new:N \l_is_continuation_bool
+  \tl_new:N    \l_long_name_tl
+  \tl_new:N    \l_short_name_tl
+  \clist_new:N \l_primary_notes_clist
+  \int_new:N   \l_primary_note_start_int
+  \int_new:N   \l_primary_note_end_int
+  \clist_new:N \l_primary_note_labels_clist
+  \tl_new:N    \l_primary_note_start_label_tl
+  \tl_new:N    \l_primary_note_end_label_tl
+  \tl_new:N    \l_primary_color_tl
+  \clist_new:N \l_secondary_notes_clist
+  \int_new:N   \l_secondary_note_start_int
+  \int_new:N   \l_secondary_note_end_int
 
   \keys_define:nn { ambitus } {
-    primary-note-start       .int_set:N  = \l_primary_note_start_int,
-    primary-note-start       .groups:n   = { primary-note-start },
-    primary-note-start-label .tl_set:N   = \l_primary_note_start_label_tl,
-    primary-note-end         .int_set:N  = \l_primary_note_end_int,
-    primary-note-end-label   .tl_set:N   = \l_primary_note_end_label_tl,
-    primary-color            .tl_set:N   = \l_primary_color_tl,
-    secondary-note-start     .int_set:N  = \l_secondary_note_start_int,
-    secondary-note-start     .groups:n   = { secondary-notes },
-    secondary-note-end       .int_set:N  = \l_secondary_note_end_int,
-    secondary-note-end       .groups:n   = { secondary-notes },
-    long-name                .tl_set:N   = \l_long_name_tl,
-    short-name               .tl_set:N   = \l_short_name_tl,
-    is-continuation          .bool_set:N = \l_is_continuation_bool,
-    is-continuation          .default:n  = true
+    notes           .clist_set:N      = \l_primary_notes_clist,
+    notes           .value_required:n = true,
+    notes           .groups:n         = { primary-notes },
+    note-labels     .clist_set:N      = \l_primary_note_labels_clist,
+    note-labels     .value_required:n = true,
+    color           .tl_set:N         = \l_primary_color_tl,
+    color           .value_required:n = true,
+    secondary-notes .clist_set:N      = \l_secondary_notes_clist,
+    secondary-notes .value_required:n = true
   }
 
   \bool_new:N \l_secondary_note_start_is_below_primary_bool
   \bool_new:N \l_secondary_note_end_is_above_primary_bool
 
-  \NewDocumentCommand\drawAmbitus{m}{
-    \tl_clear:N \l_primary_note_start_label_tl
-    \tl_clear:N \l_primary_note_end_label_tl
-    \tl_set:Nn  \l_primary_color_tl { primary-ambitus-color }
-    \tl_clear:N \l_long_name_tl
-    \tl_clear:N \l_short_name_tl
+  \NewDocumentCommand { \ambitus } { o o m } {
+    \tl_clear:N    \l_long_name_tl
+    \tl_clear:N    \l_short_name_tl
+    \clist_clear:N \l_primary_note_labels_clist
+    \tl_clear:N    \l_primary_note_start_label_tl
+    \tl_clear:N    \l_primary_note_end_label_tl
+    \tl_set:Nn     \l_primary_color_tl { primary-ambitus-color }
+    \clist_clear:N \l_secondary_notes_clist
 
-    \keys_set_groups:nnn { ambitus } { primary-note-start } { #1 }
+    \keys_set_groups:nnn { ambitus } { primary-notes } { #3 }
 
-    \int_set_eq:NN \l_primary_note_end_int \l_primary_note_start_int
+    \int_set:Nn \l_primary_note_start_int { \clist_item:Nn \l_primary_notes_clist 1 }
+    % \clist_show:N \l_primary_notes_clist
+    \int_set:Nn \l_primary_note_end_int   { \clist_item:Nn \l_primary_notes_clist { -1 } }
 
-    \keys_set_exclude_groups:nnn { ambitus } { primary-note-start, secondary-notes } { #1 }
+    \keys_set_exclude_groups:nnn { ambitus } { primary-notes } { #3 }
 
-    \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
-    \int_set_eq:NN \l_secondary_note_end_int \l_primary_note_start_int
-
-    \keys_set_groups:nnn { ambitus } { secondary-notes } { #1 }
-
-    \bool_if:nF { \l_is_continuation_bool } {
-      \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1 + \ambitusBarSeparation}
-      \xdef\ambitusBarOffset{\ambitusBarOffset}
+    % \clist_show:N \l_primary_note_labels_clist
+    \bool_if:nT { \int_compare_p:nNn { \clist_count:N \l_primary_note_labels_clist } > { 0 } } {
+      \tl_set:Nn \l_primary_note_start_label_tl { \clist_item:Nn \l_primary_note_labels_clist 1 }
+      \tl_set:Nn \l_primary_note_end_label_tl   { \clist_item:Nn \l_primary_note_labels_clist { -1 } }
     }
 
-    \tl_if_empty:NF \l_long_name_tl {
+    % \clist_show:N \l_secondary_notes_clist
+    \bool_case:nF {
+      { \int_compare_p:nNn { \clist_count:N \l_secondary_notes_clist } = { 0 } } {
+        \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
+        \int_set_eq:NN \l_secondary_note_end_int   \l_primary_note_start_int
+      }
+      { \int_compare_p:nNn { \clist_count:N \l_secondary_notes_clist } = { 1 } } {
+        \bool_if:nTF { \int_compare_p:nNn { \clist_item:Nn \l_secondary_notes_clist 1 } < { \l_primary_note_start_int } } {
+          \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+          \int_set_eq:NN \l_secondary_note_end_int   \l_primary_note_start_int
+        } {
+          \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
+          \int_set:Nn \l_secondary_note_end_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+        }
+      }
+    } {
+      \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+      \int_set:Nn \l_secondary_note_end_int   { \clist_item:Nn \l_secondary_notes_clist { -1 } }
+    }
+
+    \IfValueT{#1}{
+      \tl_set:Nn \l_long_name_tl { #1 }
       \tl_set_eq:NN \l_tmpa_tl \l_long_name_tl
       \tl_replace_all:Nnn \l_tmpa_tl { ♭ } { -flat }
       \tl_remove_all:Nn \l_tmpa_tl { . }
@@ -447,6 +464,13 @@ Fab-Fil-ter
     \end{scope}
   }
 
+  \NewDocumentCommand { \instrumentAmbitus } { o o m } {
+    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1 + \ambitusBarSeparation}
+    \xdef\ambitusBarOffset{\ambitusBarOffset}
+
+    \ambitus[#1][#2]{#3}
+  }
+
   \ExplSyntaxOff
 
   \NewDocumentEnvironment{instrumentFamily}{}{
@@ -464,8 +488,8 @@ Fab-Fil-ter
 
     \newtoggle{didRun}
 
-    \NewCommandCopy\drawAmbitusOriginal\drawAmbitus
-    \RenewDocumentCommand\drawAmbitus{m}{
+    \NewCommandCopy\ambitusOriginal\ambitus
+    \RenewDocumentCommand\ambitus{oom}{
       \iftoggle{didRun}{
         \def\lowNodeName{}
         \def\highNodeName{high}
@@ -474,7 +498,7 @@ Fab-Fil-ter
         \def\highNodeName{}
         \toggletrue{didRun}
       }
-      \drawAmbitusOriginal{##1}
+      \ambitusOriginal[##1][##2]{##3}
     }
 
     \begin{scope}[name prefix=#1-]
@@ -492,7 +516,7 @@ Fab-Fil-ter
       % (\x1 - 0.75 * \blackKeyWidth, \y3) -- (\x1 - \blackKeyWidth, \y3)
       ;
 
-    \RenewCommandCopy\drawAmbitus\drawAmbitusOriginal
+    \RenewCommandCopy\ambitus\ambitusOriginal
 
     \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1}
     \xdef\ambitusBarOffset{\ambitusBarOffset}
@@ -509,28 +533,22 @@ Fab-Fil-ter
     \begin{instrumentFamily}
       \begin{bracketedAmbitus}{Contrabass}
         \begin{compactAmbitus}
-          \drawAmbitus{primary-note-start=28, primary-note-end=40, secondary-note-start=24, secondary-note-end=52}
-          \drawAmbitus{primary-note-start=33, primary-note-end=45, secondary-note-end=57}
-          \drawAmbitus{primary-note-start=38, primary-note-end=50, secondary-note-end=62}
-          \drawAmbitus{primary-note-start=43, primary-note-end=55, secondary-note-end=67}
+          \instrumentAmbitus{notes={28, 40}, secondary-notes={24, 52}}
+          \instrumentAmbitus{notes={33, 45}, secondary-notes=57}
+          \instrumentAmbitus{notes={38, 50}, secondary-notes=62}
+          \instrumentAmbitus{notes={43, 55}, secondary-notes=67}
         \end{compactAmbitus}
-        \drawAmbitus{primary-note-start=40, long-name=Cb. harmonics}
-        \drawAmbitus{primary-note-start=45, is-continuation}
-        \drawAmbitus{primary-note-start=47, is-continuation}
-        \drawAmbitus{primary-note-start=50, is-continuation}
-        \drawAmbitus{primary-note-start=52, primary-note-end=84, secondary-note-end=89, is-continuation}
+        \instrumentAmbitus[Cb. harmonics]{notes=40} \ambitus{notes=45} \ambitus{notes=47} \ambitus{notes=50} \ambitus{notes={52, 84}, secondary-notes=89}
       \end{bracketedAmbitus}
 
       \begin{bracketedAmbitus}{Cello}
         \begin{compactAmbitus}
-          \drawAmbitus{primary-note-start=36, primary-note-end=53, secondary-note-end=60}
-          \drawAmbitus{primary-note-start=43, primary-note-end=60, secondary-note-end=67}
-          \drawAmbitus{primary-note-start=50, primary-note-end=67, secondary-note-end=74}
-          \drawAmbitus{primary-note-start=57, primary-note-end=81, secondary-note-end=82}
+          \instrumentAmbitus{notes={36, 53}, secondary-notes=60}
+          \instrumentAmbitus{notes={43, 60}, secondary-notes=67}
+          \instrumentAmbitus{notes={50, 67}, secondary-notes=74}
+          \instrumentAmbitus{notes={57, 81}, secondary-notes=82}
         \end{compactAmbitus}
-        \drawAmbitus{primary-note-start=48, long-name=Vcl. harmonics}
-        \drawAmbitus{primary-note-start=55, is-continuation}
-        \drawAmbitus{primary-note-start=60, primary-note-end=89, secondary-note-end=95, is-continuation}
+        \instrumentAmbitus[Vcl. harmonics]{notes=48} \ambitus{notes=55} \ambitus{notes={60, 89}, secondary-notes=95}
 
         \path
           let \p1=(Vcl harmonics-high) in
@@ -542,48 +560,44 @@ Fab-Fil-ter
 
       \begin{bracketedAmbitus}{Viola}
         \begin{compactAmbitus}
-          \drawAmbitus{primary-note-start=48, primary-note-end=72}
-          \drawAmbitus{primary-note-start=55, primary-note-end=79}
-          \drawAmbitus{primary-note-start=62, primary-note-end=86}
-          \drawAmbitus{primary-note-start=69, primary-note-end=93}
+          \instrumentAmbitus{notes={48, 72}}
+          \instrumentAmbitus{notes={55, 79}}
+          \instrumentAmbitus{notes={62, 86}}
+          \instrumentAmbitus{notes={69, 93}}
         \end{compactAmbitus}
-        \drawAmbitus{primary-note-start=60, long-name=Vla. harmonics}
-        \drawAmbitus{primary-note-start=67, is-continuation}
-        \drawAmbitus{primary-note-start=72, primary-note-end=100, secondary-note-end=101, is-continuation}
+        \instrumentAmbitus[Vla. harmonics]{notes=60} \ambitus{notes=67} \ambitus{notes={72, 100}, secondary-notes=101}
       \end{bracketedAmbitus}
 
       \begin{bracketedAmbitus}{Violin}
         \begin{compactAmbitus}
-          \drawAmbitus{primary-note-start=55, primary-note-end=79}
-          \drawAmbitus{primary-note-start=62, primary-note-end=86}
-          \drawAmbitus{primary-note-start=69, primary-note-end=93}
-          \drawAmbitus{primary-note-start=76, primary-note-end=100}
+          \instrumentAmbitus{notes={55,  79}}
+          \instrumentAmbitus{notes={62,  86}}
+          \instrumentAmbitus{notes={69,  93}}
+          \instrumentAmbitus{notes={76, 100}}
         \end{compactAmbitus}
-        \drawAmbitus{primary-note-start=67, long-name=Vln. harmonics}
-        \drawAmbitus{primary-note-start=74, is-continuation}
-        \drawAmbitus{primary-note-start=79, primary-note-end=108, secondary-note-end=110, is-continuation}
+        \instrumentAmbitus[Vln. harmonics]{notes=67} \ambitus{notes=74} \ambitus{notes={79, 108}, secondary-notes=110}
       \end{bracketedAmbitus}
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
-      \drawAmbitus{primary-note-start=21, primary-note-end=108, long-name=Piano, short-name=Pno.}
-      \drawAmbitus{primary-note-start=23, primary-note-end=104, long-name=Harp, short-name=Harp, primary-note-start-label=C♭0, primary-note-end-label=G♯7}
-      \drawAmbitus{primary-note-start=48, primary-note-end=96, secondary-note-start=36, long-name=Marimba, short-name=Mar.}
-      \drawAmbitus{primary-note-start=65, primary-note-end=108, secondary-note-start=58, long-name=Xylophone, short-name=Xyl.}
-      \drawAmbitus{primary-note-start=53, primary-note-end=89, secondary-note-start=48, long-name=Vibraphone, short-name=Vib.}
-      \drawAmbitus{primary-note-start=60, primary-note-end=77, secondary-note-start=52, secondary-note-end=79, long-name=Tubular Bells, short-name=T. Bells}
-      \drawAmbitus{primary-note-start=60, primary-note-end=108, long-name=Celesta, short-name=Cel.}
-      \drawAmbitus{primary-note-start=79, primary-note-end=108, secondary-note-start=72, long-name=Glockenspiel, short-name=Glck.}
-      \drawAmbitus{primary-note-start=84, primary-note-end=108, long-name=Crotales, short-name=Crot.}
+      \instrumentAmbitus[Piano]         [Pno.]     {notes={21, 108}}
+      \instrumentAmbitus[Harp]          [Harp]     {notes={23, 104}, note-labels={C♭0, G♯7}}
+      \instrumentAmbitus[Marimba]       [Mar.]     {notes={48,  96}}
+      \instrumentAmbitus[Xylophone]     [Xyl.]     {notes={65, 108}, secondary-notes=58}
+      \instrumentAmbitus[Vibraphone]    [Vib.]     {notes={53,  89}, secondary-notes=48}
+      \instrumentAmbitus[Tubular Bells] [T. Bells] {notes={60,  77}, secondary-notes={52, 79}}
+      \instrumentAmbitus[Celesta]       [Cel.]     {notes={60, 108}}
+      \instrumentAmbitus[Glockenspiel]  [Glck.]    {notes={79, 108}, secondary-notes=72}
+      \instrumentAmbitus[Crotales]      [Crot.]    {notes={84, 108}}
       \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset - 3 - 2 * \ambitusBarSeparation}
       \xdef\ambitusBarOffset{\ambitusBarOffset}
       \begin{bracketedAmbitus}{Timpani}
         \begin{compactAmbitus}
-          \drawAmbitus{primary-note-start=36, primary-note-end=45, primary-color=secondary-ambitus-color}
-          \drawAmbitus{primary-note-start=41, primary-note-end=48}
-          \drawAmbitus{primary-note-start=46, primary-note-end=53}
-          \drawAmbitus{primary-note-start=50, primary-note-end=57}
-          \drawAmbitus{primary-note-start=53, primary-note-end=61, primary-color=secondary-ambitus-color}
+          \instrumentAmbitus{notes={36, 45}, color=secondary-ambitus-color}
+          \instrumentAmbitus{notes={41, 48}}
+          \instrumentAmbitus{notes={46, 53}}
+          \instrumentAmbitus{notes={50, 57}}
+          \instrumentAmbitus{notes={53, 61}, color=secondary-ambitus-color}
         \end{compactAmbitus}
       \end{bracketedAmbitus}
     \end{instrumentFamily}
@@ -592,19 +606,19 @@ Fab-Fil-ter
     \xdef\ambitusBarOffset{\ambitusBarOffset}
 
     \begin{instrumentFamily}
-      \drawAmbitus{primary-note-start=22, primary-note-end=63, long-name=B♭ Tuba, short-name=B♭ Tuba}
-      \drawAmbitus{primary-note-start=26, primary-note-end=64, secondary-note-start=24, long-name=C Tuba, short-name=C Tuba}
-      \drawAmbitus{primary-note-start=35, primary-note-end=72, long-name=B♭ Euphonium, short-name=B♭ Euph.}
-      \drawAmbitus{primary-note-start=40, primary-note-end=72, long-name=B♭ Baritone, short-name=B♭ Bar.}
-      \drawAmbitus{primary-note-start=35, primary-note-end=77, long-name=F Wagner Tuba, short-name=F Wag.}
-      \drawAmbitus{primary-note-start=40, primary-note-end=77, long-name=B♭ Wagner Tuba, short-name=B♭ Wag.}
-      \drawAmbitus{primary-note-start=34, primary-note-end=77, long-name=Bass Trombone, short-name=B. Tbn.}
-      \drawAmbitus{primary-note-start=40, primary-note-end=77, long-name=Trombone, short-name=Tbn.}
-      \drawAmbitus{primary-note-start=40, primary-note-end=72, long-name=B♭ Bass Trumpet, short-name=B♭ B. Tpt.}
-      \drawAmbitus{primary-note-start=52, primary-note-end=82, secondary-note-start=51, long-name=B♭ Trumpet, short-name=B♭ Tpt.}
-      \drawAmbitus{primary-note-start=54, primary-note-end=84, secondary-note-start=53, long-name=C Trumpet, short-name=C Tpt.}
-      \drawAmbitus{primary-note-start=64, primary-note-end=91, secondary-note-start=62, long-name=B♭ Piccolo Trumpet, short-name=B♭ Picc. Tpt.}
-      \drawAmbitus{primary-note-start=31, primary-note-end=77, long-name=French Horn, short-name=Hn.}
+      \instrumentAmbitus[B♭ Tuba]            [B♭ Tuba]       {notes={22, 63}}
+      \instrumentAmbitus[C Tuba]             [C Tuba]        {notes={26, 64}, secondary-notes=24}
+      \instrumentAmbitus[B♭ Euphonium]       [B♭ Euph.]      {notes={35, 72}}
+      \instrumentAmbitus[B♭ Baritone]        [B♭ Bar.]       {notes={40, 72}}
+      \instrumentAmbitus[F Wagner Tuba]      [F Wag.]        {notes={35, 77}}
+      \instrumentAmbitus[B♭ Wagner Tuba]     [B♭ Wag.]       {notes={40, 77}}
+      \instrumentAmbitus[Bass Trombone]      [B. Tbn.]       {notes={34, 77}}
+      \instrumentAmbitus[Trombone]           [Tbn.]          {notes={40, 77}}
+      \instrumentAmbitus[B♭ Bass Trumpet]    [B♭ B. Tpt.]    {notes={40, 72}}
+      \instrumentAmbitus[B♭ Trumpet]         [B♭ Tpt.]       {notes={52, 82}, secondary-notes=51}
+      \instrumentAmbitus[C Trumpet]          [C Tpt.]        {notes={54, 84}, secondary-notes=53}
+      \instrumentAmbitus[B♭ Piccolo Trumpet] [B♭ Picc. Tpt.] {notes={64, 91}, secondary-notes=62}
+      \instrumentAmbitus[French Horn]        [Hn.]           {notes={31, 77}}
 
       \path
         let \p1=(C Trumpet-low) in
@@ -615,10 +629,10 @@ Fab-Fil-ter
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
-      \drawAmbitus{primary-note-start=37, primary-note-end=75, secondary-note-start=36, long-name=Baritone Saxophone, short-name=Bar. Sax.}
-      \drawAmbitus{primary-note-start=44, primary-note-end=82, long-name=Tenor Saxophone, short-name=T. Sax.}
-      \drawAmbitus{primary-note-start=49, primary-note-end=87, long-name=Alto Saxophone, short-name=A. Sax.}
-      \drawAmbitus{primary-note-start=56, primary-note-end=94, long-name=Soprano Saxophone, short-name=S. Sax.}
+      \instrumentAmbitus[Baritone Saxophone] [Bar. Sax.] {notes={37, 75}, secondary-notes=36}
+      \instrumentAmbitus[Tenor Saxophone]    [T. Sax.]   {notes={44, 82}}
+      \instrumentAmbitus[Alto Saxophone]     [A. Sax.]   {notes={49, 87}}
+      \instrumentAmbitus[Soprano Saxophone]  [S. Sax.]   {notes={56, 94}}
 
       \path
         let \p1=(Soprano Saxophone-high) in
@@ -629,23 +643,23 @@ Fab-Fil-ter
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
-      \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
-      \drawAmbitus{primary-note-start=22, primary-note-end=60, secondary-note-start=21, long-name=Contrabassoon, short-name=Cbsn.}
-      \tikzset{instrument label/.style={}}
-      \drawAmbitus{primary-note-start=34, primary-note-end=75, secondary-note-end=77, long-name=Bassoon, short-name=Bsn.}
-      \tikzset{instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}}
-      \drawAmbitus{primary-note-start=22, primary-note-end=67, long-name=Contrabass Clarinet, short-name=Cb. Cl.}
-      \tikzset{instrument label/.style={}}
-      \drawAmbitus{primary-note-start=34, primary-note-end=79, secondary-note-end=83, long-name=Bass Clarinet, short-name=B.Cl.}
-      \drawAmbitus{primary-note-start=43, primary-note-end=79, secondary-note-start=42, secondary-note-end=84, long-name=E♭ Alto Clarinet, short-name=A.Cl.}
-      \drawAmbitus{primary-note-start=50, primary-note-end=91, long-name=B♭ Clarinet, short-name=B♭ Cl.}
-      \drawAmbitus{primary-note-start=55, primary-note-end=95, long-name=E♭ Clarinet, short-name=E♭ Cl.}
-      \drawAmbitus{primary-note-start=45, primary-note-end=79, secondary-note-end=84, long-name=Heckelphone, short-name=Heck.}
-      \drawAmbitus{primary-note-start=52, primary-note-end=83, long-name=English Horn, short-name=EH}
-      \drawAmbitus{primary-note-start=58, primary-note-end=91, secondary-note-end=96, long-name=Oboe, short-name=Ob.}
-      \drawAmbitus{primary-note-start=55, primary-note-end=88, long-name=Alto Flute, short-name=A.Fl.}
-      \drawAmbitus{primary-note-start=60, primary-note-end=98, secondary-note-start=59, long-name=Flute, short-name=Fl.}
-      \drawAmbitus{primary-note-start=74, primary-note-end=108, long-name=Piccolo, short-name=Picc.}
+      \begin{scope}[instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
+        \instrumentAmbitus[Contrabassoon]       [Cbsn.]   {notes={22,  60}, secondary-notes=21}
+      \end{scope}
+      \instrumentAmbitus  [Bassoon]             [Bsn.]    {notes={34,  75}, secondary-notes=77}
+      \begin{scope}[instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
+        \instrumentAmbitus[Contrabass Clarinet] [Cb. Cl.] {notes={22,  67}}
+      \end{scope}
+      \instrumentAmbitus  [Bass Clarinet]       [B.Cl.]   {notes={34,  79}, secondary-notes=83}
+      \instrumentAmbitus  [E♭ Alto Clarinet]    [A.Cl.]   {notes={43,  79}, secondary-notes={42, 84}}
+      \instrumentAmbitus  [B♭ Clarinet]         [B♭ Cl.]  {notes={50,  91}}
+      \instrumentAmbitus  [E♭ Clarinet]         [E♭ Cl.]  {notes={55,  95}}
+      \instrumentAmbitus  [Heckelphone]         [Heck.]   {notes={45,  79}, secondary-notes=84}
+      \instrumentAmbitus  [English Horn]        [EH]      {notes={52,  83}}
+      \instrumentAmbitus  [Oboe]                [Ob.]     {notes={58,  91}, secondary-notes=96}
+      \instrumentAmbitus  [Alto Flute]          [A.Fl.]   {notes={55,  88}}
+      \instrumentAmbitus  [Flute]               [Fl.]     {notes={60,  98}, secondary-notes=59}
+      \instrumentAmbitus  [Piccolo]             [Picc.]   {notes={74, 108}}
     \end{instrumentFamily}
   \end{scope}
 
