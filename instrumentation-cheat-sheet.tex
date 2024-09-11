@@ -176,7 +176,7 @@ Fab-Fil-ter
         % This is a simplification of
         %   (ln(\frequency) - ln(\minFrequency)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(\minFrequency)) + 0.5
       }
-      \draw[frequency-label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north,yshift=-0.2ex] {
+      \draw[frequency-label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north, yshift=-0.2ex] {
         \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
       };
   }
@@ -278,7 +278,7 @@ Fab-Fil-ter
           ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
           node { C\octave };
         \ifnum\noteNumber>24\relax
-          \path (\noteNumber - 21, -\noteGuideBottom - \keyboardYOffset) node[anchor=south west,yshift=0.1ex] { C\octave };
+          \path (\noteNumber - 21, -\noteGuideBottom - \keyboardYOffset) node[anchor=south west, yshift=0.1ex] { C\octave };
         \fi
       }
       % Label concert pitch (A above middle C).
@@ -290,7 +290,7 @@ Fab-Fil-ter
         ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
         node { A\octave }
         ++(0, -\noteGuideBottom - \noteGuideTop)
-        node[anchor=south west,yshift=0.1ex] { A\octave };
+        node[anchor=south west, yshift=0.1ex] { A\octave };
     \end{scope}
 
     % Add MIDI note numbers.
