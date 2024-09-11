@@ -182,13 +182,11 @@ Fab-Fil-ter
   }
 
   % Draw white note guides.
+  \pgfmathsetmacro{\noteGuideMaxY}{\noteGuideBottom + \noteGuideTop}
   \NewDocumentCommand\AToDGuidePaths{}{
-    % A
-    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
-    % B
-    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(2, -\noteGuideBottom - \noteGuideTop)
-    % D
-    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
+    rectangle ++(1, \noteGuideMaxY) ++(1, -\noteGuideMaxY) % A
+    rectangle ++(1, \noteGuideMaxY) ++(2, -\noteGuideMaxY) % B
+    rectangle ++(1, \noteGuideMaxY) ++(1, -\noteGuideMaxY) % D
   }
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
   \def\EFSeparation{0.05}
@@ -199,21 +197,16 @@ Fab-Fil-ter
     (0, -\noteGuideBottom)
     \foreach \octave in { 0, ..., \lastOctave } {
       \AToDGuidePaths
-      % E
-      rectangle ++(1 - \EFSeparation, \noteGuideBottom + \noteGuideTop) ++(2 * \EFSeparation, -\noteGuideBottom - \noteGuideTop)
-      % F
-      rectangle ++(1 - \EFSeparation, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
-      % G
-      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
+      rectangle ++(1 - \EFSeparation, \noteGuideMaxY) ++(2 * \EFSeparation, -\noteGuideMaxY) % E
+      rectangle ++(1 - \EFSeparation, \noteGuideMaxY) ++(1,                 -\noteGuideMaxY) % F
+      rectangle ++(1,                 \noteGuideMaxY) ++(1,                 -\noteGuideMaxY) % G
     }
     \AToDGuidePaths;
 
   % Draw black note guides.
   \NewDocumentCommand\BFlatToCSharpGuidePaths{}{
-    % A♯/B♭
-    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(2, -\noteGuideBottom - \noteGuideTop)
-    % C♯/D♭
-    rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
+    rectangle ++(1, \noteGuideMaxY) ++(2, -\noteGuideMaxY) % A♯/B♭
+    rectangle ++(1, \noteGuideMaxY) ++(1, -\noteGuideMaxY) % C♯/D♭
   }
   \filldraw[
     draw=black-note-guide-color,
@@ -222,12 +215,9 @@ Fab-Fil-ter
     (1, -\noteGuideBottom)
     \foreach \octave in { 0, ..., \lastOctave } {
       \BFlatToCSharpGuidePaths
-      % D♯/E♭
-      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(2, -\noteGuideBottom - \noteGuideTop)
-      % F♯/G♭
-      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
-      % G♯/A♭
-      rectangle ++(1, \noteGuideBottom + \noteGuideTop) ++(1, -\noteGuideBottom - \noteGuideTop)
+      rectangle ++(1, \noteGuideMaxY) ++(2, -\noteGuideMaxY) % D♯/E♭
+      rectangle ++(1, \noteGuideMaxY) ++(1, -\noteGuideMaxY) % F♯/G♭
+      rectangle ++(1, \noteGuideMaxY) ++(1, -\noteGuideMaxY) % G♯/A♭
     }
     \BFlatToCSharpGuidePaths;
 
@@ -289,7 +279,7 @@ Fab-Fil-ter
         node[yshift=-0.75ex] { A\octave }
         ++(0, \noteGuideTop - \keyboardHeight - \keyboardYOffset)
         node { A\octave }
-        ++(0, -\noteGuideBottom - \noteGuideTop)
+        ++(0, -\noteGuideMaxY)
         node[anchor=south west, yshift=0.1ex] { A\octave };
     \end{scope}
 
