@@ -430,9 +430,11 @@ Fab-Fil-ter
           ++(\l_primary_note_end_int - \l_primary_note_start_int + 1, \ambitusBarHeight);
 
         \node[anchor=south~ west, text=white] (\lowNodeName) at (\l_primary_note_start_int - 21, \ambitusMinY) {
-          \tl_if_empty:NTF \l_primary_note_start_label_tl
-            { \noteName{\l_primary_note_start_int} }
-            { \l_primary_note_start_label_tl }
+          \tl_if_empty:NTF \l_primary_note_start_label_tl {
+            \noteName{\l_primary_note_start_int}
+          } {
+            \l_primary_note_start_label_tl
+          }
         };
 
         \bool_if:nT { \l_secondary_note_start_is_below_primary_bool } {
@@ -443,9 +445,11 @@ Fab-Fil-ter
 
         \node[anchor=south~ west, text=white] (\highNodeName) at (\l_primary_note_end_int - 21, \ambitusMinY) {
           \int_compare:nNnT { \l_primary_note_start_int } < { \l_primary_note_end_int } {
-            \tl_if_empty:NTF \l_primary_note_end_label_tl
-              { \noteName{\l_primary_note_end_int} }
-              { \l_primary_note_end_label_tl }
+            \tl_if_empty:NTF \l_primary_note_end_label_tl {
+              \noteName{\l_primary_note_end_int}
+            } {
+              \l_primary_note_end_label_tl
+            }
           }
         };
 
