@@ -53,7 +53,7 @@ Fab-Fil-ter
 \definecolor{black-note-number-color}{gray}{0.525}
 
 \tikzset{annotation/.style={font=\itshape, text badly ragged}}
-\tikzset{instrument label/.style={}}
+\tikzset{instrument label/.style={overlay}}
 
 \input .octave-offset.tex
 
@@ -141,8 +141,6 @@ Fab-Fil-ter
   \def\bottomNoteShift{0.25}
   \pgfmathsetmacro{\noteGuideBottom}{\noteImageScaleFactor * -\minNoteY * 2.54/72.27 + \bottomNotePadding - \bottomNoteShift}
 
-  \path[use as bounding box] (0, -\noteGuideBottom) rectangle (\totalNoteCount * \blackKeyWidth, \noteGuideTop);
-
   % Add frequencies.
   \pgfkeys{/pgf/number format/.cd,
     assume math mode=true, % Don’t switch to math mode (which would use the wrong font).
@@ -176,7 +174,7 @@ Fab-Fil-ter
         % This is a simplification of
         %   (ln(\frequency) - ln(\minFrequency)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(\minFrequency)) + 0.5
       }
-      \draw[frequency-label-color] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north, yshift=-0.2ex] {
+      \draw[frequency-label-color, overlay] (\pgfmathresult, -\noteGuideBottom) -- ++(0, -0.05) node[anchor=north, yshift=-0.2ex] {
         \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
       };
   }
@@ -283,6 +281,7 @@ Fab-Fil-ter
       anchor=south east,
       inner xsep=1pt,
       minimum height=\keyboardHeight cm,
+      overlay,
       text=white-note-number-color
     ] at (0, 0) { MIDI\\[-0.5ex] note nos. };
 
@@ -505,7 +504,7 @@ Fab-Fil-ter
   }{
     \end{scope}
 
-    \path[draw=ambitus-bracket-color]
+    \path[draw=ambitus-bracket-color, overlay]
       let \p1=(#1-low), \p2=(#1-high) in
       (\x1 - 0.25 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
       (\x1 - 0.75 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
@@ -643,11 +642,11 @@ Fab-Fil-ter
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
-      \begin{scope}[instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
+      \begin{scope}[instrument label/.append style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
         \instrumentAmbitus[Contrabassoon]       [Cbsn.]   {notes={22,  60}, secondary-notes=21}
       \end{scope}
       \instrumentAmbitus  [Bassoon]             [Bsn.]    {notes={34,  75}, secondary-notes=77}
-      \begin{scope}[instrument label/.style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
+      \begin{scope}[instrument label/.append style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
         \instrumentAmbitus[Contrabass Clarinet] [Cb. Cl.] {notes={22,  67}}
       \end{scope}
       \instrumentAmbitus  [Bass Clarinet]       [B.Cl.]   {notes={34,  79}, secondary-notes=83}
@@ -664,12 +663,12 @@ Fab-Fil-ter
   \end{scope}
 
   \pgfmathsetmacro{\noteImageXCoordinate}{0.5 - \minNoteMidpoint * \noteImageScaleFactor / \blackKeyWidth}
-  \path
+  \path[overlay]
     (\noteImageXCoordinate, -\bottomNotePadding + \bottomNoteShift)
     node[anchor=north west] {
       \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
     };
-  \path
+  \path[overlay]
     let \p1=(Piccolo-high) in
     (\noteImageXCoordinate, \y1 - \ambitusBarHeight cm)
     node[anchor=south west] {
