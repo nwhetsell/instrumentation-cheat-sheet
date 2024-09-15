@@ -3,9 +3,9 @@
 This is a “cheat sheet” that shows ranges of musical instruments in a compact format.
 There are two versions, with concert pitch at A3 and A4.
 You can download the version with A3 concert pitch
-[here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v15/instrumentation-cheat-sheet-a3-concert.pdf),
+[here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v16/instrumentation-cheat-sheet-a3-concert.pdf),
 and the version with A4 concert pitch
-[here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v15/instrumentation-cheat-sheet-a4-concert.pdf).
+[here](https://github.com/nwhetsell/instrumentation-cheat-sheet/releases/download/v16/instrumentation-cheat-sheet-a4-concert.pdf).
 
 To create the cheat sheet yourself, you need
 [TeX Live](https://tug.org/texlive/),
