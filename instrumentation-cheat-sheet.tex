@@ -393,6 +393,7 @@ Fab-Fil-ter
 
     \IfValueT{#1}{
       \tl_set:Nn \l_long_name_tl { #1 }
+
       \tl_set_eq:NN \l_tmpa_tl \l_long_name_tl
       \tl_replace_all:Nnn \l_tmpa_tl { ♭ } { -flat }
       \tl_remove_all:Nn \l_tmpa_tl { . }
@@ -400,6 +401,10 @@ Fab-Fil-ter
       \tl_remove_all:Nn \l_tmpa_tl { ) }
       \edef\lowNodeName{\l_tmpa_tl-low}
       \edef\highNodeName{\l_tmpa_tl-high}
+    }
+
+    \IfValueT{#2}{
+      \tl_set:Nn \l_short_name_tl { #2 }
     }
 
     \begin{scope}[node~ distance=0]
