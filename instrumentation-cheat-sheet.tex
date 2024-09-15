@@ -190,10 +190,7 @@ Fab-Fil-ter
   }
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
   \def\EFSeparation{0.05}
-  \filldraw[
-    draw=white-note-guide-color,
-    fill=white-note-guide-color
-  ]
+  \fill[fill=white-note-guide-color]
     (0, -\noteGuideBottom)
     \foreach \octave in { 0, ..., \lastOctave } {
       \AToDGuidePaths
@@ -208,10 +205,7 @@ Fab-Fil-ter
     rectangle ++(1, \noteGuideMaxY) ++(2, -\noteGuideMaxY) % A♯/B♭
     rectangle ++(1, \noteGuideMaxY) ++(1, -\noteGuideMaxY) % C♯/D♭
   }
-  \filldraw[
-    draw=black-note-guide-color,
-    fill=black-note-guide-color
-  ]
+  \fill[fill=black-note-guide-color]
     (1, -\noteGuideBottom)
     \foreach \octave in { 0, ..., \lastOctave } {
       \BFlatToCSharpGuidePaths
