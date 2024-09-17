@@ -365,11 +365,11 @@ Fab-Fil-ter
 
   % Add the top staff.
   \pgfgetlastxy{\lastx}{\lasty}
-
   \node[anchor=north west, overlay] (notes-top) at (\noteImageXCoordinate, \lasty - \ambitusBarHeight cm) {
     \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
   };
 
+  % Add wind instrument ambitus.
   \node[below=0 of notes-top] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \gdef\ambitusBarOffset{-3.5 - \ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
@@ -497,6 +497,7 @@ Fab-Fil-ter
     ] (MIDI note label) at (0, 0) { MIDI\\[-0.5ex] note nos. };
   \end{scope}
 
+  % Add percussion and string instrument ambitus.
   \node[below=0 of MIDI note label, overlay] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \gdef\ambitusBarOffset{-\ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
@@ -586,6 +587,7 @@ Fab-Fil-ter
       \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
     };
 
+  % Label notes.
   \node[below=0 of notes-bottom] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \pgfmathsetmacro{\frequencyY}{-\lasty * 2.54/72.27}
