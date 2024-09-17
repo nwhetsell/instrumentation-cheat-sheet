@@ -99,7 +99,6 @@ Fab-Fil-ter
 ]
   \def\ambitusBarHeight{0.155}
   \def\ambitusBarSeparation{0.45}
-  \pgfmathsetmacro{\keyboardHeight}{6 * \ambitusBarHeight}
   \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
 
   \input .note-metrics
@@ -435,6 +434,7 @@ Fab-Fil-ter
   \end{scope}
 
   % Draw the keyboard.
+  \pgfmathsetmacro{\keyboardHeight}{6 * \ambitusBarHeight}
   \pgfmathsetmacro{\blackKeyHeight}{0.625 * \keyboardHeight}
   \pgfmathsetmacro{\whiteToBlackKeyDistance}{\keyboardHeight - \blackKeyHeight}
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
