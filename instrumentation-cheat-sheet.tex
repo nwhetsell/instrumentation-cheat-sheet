@@ -55,6 +55,7 @@ Fab-Fil-ter
 
 \tikzset{annotation/.style={font=\itshape, text badly ragged}}
 \tikzset{instrument label/.style={overlay}}
+\tikzset{note name/.style={anchor=north west, text=white}}
 
 \input .octave-offset.tex
 
@@ -105,39 +106,40 @@ Fab-Fil-ter
   \pgfmathsetmacro{\noteImageScaleFactor}{(87 * \blackKeyWidth) / (\maxNoteMidpoint - \minNoteMidpoint)}
   \pgfmathsetmacro{\noteImageXCoordinate}{0.5 - \minNoteMidpoint * \noteImageScaleFactor / \blackKeyWidth}
 
+  \tikzset{note name/.append style={minimum width=\blackKeyWidth}}
+
   \ExplSyntaxOn
-
-  \int_new:N \l_labeled_note_minimum_octave_int
-
-  \NewDocumentCommand { \labelCsAndConcertPitch } { o } {
-    \IfValueTF{#1}{
-      \int_set:Nn \l_labeled_note_minimum_octave_int { #1 }
-    } {
-      \int_set:Nn \l_labeled_note_minimum_octave_int { -1 }
-    }
-    \begin{scope}[
-      minimum~ width=\blackKeyWidth,
-      text=note-label-color
-    ]
-      \foreach \noteNumber in { 24, 36, ..., 108, 69 } {
-        \pgfmathsetmacro{\octave}{int(div(\noteNumber, 12) - \octaveOffset)}
-        \bool_if:nT { \int_compare_p:nNn \octave > \l_labeled_note_minimum_octave_int } {
-          \node (midi-note-\noteNumber) at (\noteNumber - 21, 0) {
-            \bool_if:nTF { \int_compare_p:nNn \noteNumber = { 69 } } { A } { C } \octave
-          };
-        }
-      }
-    \end{scope}
-  }
 
   \NewDocumentCommand { \noteOctave } { m } {
     \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
   }
 
-  \seq_const_from_clist:Nn \note_names { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
+  \seq_const_from_clist:Nn \pitch_classes { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
+  \NewDocumentCommand { \pitchClass } { m } {
+    \seq_item:Nn \pitch_classes { \int_mod:nn { #1 } { 12 } + 1 }
+  }
+
   \NewDocumentCommand { \noteName } { m } {
-    \seq_item:Nn \note_names { \int_mod:nn { #1 } { 12 } + 1 }
-    \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
+    \pitchClass{#1}\noteOctave{#1}
+  }
+
+  \int_new:N \l_labeled_note_minimum_octave_int
+
+  \NewDocumentCommand { \labelCsAndConcertPitch } { o } {
+    \int_set:Nn \l_labeled_note_minimum_octave_int { \IfValueTF{#1}{#1}{-1} }
+    \begin{scope}[
+      minimum~ width=\blackKeyWidth,
+      text=note-label-color
+    ]
+      \foreach \noteNumber in { 24, 36, ..., 108, 69 } {
+        \def\octave{\noteOctave{\noteNumber}}
+        \bool_if:nT { \int_compare_p:nNn \octave > \l_labeled_note_minimum_octave_int } {
+          \node (midi-note-\noteNumber) at (\noteNumber - 21, 0) {
+            \pitchClass{\noteNumber}\octave
+          };
+        }
+      }
+    \end{scope}
   }
 
   \tl_new:N    \l_long_name_tl
@@ -191,9 +193,6 @@ Fab-Fil-ter
     \int_set:Nn \l_primary_note_end_int   { \clist_item:Nn \l_primary_notes_clist { -1 } }
 
     \keys_set_exclude_groups:nnn { ambitus } { primary-notes } { #3 }
-
-    % \tl_show:N \l_low_node_name_tl
-    % \tl_show:N \l_high_node_name_tl
 
     \bool_if:nT { \int_compare_p:nNn { \clist_count:N \l_primary_note_labels_clist } > 0 } {
       \tl_set:Nn \l_primary_start_pitch_class_label_tl { \clist_item:Nn \l_primary_note_labels_clist 1 }
@@ -261,7 +260,7 @@ Fab-Fil-ter
           rectangle
           ++(\l_primary_note_end_int - \l_primary_note_start_int + 1, \ambitusBarHeight);
 
-        \node[anchor=north~ west, text=white] (\l_low_node_name_tl) at (\l_primary_note_start_int - 21, \ambitusMinY) {
+        \node[note~ name] (\l_low_node_name_tl) at (\l_primary_note_start_int - 21, \ambitusMinY) {
           \tl_if_empty:NTF \l_primary_start_pitch_class_label_tl {
             \noteName{\l_primary_note_start_int}
           } {
@@ -270,12 +269,12 @@ Fab-Fil-ter
         };
 
         \bool_if:nT { \l_secondary_note_start_is_below_primary_bool } {
-          \node[anchor=north~ west, text=white] (\l_low_node_name_tl) at (\l_secondary_note_start_int - 21, \ambitusMinY) {
+          \node[note~ name] (\l_low_node_name_tl) at (\l_secondary_note_start_int - 21, \ambitusMinY) {
             \noteName{\l_secondary_note_start_int}
           };
         }
 
-        \node[anchor=north~ west, text=white] (\l_high_node_name_tl) at (\l_primary_note_end_int - 21, \ambitusMinY) {
+        \node[note~ name] (\l_high_node_name_tl) at (\l_primary_note_end_int - 21, \ambitusMinY) {
           \int_compare:nNnT { \l_primary_note_start_int } < { \l_primary_note_end_int } {
             \tl_if_empty:NTF \l_primary_end_pitch_class_label_tl {
               \noteName{\l_primary_note_end_int}
@@ -286,7 +285,7 @@ Fab-Fil-ter
         };
 
         \bool_if:nT { \l_secondary_note_end_is_above_primary_bool } {
-          \node[anchor=north~ west, text=white] (\l_high_node_name_tl) at (\l_secondary_note_end_int - 21, \ambitusMinY) {
+          \node[note~ name] (\l_high_node_name_tl) at (\l_secondary_note_end_int - 21, \ambitusMinY) {
             \noteName{\l_secondary_note_end_int}
           };
         }
@@ -366,21 +365,17 @@ Fab-Fil-ter
   \end{scope}
 
   % Add the top staff.
-  \path[overlay]
-    let \p1=(midi-note-60) in
-    (\noteImageXCoordinate, \y1 - \ambitusBarHeight cm)
-    node[anchor=north west] (notes-top) {
-      \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
-    };
+  \pgfgetlastxy{\lastx}{\lasty}
+
+  \node[anchor=north west, overlay] (notes-top) at (\noteImageXCoordinate, \lasty - \ambitusBarHeight cm) {
+    \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
+  };
 
   \node[below=0 of notes-top] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \gdef\ambitusBarOffset{-3.5 - \ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
 
-  \begin{scope}[
-    minimum height=\ambitusBarHeight cm,
-    minimum width=\blackKeyWidth
-  ]
+  \begin{scope}[minimum height=\ambitusBarHeight cm]
     \begin{instrumentFamily}
       \ambitus  [Piccolo]             [Picc.]   {notes={74, 108}}
       \ambitus  [Flute]               [Fl.]     {notes={60,  98}, secondary-notes=59}
