@@ -227,10 +227,10 @@ Fab-Fil-ter
       \tl_remove_all:Nn \l_tmpa_tl { ) }
 
       \tl_if_empty:NT \l_low_node_name_tl {
-        \tl_set:Nn \l_low_node_name_tl { \l_tmpa_tl-low }
+        \tl_set:Nx \l_low_node_name_tl { \l_tmpa_tl \c_space_tl lowest~ note }
       }
       \tl_if_empty:NT \l_high_node_name_tl {
-        \tl_set:Nn \l_high_node_name_tl { \l_tmpa_tl-high }
+        \tl_set:Nx \l_high_node_name_tl { \l_tmpa_tl \c_space_tl highest~ note }
       }
     }
 
@@ -329,9 +329,9 @@ Fab-Fil-ter
     \NewCommandCopy\ambitusComponentOriginal\ambitusComponent
     \RenewDocumentCommand\ambitusComponent{oom}{
       \iftoggle{didRun}{
-        \ambitusComponentOriginal[##1][##2]{##3, low-node-name=#1-low}
+        \ambitusComponentOriginal[##1][##2]{##3, low-node-name=#1 lowest note}
       }{
-        \ambitusComponentOriginal[##1][##2]{##3, high-node-name=#1-high}
+        \ambitusComponentOriginal[##1][##2]{##3, high-node-name=#1 highest note}
         \toggletrue{didRun}
       }
     }
@@ -341,7 +341,7 @@ Fab-Fil-ter
     \end{scope}
 
     \path[draw=ambitus-bracket-color, overlay]
-      let \p1=(#1-low), \p2=(#1-high) in
+      let \p1=(#1 lowest note), \p2=(#1 highest note) in
       (\x1 - 0.25 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
       (\x1 - 0.75 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
       (\x1 - 0.75 * \blackKeyWidth, \y2 + 0.5 * \ambitusBarHeight cm)
@@ -368,12 +368,12 @@ Fab-Fil-ter
 
   % Add the top staff.
   \pgfgetlastxy{\lastx}{\lasty}
-  \node[anchor=north west, overlay] (notes-top) at (\noteImageXCoordinate, \lasty - \ambitusBarHeight cm) {
+  \node[anchor=north west, overlay] (top staff) at (\noteImageXCoordinate, \lasty - \ambitusBarHeight cm) {
     \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
   };
 
   % Add wind instrument ambitus.
-  \node[below=0 of notes-top] {};
+  \node[below=0 of top staff] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \gdef\ambitusBarOffset{-3.5 - \ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
 
@@ -405,7 +405,7 @@ Fab-Fil-ter
       \ambitus[Baritone Saxophone] [Bar. Sax.] {notes={37, 75}, secondary-notes=36}
 
       \path
-        let \p1=(Soprano Saxophone-high) in
+        let \p1=(Soprano Saxophone highest note) in
         (\x1 + 3.75 * \blackKeyWidth, \y1 + \ambitusBarHeight cm)
         node[annotation, anchor=mid west, text width=12.75*\blackKeyWidth] {
           Higher notes are possible on wind instruments, but increasingly difficult to sound and not always available in sample sets.
@@ -428,7 +428,7 @@ Fab-Fil-ter
       \ambitus[B♭ Tuba]            [B♭ Tuba]       {notes={22, 63}}
 
       \path
-        let \p1=(C Trumpet-low) in
+        let \p1=(C Trumpet lowest note) in
         (0, \y1)
         node[annotation, anchor=north west, text width=7.5*\blackKeyWidth] {
           Lower pedal tones are possible on brass instruments.
@@ -441,7 +441,7 @@ Fab-Fil-ter
   \pgfmathsetmacro{\blackKeyHeight}{0.625 * \keyboardHeight}
   \pgfmathsetmacro{\whiteToBlackKeyDistance}{\keyboardHeight - \blackKeyHeight}
   \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
-  \node[below=0 of B-flat Tuba-low] {};
+  \node[below=0 of B-flat Tuba lowest note] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \begin{scope}[yshift=\lasty - \ambitusBarHeight cm]
     \begin{scope}[draw=black-key-color]
@@ -505,10 +505,7 @@ Fab-Fil-ter
   \pgfgetlastxy{\lastx}{\lasty}
   \gdef\ambitusBarOffset{-\ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
 
-  \begin{scope}[
-    minimum height=\ambitusBarHeight cm,
-    minimum width=\blackKeyWidth
-  ]
+  \begin{scope}[minimum height=\ambitusBarHeight cm]
     \begin{instrumentFamily}
       \begin{bracketedAmbitus}{Timpani}
         \begin{compactAmbitus}
@@ -563,7 +560,7 @@ Fab-Fil-ter
         \end{compactAmbitus}
 
         \path
-          let \p1=(Cello-high) in
+          let \p1=(Cello highest note) in
           (96.5 - 21, \y1 + 0.5*\ambitusBarHeight cm)
           node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth] {
             Higher harmonics are possible on stringed instruments, but not always available in sample sets.
@@ -584,14 +581,14 @@ Fab-Fil-ter
 
   % Add the bottom staff.
   \path[overlay]
-    let \p1=(Contrabass-low) in
+    let \p1=(Contrabass lowest note) in
     (\noteImageXCoordinate, \y1)
-    node[anchor=north west] (notes-bottom) {
+    node[anchor=north west] (bottom staff) {
       \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
     };
 
   % Label notes.
-  \node[below=0 of notes-bottom] {};
+  \node[below=0 of bottom staff] {};
   \pgfgetlastxy{\lastx}{\lasty}
   \pgfmathsetmacro{\frequencyY}{-\lasty * 2.54/72.27}
 
