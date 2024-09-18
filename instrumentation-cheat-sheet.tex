@@ -238,7 +238,10 @@ Fab-Fil-ter
       \tl_set:Nn \l_short_name_tl { #2 }
     }
 
-    \begin{scope}[node~ distance=0]
+    \begin{scope}[
+      node~ distance=0,
+      xshift=-21*\blackKeyWidth
+    ]
       \pgfmathsetmacro{\ambitusMinY}{\ambitusBarOffset * \ambitusBarHeight}
 
       \begin{scope}[rounded~ corners=0.5bp]
@@ -249,17 +252,17 @@ Fab-Fil-ter
 
         \bool_if:nT { \l_secondary_note_start_is_below_primary_bool || \l_secondary_note_end_is_above_primary_bool } {
           \path[fill=secondary-ambitus-color]
-            (\l_secondary_note_start_int - 21, \ambitusMinY)
+            (\l_secondary_note_start_int, \ambitusMinY)
             rectangle
             ++(\l_secondary_note_end_int - \l_secondary_note_start_int + 1, \ambitusBarHeight);
         }
 
         \path[fill=\l_primary_color_tl]
-          (\l_primary_note_start_int - 21, \ambitusMinY)
+          (\l_primary_note_start_int, \ambitusMinY)
           rectangle
           ++(\l_primary_note_end_int - \l_primary_note_start_int + 1, \ambitusBarHeight);
 
-        \node[note~ name] (\l_low_node_name_tl) at (\l_primary_note_start_int - 21, \ambitusMinY) {
+        \node[note~ name] (\l_low_node_name_tl) at (\l_primary_note_start_int, \ambitusMinY) {
           \tl_if_empty:NTF \l_primary_start_pitch_class_label_tl {
             \noteName{\l_primary_note_start_int}
           } {
@@ -268,12 +271,12 @@ Fab-Fil-ter
         };
 
         \bool_if:nT { \l_secondary_note_start_is_below_primary_bool } {
-          \node[note~ name] (\l_low_node_name_tl) at (\l_secondary_note_start_int - 21, \ambitusMinY) {
+          \node[note~ name] (\l_low_node_name_tl) at (\l_secondary_note_start_int, \ambitusMinY) {
             \noteName{\l_secondary_note_start_int}
           };
         }
 
-        \node[note~ name] (\l_high_node_name_tl) at (\l_primary_note_end_int - 21, \ambitusMinY) {
+        \node[note~ name] (\l_high_node_name_tl) at (\l_primary_note_end_int, \ambitusMinY) {
           \int_compare:nNnT { \l_primary_note_start_int } < { \l_primary_note_end_int } {
             \tl_if_empty:NTF \l_primary_end_pitch_class_label_tl {
               \noteName{\l_primary_note_end_int}
@@ -284,7 +287,7 @@ Fab-Fil-ter
         };
 
         \bool_if:nT { \l_secondary_note_end_is_above_primary_bool } {
-          \node[note~ name] (\l_high_node_name_tl) at (\l_secondary_note_end_int - 21, \ambitusMinY) {
+          \node[note~ name] (\l_high_node_name_tl) at (\l_secondary_note_end_int, \ambitusMinY) {
             \noteName{\l_secondary_note_end_int}
           };
         }
