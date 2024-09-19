@@ -133,7 +133,7 @@ Fab-Fil-ter
       \foreach \noteNumber in { 24, 36, ..., 108, 69 } {
         \def\octave{\noteOctave{\noteNumber}}
         \bool_if:nT { \int_compare_p:nNn \octave > \l_labeled_note_minimum_octave_int } {
-          \node (midi-note-\noteNumber) at (\noteNumber - 21, 0) {
+          \node at (\noteNumber - 21, 0) {
             \pitchClass{\noteNumber}\octave
           };
         }
