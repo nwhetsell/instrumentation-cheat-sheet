@@ -246,9 +246,9 @@ Fab-Fil-ter
 
       \begin{scope}[rounded~ corners=0.5bp]
         \bool_set:Nn \l_secondary_note_start_is_below_primary_bool
-                     { \int_compare_p:nNn { \l_secondary_note_start_int } < { \l_primary_note_start_int } }
+                     { \int_compare_p:nNn \l_secondary_note_start_int < \l_primary_note_start_int }
         \bool_set:Nn \l_secondary_note_end_is_above_primary_bool
-                     { \int_compare_p:nNn { \l_secondary_note_end_int } > { \l_primary_note_end_int } }
+                     { \int_compare_p:nNn \l_secondary_note_end_int > \l_primary_note_end_int }
 
         \bool_if:nT { \l_secondary_note_start_is_below_primary_bool || \l_secondary_note_end_is_above_primary_bool } {
           \path[fill=secondary-ambitus-color]
