@@ -480,7 +480,7 @@ Fab-Fil-ter
     ]
       \foreach \noteNumber in { 21, ..., 110 } {
         \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
-        \pgfmathparse{\pitchNumber ==  1 || \pitchNumber ==  3 || \pitchNumber ==  6 || \pitchNumber ==  8 || \pitchNumber == 10}
+        \pgfmathparse{\pitchNumber == 1 || \pitchNumber == 3 || \pitchNumber == 6 || \pitchNumber == 8 || \pitchNumber == 10}
         \ifnum\pgfmathresult>0\relax
           \def\noteNumberColor{black-note-number-color}
         \else
