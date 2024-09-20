@@ -72,91 +72,125 @@ Fab-Fil-ter
                                      {\normalfont\normalsize}}%
 \makeatother
 
-\begin{document}
-\frenchspacing
-\pagenumbering{gobble}
-\pagestyle{fancyplain}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0sp}
-\renewcommand{\footrulewidth}{0sp}
-\lfoot{\fancyplain{}{\tiny commit \ttfamily \input|"git rev-parse --short HEAD"}}
-\rfoot{\fancyplain{}{\tiny\DTMsetstyle{iso}\today}}
+\AddToHook{begindocument/end}{
+  % Don’t put extra space after a full stop.
+  \frenchspacing
 
-\section*{Instrumentation Cheat Sheet}
-\vfil
+  % Don’t number pages.
+  \pagenumbering{gobble}
 
-\def\totalNoteCount{90}
-\pgfmathsetmacro{\blackKeyWidth}{\textwidth / \totalNoteCount}
+  % Put the commit hash and current date in the footer.
+  \pagestyle{fancyplain}
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+  \lfoot{\fancyplain{}{\tiny commit \ttfamily \input|"git rev-parse --short HEAD"}}
+  \rfoot{\fancyplain{}{\tiny\DTMsetstyle{iso}\today}}
+}
 
-\begin{tikzpicture}[
-  every node/.style={
-    node font=\tiny,
-    inner sep=0,
-    outer sep=0
-  },
-  x=\blackKeyWidth,
-  y=-1 cm
-]
-  \def\ambitusBarHeight{0.155}
-  \def\ambitusBarSeparation{0.45}
-  \pgfmathsetmacro{\labelOffset}{-0.1 * \blackKeyWidth}
+\ExplSyntaxOn
 
-  \input .note-metrics
-  \pgfmathsetmacro{\noteImageScaleFactor}{(87 * \blackKeyWidth) / (\maxNoteMidpoint - \minNoteMidpoint)}
-  \pgfmathsetmacro{\noteImageXCoordinate}{0.5 - \minNoteMidpoint * \noteImageScaleFactor / \blackKeyWidth}
+\tl_const:Nn \l_total_note_count_tl { 90 }
 
-  \tikzset{note name/.append style={minimum width=\blackKeyWidth}}
+% TikZ does not treat coordinates that lack units (the usual case) the same as
+% coordinates that have units, so we need to be careful about which is which.
+% Use token lists for numbers without units and dimensions for numbers with
+% units. (This isn’t a perfect solution. Token lists can contain anything, so a
+% token list can become a number with a unit simply by appending “pt”, for
+% example.)
+\tl_const:Nn  \l_ambitus_bar_height_tl { 0.155 }
+\tl_const:Nn  \l_ambitus_bar_separation_tl { 0.45 } % This is a fraction of the ambitus bar height.
+\tl_new:N     \g_ambitus_y_tl
+\dim_const:Nn \l_black_key_width_dim { \textwidth / \l_total_note_count_tl }
 
-  \ExplSyntaxOn
+\tikzset{midi~ note~ number/.style={anchor=mid~ west, minimum~ height=\l_ambitus_bar_height_tl cm, minimum~ width=\l_black_key_width_dim}}
+\tikzset{note~ name/.append~ style={minimum~ width=\l_black_key_width_dim}}
 
-  \NewDocumentCommand { \noteOctave } { m } {
+\NewDocumentEnvironment { instrumentationPicture } { o }
+  {
+    \begin{tikzpicture}[
+      every~ node/.style={
+        node~ font=\tiny,
+        inner~ sep=0,
+        outer~ sep=0
+      },
+      % Without units, TikZ x-coordinates are in terms of black key widths, and
+      % TikZ y-coordinates are flipped (increasing goes down the page, not up).
+      % This only applies to *coordinates* without units. TikZ keys like xshift
+      % and yshift must have units, which greatly complicates things.
+      x=\l_black_key_width_dim, y=-1cm
+    ]
+  }
+  {
+    \end{tikzpicture}
+  }
+
+\input .note-metrics
+\tl_const:Nn \l_staff_scale_factor_tl { \fp_to_decimal:n { (87 * \l_black_key_width_dim) / (\maxNoteMidpoint - \minNoteMidpoint) } }
+\tl_const:Nn \l_staff_x_coordinate_tl { \fp_to_decimal:n { 0.5 - \minNoteMidpoint * \l_staff_scale_factor_tl / \l_black_key_width_dim } }
+
+\NewDocumentCommand { \noteOctave } { m }
+  {
     \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
   }
 
-  \seq_const_from_clist:Nn \pitch_classes { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
-  \NewDocumentCommand { \pitchClass } { m } {
-    \seq_item:Nn \pitch_classes { \int_mod:nn { #1 } { 12 } + 1 }
+\int_const:Nn \l_first_octave_int { \noteOctave{21} }
+\int_const:Nn \l_last_octave_int  { \noteOctave{\l_total_note_count_tl} }
+
+\NewDocumentCommand { \pitchNumber } { m }
+  {
+    \int_mod:nn { #1 } { 12 } + 1
   }
 
-  \NewDocumentCommand { \noteName } { m } {
+\seq_const_from_clist:Nn \pitch_classes { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
+\NewDocumentCommand { \pitchClass } { m }
+  {
+    \seq_item:Nn \pitch_classes { \pitchNumber{#1} }
+  }
+
+\NewDocumentCommand { \noteName } { m }
+  {
     \pitchClass{#1}\noteOctave{#1}
   }
 
-  \int_new:N \l_labeled_note_minimum_octave_int
+\int_new:N \l_labeled_note_minimum_octave_int
 
-  \NewDocumentCommand { \labelCsAndConcertPitch } { o } {
+\NewDocumentCommand { \labelCsAndConcertPitch } { o }
+  {
     \int_set:Nn \l_labeled_note_minimum_octave_int { \IfValueTF{#1}{#1}{-1} }
+
     \begin{scope}[
-      minimum~ width=\blackKeyWidth,
+      minimum~ width=\l_black_key_width_dim,
       text=note-label-color
     ]
       \foreach \noteNumber in { 24, 36, ..., 108, 69 } {
-        \def\octave{\noteOctave{\noteNumber}}
-        \bool_if:nT { \int_compare_p:nNn \octave > \l_labeled_note_minimum_octave_int } {
+        \tl_set:Nn \l_tmpa_tl { \noteOctave{\noteNumber} }
+        \bool_if:nT { \int_compare_p:nNn \l_tmpa_tl > \l_labeled_note_minimum_octave_int } {
           \node at (\noteNumber - 21, 0) {
-            \pitchClass{\noteNumber}\octave
+            \pitchClass{\noteNumber}\l_tmpa_tl
           };
         }
       }
     \end{scope}
   }
 
-  \tl_new:N    \l_long_name_tl
-  \tl_new:N    \l_short_name_tl
-  \clist_new:N \l_primary_notes_clist
-  \int_new:N   \l_primary_note_start_int
-  \int_new:N   \l_primary_note_end_int
-  \clist_new:N \l_primary_note_labels_clist
-  \tl_new:N    \l_primary_start_pitch_class_label_tl
-  \tl_new:N    \l_primary_end_pitch_class_label_tl
-  \tl_new:N    \l_primary_color_tl
-  \clist_new:N \l_secondary_notes_clist
-  \int_new:N   \l_secondary_note_start_int
-  \int_new:N   \l_secondary_note_end_int
-  \tl_new:N    \l_low_node_name_tl
-  \tl_new:N    \l_high_node_name_tl
+\tl_new:N    \l_long_name_tl
+\tl_new:N    \l_short_name_tl
+\clist_new:N \l_primary_notes_clist
+\int_new:N   \l_primary_note_start_int
+\int_new:N   \l_primary_note_end_int
+\clist_new:N \l_primary_note_labels_clist
+\tl_new:N    \l_primary_start_pitch_class_label_tl
+\tl_new:N    \l_primary_end_pitch_class_label_tl
+\tl_new:N    \l_primary_color_tl
+\clist_new:N \l_secondary_notes_clist
+\int_new:N   \l_secondary_note_start_int
+\int_new:N   \l_secondary_note_end_int
+\tl_new:N    \l_low_node_name_tl
+\tl_new:N    \l_high_node_name_tl
 
-  \keys_define:nn { ambitus } {
+\keys_define:nn { ambitus }
+  {
     notes           .clist_set:N      = \l_primary_notes_clist,
     notes           .value_required:n = true,
     notes           .groups:n         = { primary-notes },
@@ -172,10 +206,11 @@ Fab-Fil-ter
     high-node-name  .value_required:n = true,
   }
 
-  \bool_new:N \l_secondary_note_start_is_below_primary_bool
-  \bool_new:N \l_secondary_note_end_is_above_primary_bool
+\bool_new:N \l_secondary_note_start_is_below_primary_bool
+\bool_new:N \l_secondary_note_end_is_above_primary_bool
 
-  \NewDocumentCommand { \ambitusComponent } { o o m } {
+\NewDocumentCommand { \ambitusComponent } { o o m }
+  {
     \tl_clear:N    \l_long_name_tl
     \tl_clear:N    \l_short_name_tl
     \clist_clear:N \l_primary_note_labels_clist
@@ -193,29 +228,42 @@ Fab-Fil-ter
 
     \keys_set_exclude_groups:nnn { ambitus } { primary-notes } { #3 }
 
-    \bool_if:nT { \int_compare_p:nNn { \clist_count:N \l_primary_note_labels_clist } > 0 } {
-      \tl_set:Nn \l_primary_start_pitch_class_label_tl { \clist_item:Nn \l_primary_note_labels_clist 1 }
-      \tl_set:Nn \l_primary_end_pitch_class_label_tl   { \clist_item:Nn \l_primary_note_labels_clist { -1 } }
-    }
+    \bool_if:nT { \int_compare_p:nNn { \clist_count:N \l_primary_note_labels_clist } > 0 }
+      {
+        \tl_set:Nn \l_primary_start_pitch_class_label_tl { \clist_item:Nn \l_primary_note_labels_clist 1 }
+        \tl_set:Nn \l_primary_end_pitch_class_label_tl   { \clist_item:Nn \l_primary_note_labels_clist { -1 } }
+      }
 
-    \bool_case:nF {
-      { \int_compare_p:nNn { \clist_count:N \l_secondary_notes_clist } = 0 } {
-        \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
-        \int_set_eq:NN \l_secondary_note_end_int   \l_primary_note_start_int
+    \int_case:nnF { \clist_count:N \l_secondary_notes_clist }
+      {
+        { 0 }
+          {
+            \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
+            \int_set_eq:NN \l_secondary_note_end_int   \l_primary_note_start_int
+          }
+
+        { 1 }
+          {
+            \bool_if:nTF { \int_compare_p:nNn { \clist_item:Nn \l_secondary_notes_clist 1 } < \l_primary_note_start_int }
+              {
+                \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+                \int_set_eq:NN \l_secondary_note_end_int \l_primary_note_start_int
+              }
+              {
+                \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
+                \int_set:Nn \l_secondary_note_end_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+              }
+          }
       }
-      { \int_compare_p:nNn { \clist_count:N \l_secondary_notes_clist } = 1 } {
-        \bool_if:nTF { \int_compare_p:nNn { \clist_item:Nn \l_secondary_notes_clist 1 } < \l_primary_note_start_int } {
-          \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
-          \int_set_eq:NN \l_secondary_note_end_int \l_primary_note_start_int
-        } {
-          \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
-          \int_set:Nn \l_secondary_note_end_int { \clist_item:Nn \l_secondary_notes_clist 1 }
-        }
+      {
+        \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+        \int_set:Nn \l_secondary_note_end_int   { \clist_item:Nn \l_secondary_notes_clist { -1 } }
       }
-    } {
-      \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
-      \int_set:Nn \l_secondary_note_end_int   { \clist_item:Nn \l_secondary_notes_clist { -1 } }
-    }
+
+    \bool_set:Nn \l_secondary_note_start_is_below_primary_bool
+                 { \int_compare_p:nNn \l_secondary_note_start_int < \l_primary_note_start_int }
+    \bool_set:Nn \l_secondary_note_end_is_above_primary_bool
+                 { \int_compare_p:nNn \l_secondary_note_end_int > \l_primary_note_end_int }
 
     \IfValueT{#1}{
       \tl_set:Nn \l_long_name_tl { #1 }
@@ -226,12 +274,15 @@ Fab-Fil-ter
       \tl_remove_all:Nn \l_tmpa_tl { ( }
       \tl_remove_all:Nn \l_tmpa_tl { ) }
 
-      \tl_if_empty:NT \l_low_node_name_tl {
-        \tl_set:Nx \l_low_node_name_tl { \l_tmpa_tl \c_space_tl lowest~ note }
-      }
-      \tl_if_empty:NT \l_high_node_name_tl {
-        \tl_set:Nx \l_high_node_name_tl { \l_tmpa_tl \c_space_tl highest~ note }
-      }
+      \tl_if_empty:NT \l_low_node_name_tl
+        {
+          \tl_set:Nx \l_low_node_name_tl { \l_tmpa_tl \c_space_tl lowest~ note }
+        }
+
+      \tl_if_empty:NT \l_high_node_name_tl
+        {
+          \tl_set:Nx \l_high_node_name_tl { \l_tmpa_tl \c_space_tl highest~ note }
+        }
     }
 
     \IfValueT{#2}{
@@ -240,144 +291,143 @@ Fab-Fil-ter
 
     \begin{scope}[
       node~ distance=0,
-      xshift=-21*\blackKeyWidth
+      minimum~ height=\l_ambitus_bar_height_tl cm,
+      xshift=-21 * \l_black_key_width_dim
     ]
-      \pgfmathsetmacro{\ambitusMinY}{\ambitusBarOffset * \ambitusBarHeight}
-
       \begin{scope}[rounded~ corners=0.5bp]
-        \bool_set:Nn \l_secondary_note_start_is_below_primary_bool
-                     { \int_compare_p:nNn \l_secondary_note_start_int < \l_primary_note_start_int }
-        \bool_set:Nn \l_secondary_note_end_is_above_primary_bool
-                     { \int_compare_p:nNn \l_secondary_note_end_int > \l_primary_note_end_int }
-
-        \bool_if:nT { \l_secondary_note_start_is_below_primary_bool || \l_secondary_note_end_is_above_primary_bool } {
-          \path[fill=secondary-ambitus-color]
-            (\l_secondary_note_start_int, \ambitusMinY)
-            rectangle
-            ++(\l_secondary_note_end_int - \l_secondary_note_start_int + 1, \ambitusBarHeight);
-        }
+        \bool_if:nT { \l_secondary_note_start_is_below_primary_bool || \l_secondary_note_end_is_above_primary_bool }
+          {
+            \path[fill=secondary-ambitus-color]
+              (\l_secondary_note_start_int, \g_ambitus_y_tl)
+              rectangle
+              ++(\l_secondary_note_end_int - \l_secondary_note_start_int + 1, \l_ambitus_bar_height_tl);
+          }
 
         \path[fill=\l_primary_color_tl]
-          (\l_primary_note_start_int, \ambitusMinY)
+          (\l_primary_note_start_int, \g_ambitus_y_tl)
           rectangle
-          ++(\l_primary_note_end_int - \l_primary_note_start_int + 1, \ambitusBarHeight);
+          ++(\l_primary_note_end_int - \l_primary_note_start_int + 1, \l_ambitus_bar_height_tl);
+      \end{scope}
 
-        \node[note~ name] (\l_low_node_name_tl) at (\l_primary_note_start_int, \ambitusMinY) {
-          \tl_if_empty:NTF \l_primary_start_pitch_class_label_tl {
-            \noteName{\l_primary_note_start_int}
-          } {
-            \l_primary_start_pitch_class_label_tl \noteOctave{\l_primary_note_start_int}
-          }
-        };
+      \node[note~ name] (\l_low_node_name_tl) at (\l_primary_note_start_int, \g_ambitus_y_tl) {
+        \tl_if_empty:NTF \l_primary_start_pitch_class_label_tl
+          { \noteName{\l_primary_note_start_int} }
+          { \l_primary_start_pitch_class_label_tl \noteOctave{\l_primary_note_start_int} }
+      };
 
-        \bool_if:nT { \l_secondary_note_start_is_below_primary_bool } {
-          \node[note~ name] (\l_low_node_name_tl) at (\l_secondary_note_start_int, \ambitusMinY) {
+      \bool_if:nT { \l_secondary_note_start_is_below_primary_bool }
+        {
+          \node[note~ name] (\l_low_node_name_tl) at (\l_secondary_note_start_int, \g_ambitus_y_tl) {
             \noteName{\l_secondary_note_start_int}
           };
         }
 
-        \node[note~ name] (\l_high_node_name_tl) at (\l_primary_note_end_int, \ambitusMinY) {
-          \int_compare:nNnT { \l_primary_note_start_int } < { \l_primary_note_end_int } {
-            \tl_if_empty:NTF \l_primary_end_pitch_class_label_tl {
-              \noteName{\l_primary_note_end_int}
-            } {
-              \l_primary_end_pitch_class_label_tl \noteOctave{\l_primary_note_end_int}
-            }
+      \node[note~ name] (\l_high_node_name_tl) at (\l_primary_note_end_int, \g_ambitus_y_tl) {
+        \int_compare:nNnT { \l_primary_note_start_int } < { \l_primary_note_end_int }
+          {
+            \tl_if_empty:NTF \l_primary_end_pitch_class_label_tl
+              { \noteName{\l_primary_note_end_int} }
+              { \l_primary_end_pitch_class_label_tl \noteOctave{\l_primary_note_end_int} }
           }
-        };
+      };
 
-        \bool_if:nT { \l_secondary_note_end_is_above_primary_bool } {
-          \node[note~ name] (\l_high_node_name_tl) at (\l_secondary_note_end_int, \ambitusMinY) {
+      \bool_if:nT { \l_secondary_note_end_is_above_primary_bool }
+        {
+          \node[note~ name] (\l_high_node_name_tl) at (\l_secondary_note_end_int, \g_ambitus_y_tl) {
             \noteName{\l_secondary_note_end_int}
           };
         }
 
-        \tl_if_empty:NF \l_long_name_tl {
-          \node[base~ left=of~ \l_low_node_name_tl, xshift=\labelOffset, instrument~ label] { \l_long_name_tl };
+      \tl_if_empty:NF \l_long_name_tl
+        {
+          \node[base~ left=of~ \l_low_node_name_tl, xshift=-0.5ex, instrument~ label] { \l_long_name_tl };
         }
-        \tl_if_empty:NF \l_short_name_tl {
-          \node[base~ right=of~ \l_high_node_name_tl, xshift=-\labelOffset] { \l_short_name_tl };
+      \tl_if_empty:NF \l_short_name_tl
+        {
+          \node[base~ right=of~ \l_high_node_name_tl, xshift=0.5ex] { \l_short_name_tl };
         }
-      \end{scope}
     \end{scope}
   }
 
-  \NewDocumentCommand { \ambitus } { o o m } {
+\NewDocumentCommand { \ambitus } { o o m }
+  {
     \ambitusComponent[#1][#2]{#3}
-
-    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1 + \ambitusBarSeparation}
-    \xdef\ambitusBarOffset{\ambitusBarOffset}
+    \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \g_ambitus_y_tl + (1 + \l_ambitus_bar_separation_tl) * \l_ambitus_bar_height_tl } }
   }
 
-  \ExplSyntaxOff
-
-  \NewDocumentEnvironment{instrumentFamily}{}{
-    \def\defaultInstrumentFamilySeparation{1.5}
-    \gdef\instrumentFamilySeparation{\defaultInstrumentFamilySeparation}
-
-    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + \instrumentFamilySeparation}
-    \xdef\ambitusBarOffset{\ambitusBarOffset}
-  }{
-    \gdef\instrumentFamilySeparation{\defaultInstrumentFamilySeparation}
+\NewDocumentEnvironment { instrumentFamily } { }
+  { }
+  {
+    \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \g_ambitus_y_tl + 1.5 * \l_ambitus_bar_height_tl } }
   }
 
-  \NewDocumentEnvironment{bracketedAmbitus}{m}{
-    \def\ambitusBarSeparation{0.25}
+\NewDocumentEnvironment { bracketedAmbitus } { m }
+  {
+    \tl_set:Nn \l_ambitus_bar_separation_tl { 0.25 }
 
     \newtoggle{didRun}
 
-    \NewCommandCopy\ambitusComponentOriginal\ambitusComponent
-    \RenewDocumentCommand\ambitusComponent{oom}{
-      \iftoggle{didRun}{
-        \ambitusComponentOriginal[##1][##2]{##3, low-node-name=#1 lowest note}
-      }{
-        \ambitusComponentOriginal[##1][##2]{##3, high-node-name=#1 highest note}
-        \toggletrue{didRun}
+    \NewCommandCopy \ambitusComponentOriginal \ambitusComponent
+    \RenewDocumentCommand { \ambitusComponent } { o o m }
+      {
+        \iftoggle{didRun}
+          { \ambitusComponentOriginal[##1][##2]{##3, low-node-name=#1~ lowest~ note} }
+          {
+            \ambitusComponentOriginal[##1][##2]{##3, high-node-name=#1~ highest~ note}
+            \toggletrue{didRun}
+          }
       }
-    }
-
-    \begin{scope}
-  }{
-    \end{scope}
-
+  }
+  {
     \path[draw=ambitus-bracket-color, overlay]
-      let \p1=(#1 lowest note), \p2=(#1 highest note) in
-      (\x1 - 0.25 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
-      (\x1 - 0.75 * \blackKeyWidth, \y1 - \ambitusBarHeight cm) --
-      (\x1 - 0.75 * \blackKeyWidth, \y2 + 0.5 * \ambitusBarHeight cm)
-      node[midway, anchor=mid east, xshift=\labelOffset] (#1-midpoint) { #1 } --
-      (\x1 - 0.25 * \blackKeyWidth, \y2 + 0.5 * \ambitusBarHeight cm)
-      % let \p3=(#1-midpoint) in
-      % (\x1 - 0.75 * \blackKeyWidth, \y3) -- (\x1 - \blackKeyWidth, \y3)
+      let \p1=(#1~ lowest~ note), \p2=(#1~ highest~ note) in
+      (\x1 - 0.25 * \l_black_key_width_dim, \y1 - \l_ambitus_bar_height_tl cm) --
+      (\x1 - 0.75 * \l_black_key_width_dim, \y1 - \l_ambitus_bar_height_tl cm) --
+      (\x1 - 0.75 * \l_black_key_width_dim, \y2 + 0.5 * \l_ambitus_bar_height_tl cm)
+      node[midway, anchor=mid~ east, xshift=-0.5ex] (#1~ midpoint) { #1 } --
+      (\x1 - 0.25 * \l_black_key_width_dim, \y2 + 0.5 * \l_ambitus_bar_height_tl cm)
+      % let \p3=(#1~ midpoint) in
+      % (\x1 - 0.75 * \l_black_key_width_dim, \y3) -- (\x1 - \l_black_key_width_dim, \y3)
       ;
 
-    \RenewCommandCopy\ambitusComponent\ambitusComponentOriginal
+    \RenewCommandCopy \ambitusComponent \ambitusComponentOriginal
 
-    \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset + 1}
-    \xdef\ambitusBarOffset{\ambitusBarOffset}
-
-    \gdef\instrumentFamilySeparation{0.5}
+    \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \g_ambitus_y_tl + \l_ambitus_bar_height_tl } }
   }
 
-  \NewDocumentEnvironment{compactAmbitus}{}{\def\ambitusBarSeparation{0}}{}
+\NewDocumentEnvironment { compactAmbitus } { }
+  { \tl_set:Nn \l_ambitus_bar_separation_tl { 0 } }
+  { }
 
+\ExplSyntaxOff
+
+
+\begin{document}
+
+\section*{Instrumentation Cheat Sheet}
+\vfil
+
+\begin{instrumentationPicture}
   % Label notes.
   \begin{scope}[anchor=north west]
     \labelCsAndConcertPitch
   \end{scope}
 
+  \ExplSyntaxOn
+
   % Add the top staff.
-  \pgfgetlastxy{\lastx}{\lasty}
-  \node[anchor=north west, overlay] (top staff) at (\noteImageXCoordinate, \lasty - \ambitusBarHeight cm) {
-    \includegraphics[scale=\noteImageScaleFactor]{notes-top.pdf}
+  \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+  \node[anchor=north~ west, overlay] (top~ staff) at (\l_staff_x_coordinate_tl, \l_tmpb_dim - \l_ambitus_bar_height_tl cm) {
+    \includegraphics[scale=\l_staff_scale_factor_tl]{notes-top.pdf}
   };
 
   % Add wind instrument ambitus.
-  \node[below=0 of top staff] {};
-  \pgfgetlastxy{\lastx}{\lasty}
-  \gdef\ambitusBarOffset{-3.5 - \ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
+  \node[below=0~ of~ top~ staff] { };
+  \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+  \tl_gset:Nx \g_ambitus_y_tl { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } - 2 * \l_ambitus_bar_height_tl }
 
-  \begin{scope}[minimum height=\ambitusBarHeight cm]
+  \ExplSyntaxOff
+
     \begin{instrumentFamily}
       \ambitus  [Piccolo]             [Picc.]   {notes={74, 108}}
       \ambitus  [Flute]               [Fl.]     {notes={60,  98}, secondary-notes=59}
@@ -389,11 +439,11 @@ Fab-Fil-ter
       \ambitus  [B♭ Clarinet]         [B♭ Cl.]  {notes={50,  91}}
       \ambitus  [E♭ Alto Clarinet]    [A.Cl.]   {notes={43,  79}, secondary-notes={42, 84}}
       \ambitus  [Bass Clarinet]       [B.Cl.]   {notes={34,  79}, secondary-notes=83}
-      \begin{scope}[instrument label/.append style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
+      \begin{scope}[instrument label/.append style={anchor=north west, xshift=0.5ex, yshift=-0.3ex}]
         \ambitus[Contrabass Clarinet] [Cb. Cl.] {notes={22,  67}}
       \end{scope}
       \ambitus  [Bassoon]             [Bsn.]    {notes={34,  75}, secondary-notes=77}
-      \begin{scope}[instrument label/.append style={anchor=north west, xshift=-\labelOffset, yshift=-0.2*\ambitusBarHeight cm}]
+      \begin{scope}[instrument label/.append style={anchor=north west, xshift=0.5ex, yshift=-0.3ex}]
         \ambitus[Contrabassoon]       [Cbsn.]   {notes={22,  60}, secondary-notes=21}
       \end{scope}
     \end{instrumentFamily}
@@ -404,12 +454,16 @@ Fab-Fil-ter
       \ambitus[Tenor Saxophone]    [T. Sax.]   {notes={44, 82}}
       \ambitus[Baritone Saxophone] [Bar. Sax.] {notes={37, 75}, secondary-notes=36}
 
-      \path
-        let \p1=(Soprano Saxophone highest note) in
-        (\x1 + 3.75 * \blackKeyWidth, \y1 + \ambitusBarHeight cm)
-        node[annotation, anchor=mid west, text width=12.75*\blackKeyWidth] {
-          Higher notes are possible on wind instruments, but increasingly difficult to sound and not always available in sample sets.
-        };
+      \ExplSyntaxOn
+      \node[
+        annotation,
+        anchor=mid~ west,
+        right=3.5 * \l_black_key_width_dim~ of~ Soprano~ Saxophone~ highest~ note,
+        text~ width=12.5 * \l_black_key_width_dim
+      ] {
+        Higher~ notes~ are~ possible~ on~ wind~ instruments,~ but~ increasingly~ difficult~ to~ sound~ and~ not~ always~ available~ in~ sample~ sets.
+      };
+      \ExplSyntaxOff
     \end{instrumentFamily}
 
     \begin{instrumentFamily}
@@ -427,85 +481,90 @@ Fab-Fil-ter
       \ambitus[C Tuba]             [C Tuba]        {notes={26, 64}, secondary-notes=24}
       \ambitus[B♭ Tuba]            [B♭ Tuba]       {notes={22, 63}}
 
+      \ExplSyntaxOn
       \path
-        let \p1=(C Trumpet lowest note) in
+        let \p1=(C~ Trumpet~ lowest~ note) in
         (0, \y1)
-        node[annotation, anchor=north west, text width=7.5*\blackKeyWidth] {
-          Lower pedal tones are possible on brass instruments.
+        node[
+          annotation,
+          anchor=north~ west,
+          text~ width=7.5 * \l_black_key_width_dim
+        ] {
+          Lower~ pedal~ tones~ are~ possible~ on~ brass~ instruments.
         };
+      \ExplSyntaxOff
     \end{instrumentFamily}
-  \end{scope}
+
+  \ExplSyntaxOn
 
   % Draw the keyboard.
-  \pgfmathsetmacro{\keyboardHeight}{6 * \ambitusBarHeight}
-  \pgfmathsetmacro{\blackKeyHeight}{0.625 * \keyboardHeight}
-  \pgfmathsetmacro{\whiteToBlackKeyDistance}{\keyboardHeight - \blackKeyHeight}
-  \pgfmathsetmacro{\lastOctave}{div(\totalNoteCount, 12) - 1}
-  \node[below=0 of B-flat Tuba lowest note] {};
-  \pgfgetlastxy{\lastx}{\lasty}
-  \begin{scope}[yshift=\lasty - \ambitusBarHeight cm]
-    \begin{scope}[draw=black-key-color]
-      \draw[fill=white] (0, 0) rectangle (\totalNoteCount, \keyboardHeight);
+  \tl_const:Nx \l_keyboard_height_tl { \fp_to_decimal:n { 6 * \l_ambitus_bar_height_tl } }
+  \tl_const:Nx \l_black_key_height_tl { \fp_to_decimal:n { 0.625 * \l_keyboard_height_tl } }
+  \tl_const:Nx \l_white_to_black_key_distance_tl { \fp_to_decimal:n { \l_keyboard_height_tl - \l_black_key_height_tl } }
 
-      \NewDocumentCommand\AToCSharpKeyPaths{}{
-        ++( 1.5, \keyboardHeight) --        ++(0, -\whiteToBlackKeyDistance)
-        ++(-0.5, 0)               rectangle ++(1, -\blackKeyHeight) % A♯/B♭
-        ++( 1  , \keyboardHeight) --        ++(0, -\keyboardHeight)
-        ++( 1.5, \keyboardHeight) --        ++(0, -\whiteToBlackKeyDistance)
-        ++(-0.5, 0)               rectangle ++(1, -\blackKeyHeight) % C♯/D♭
-      }
-      \filldraw[fill=black-key-color] (0, 0)
-      \foreach \octave in { 0, ..., \lastOctave } {
-        \AToCSharpKeyPaths
-        ++( 1.5, \keyboardHeight) --        ++(0, -\whiteToBlackKeyDistance)
-        ++(-0.5, 0)               rectangle ++(1, -\blackKeyHeight) % D♯/E♭
-        ++( 1  , \keyboardHeight) --        ++(0, -\keyboardHeight)
-        ++( 1.5, \keyboardHeight) --        ++(0, -\whiteToBlackKeyDistance)
-        ++(-0.5, 0)               rectangle ++(1, -\blackKeyHeight) % F♯/G♭
-        ++( 1.5, \keyboardHeight) --        ++(0, -\whiteToBlackKeyDistance)
-        ++(-0.5, 0)               rectangle ++(1, -\blackKeyHeight) % G♯/A♭
-      }
-      \AToCSharpKeyPaths;
+  \node[below=0~ of~ B-flat~ Tuba~ lowest~ note] { };
+  \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+  \begin{scope}[yshift=\l_tmpb_dim - \l_ambitus_bar_height_tl cm]
+    \begin{scope}[draw=black-key-color]
+      \draw[fill=white] (0, 0) rectangle (\l_total_note_count_tl, \l_keyboard_height_tl);
+
+      \tl_set:Nn \l_tmpa_tl
+        {
+          ++( 1.5, \l_keyboard_height_tl) --        ++(0, -\l_white_to_black_key_distance_tl)
+          ++(-0.5, 0)                     rectangle ++(1, -\l_black_key_height_tl) % A♯/B♭
+          ++( 1  , \l_keyboard_height_tl) --        ++(0, -\l_keyboard_height_tl)
+          ++( 1.5, \l_keyboard_height_tl) --        ++(0, -\l_white_to_black_key_distance_tl)
+          ++(-0.5, 0)                     rectangle ++(1, -\l_black_key_height_tl) % C♯/D♭
+        }
+
+      \filldraw[fill=black-key-color]
+        (0, 0)
+        \foreach \octave in { \l_first_octave_int, ..., \l_last_octave_int } {
+          \l_tmpa_tl
+          ++( 1.5, \l_keyboard_height_tl) --        ++(0, -\l_white_to_black_key_distance_tl)
+          ++(-0.5, 0)                     rectangle ++(1, -\l_black_key_height_tl) % D♯/E♭
+          ++( 1  , \l_keyboard_height_tl) --        ++(0, -\l_keyboard_height_tl)
+          ++( 1.5, \l_keyboard_height_tl) --        ++(0, -\l_white_to_black_key_distance_tl)
+          ++(-0.5, 0)                     rectangle ++(1, -\l_black_key_height_tl) % F♯/G♭
+          ++( 1.5, \l_keyboard_height_tl) --        ++(0, -\l_white_to_black_key_distance_tl)
+          ++(-0.5, 0)                     rectangle ++(1, -\l_black_key_height_tl) % G♯/A♭
+        }
+        \l_tmpa_tl;
 
       % Label notes.
-      \begin{scope}[anchor=north west, yshift=-0.3ex]
+      \begin{scope}[anchor=north~ west, yshift=-0.3ex]
         \labelCsAndConcertPitch
       \end{scope}
     \end{scope}
 
     % Add MIDI note numbers.
-    \begin{scope}[
-      anchor=mid west,
-      minimum width=\blackKeyWidth,
-    ]
+    \begin{scope}[midi~ note~ number]
       \foreach \noteNumber in { 21, ..., 110 } {
-        \pgfmathsetmacro{\pitchNumber}{mod(\noteNumber, 12)}
-        \pgfmathparse{\pitchNumber == 1 || \pitchNumber == 3 || \pitchNumber == 6 || \pitchNumber == 8 || \pitchNumber == 10}
-        \ifnum\pgfmathresult>0\relax
-          \def\noteNumberColor{black-note-number-color}
-        \else
-          \def\noteNumberColor{white-note-number-color}
-        \fi
-        \node[text=\noteNumberColor] at (\noteNumber - 21, 0.5 * \keyboardHeight) { \noteNumber };
+        \int_case:nnTF { \pitchNumber{\noteNumber} }
+          { { 2 } { } { 4 } { } { 7 } { } { 9 } { } { 11 } { } }
+          { \tl_set:Nn \l_tmpa_tl { black-note-number-color } }
+          { \tl_set:Nn \l_tmpa_tl { white-note-number-color } }
+        \node[text=\l_tmpa_tl] at (\noteNumber - 21, 0.5 * \l_keyboard_height_tl) { \noteNumber };
       }
     \end{scope}
 
     \node[
       align=center,
-      anchor=north east,
-      inner xsep=1pt,
-      minimum height=\keyboardHeight cm,
+      anchor=north~ east,
+      inner~ xsep=1pt,
+      minimum~ height=\l_keyboard_height_tl cm,
       overlay,
       text=white-note-number-color
-    ] (MIDI note label) at (0, 0) { MIDI\\[-0.5ex] note nos. };
+    ] (MIDI~ note~ label) at (0, 0) { MIDI\\[-0.5ex] note~ nos. };
   \end{scope}
 
   % Add percussion and string instrument ambitus.
-  \node[below=0 of MIDI note label, overlay] {};
-  \pgfgetlastxy{\lastx}{\lasty}
-  \gdef\ambitusBarOffset{-\ambitusBarSeparation - \lasty * 2.54/72.27 / \ambitusBarHeight}
+  \node[below=0~ of~ MIDI~ note~ label, overlay] {};
+  \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+  \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } + \l_ambitus_bar_height_tl } }
 
-  \begin{scope}[minimum height=\ambitusBarHeight cm]
+  \ExplSyntaxOff
+
     \begin{instrumentFamily}
       \begin{bracketedAmbitus}{Timpani}
         \begin{compactAmbitus}
@@ -516,8 +575,14 @@ Fab-Fil-ter
           \ambitus{notes={36, 45}, color=secondary-ambitus-color}
         \end{compactAmbitus}
       \end{bracketedAmbitus}
-      \pgfmathsetmacro{\ambitusBarOffset}{\ambitusBarOffset - 4 - 2 * \ambitusBarSeparation}
-      \xdef\ambitusBarOffset{\ambitusBarOffset}
+
+      % Move high pitched percussion up to save space.
+      \ExplSyntaxOn
+      \node[below=0~ of~ MIDI~ note~ label, overlay] {};
+      \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+      \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } + 2 * \l_ambitus_bar_height_tl } }
+      \ExplSyntaxOff
+
       \ambitus[Crotales]      [Crot.]    {notes={84, 108}}
       \ambitus[Glockenspiel]  [Glck.]    {notes={79, 108}, secondary-notes=72}
       \ambitus[Celesta]       [Cel.]     {notes={60, 108}}
@@ -559,12 +624,16 @@ Fab-Fil-ter
           \ambitus{notes={36, 53}, secondary-notes=60}
         \end{compactAmbitus}
 
-        \path
-          let \p1=(Cello highest note) in
-          (96.5 - 21, \y1 + 0.5*\ambitusBarHeight cm)
-          node[annotation, anchor=mid west, text width=14.5*\blackKeyWidth] {
-            Higher harmonics are possible on stringed instruments, but not always available in sample sets.
-          };
+        \ExplSyntaxOn
+        \node[
+          annotation,
+          anchor=mid~ west,
+          right=47.5 * \l_black_key_width_dim~ of~ Cello~ highest~ note,
+          text~ width=14.5 * \l_black_key_width_dim
+        ] {
+          Higher~ harmonics~ are~ possible~ on~ stringed~ instruments,~ but~ not~ always~ available~ in~ sample~ sets.
+        };
+        \ExplSyntaxOff
       \end{bracketedAmbitus}
 
       \begin{bracketedAmbitus}{Contrabass}
@@ -577,97 +646,114 @@ Fab-Fil-ter
         \end{compactAmbitus}
       \end{bracketedAmbitus}
     \end{instrumentFamily}
-  \end{scope}
+
+  \ExplSyntaxOn
 
   % Add the bottom staff.
   \path[overlay]
-    let \p1=(Contrabass lowest note) in
-    (\noteImageXCoordinate, \y1)
-    node[anchor=north west] (bottom staff) {
-      \includegraphics[scale=\noteImageScaleFactor]{notes-bottom.pdf}
+    let \p1=(Contrabass~ lowest~ note) in
+    (\l_staff_x_coordinate_tl, \y1 + 0.75 * \l_ambitus_bar_height_tl cm)
+    node[anchor=north~ west] (bottom~ staff) {
+      \includegraphics[scale=\l_staff_scale_factor_tl]{notes-bottom.pdf}
     };
 
   % Label notes.
-  \node[below=0 of bottom staff] {};
-  \pgfgetlastxy{\lastx}{\lasty}
-  \pgfmathsetmacro{\frequencyY}{-\lasty * 2.54/72.27}
+  \node[below=0~ of~ bottom~ staff] { };
+  \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+  \tl_const:Nx \l_bottom_y_tl { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } }
 
-  \begin{scope}[anchor=south west, yshift=-\frequencyY cm + 0.1ex]
-    \labelCsAndConcertPitch[0]
+  \begin{scope}[anchor=south~ west, yshift=-\l_bottom_y_tl cm + 0.1ex]
+    \labelCsAndConcertPitch[2 - \octaveOffset]
   \end{scope}
 
   % Add frequencies.
-  \pgfkeys{/pgf/number format/.cd,
-    assume math mode=true, % Don’t switch to math mode (which would use the wrong font).
-    fixed,                 % Round numbers to a fixed number of digits after the decimal point.
-    precision=1            % Round to the nearest tenth.
+  \pgfkeys{/pgf/number~ format/.cd,
+    assume~ math~ mode=true, % Don’t switch to math mode (which would use the wrong font).
+    fixed,                   % Round numbers to a fixed number of digits after the decimal point.
+    precision=1              % Round to the nearest tenth.
   }
 
   % The highest note is the D five half-steps above the A at 3520 Hz, so in most
   % DAWs using 12-EDO tuning, the fundamental frequency of the D will be
   % 2^(5/12) * 3520 Hz. Use a LaTeX3 floating point expression because the PGF
   % math engine is a bit too imprecise to compute this.
-  \ExplSyntaxOn
-  \def\maxFrequency{\fp_to_decimal:n {2^(5/12) * 3520}}
-  \ExplSyntaxOff
+  \tl_const:Nx \l_max_frequency_tl { \fp_to_decimal:n { 2^(5/12) * 3520 } }
 
-  \def\minFrequency{27.5}
+  \tl_const:Nn \l_min_frequency_tl { 27.5 }
 
   \newtoggle{didPrintFrequencyUnit}
   \foreach \frequency in {
     % Frequencies of A notes
-    \minFrequency, 55, 110, 220, 440, 880, 1760, 3520,
+    \l_min_frequency_tl, 55, 110, 220, 440, 880, 1760, 3520,
     % ISO 266 frequencies
       31.5, 40,  50,  63,  80,  100,  125,  160,  200,  250,
      315,  400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500,
     3150, 4000,
     % Max frequency
-    \maxFrequency
+    \l_max_frequency_tl
   } {
-    \pgfmathparse{
-      89 * ln(\frequency / \minFrequency) / ln(\maxFrequency / \minFrequency) + 0.5
-      % This is a simplification of
-      %   (ln(\frequency) - ln(\minFrequency)) * (89.5 - 0.5) / (ln(\maxFrequency) - ln(\minFrequency)) + 0.5
-    }
-    \draw[frequency-label-color, overlay] (\pgfmathresult, \frequencyY) -- ++(0, 0.05) node[anchor=north, yshift=-0.2ex] {
-      \pgfmathprintnumber{\frequency} \iftoggle{didPrintFrequencyUnit}{}{Hz\global\toggletrue{didPrintFrequencyUnit}}
+    \tl_set:Nx \l_tmpa_tl
+      {
+        \fp_to_decimal:n
+        {
+          89 * ln(\frequency / \l_min_frequency_tl) / ln(\l_max_frequency_tl / \l_min_frequency_tl) + 0.5
+          % This is a simplification of
+          %   (ln(\frequency) - ln(\l_min_frequency_tl)) * (89.5 - 0.5) / (ln(\l_max_frequency_tl) - ln(\l_min_frequency_tl)) + 0.5
+        }
+      }
+
+    \draw[frequency-label-color, overlay] (\l_tmpa_tl, \l_bottom_y_tl) -- ++(0, 0.05) node[anchor=north, yshift=-0.2ex] {
+      \pgfmathprintnumber{\frequency}
+      \iftoggle{didPrintFrequencyUnit}
+        { }
+        {
+          \c_space_tl Hz
+          \global\toggletrue{didPrintFrequencyUnit}
+        }
     };
   }
 
-  \begin{scope}[on background layer]
+  \begin{scope}[on~ background~ layer]
     % Draw white note guides.
-    \NewDocumentCommand\AToDGuidePaths{}{
-      rectangle ++(1, -\frequencyY) ++(1, \frequencyY) % A
-      rectangle ++(1, -\frequencyY) ++(2, \frequencyY) % B
-      rectangle ++(1, -\frequencyY) ++(1, \frequencyY) % D
-    }
-    \def\EFSeparation{0.05}
-    \fill[fill=white-note-guide-color]
-      (0, \frequencyY)
-      \foreach \octave in { 0, ..., \lastOctave } {
-        \AToDGuidePaths
-        rectangle ++(1 - \EFSeparation, -\frequencyY) ++(2 * \EFSeparation, \frequencyY) % E
-        rectangle ++(1 - \EFSeparation, -\frequencyY) ++(1,                 \frequencyY) % F
-        rectangle ++(1,                 -\frequencyY) ++(1,                 \frequencyY) % G
+    \tl_set:Nn \l_tmpa_tl
+      {
+        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % A
+        rectangle ++(1, -\l_bottom_y_tl) ++(2, \l_bottom_y_tl) % B
+        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % D
       }
-      \AToDGuidePaths;
+    \tl_set:Nn \l_tmpb_tl { 0.05 }
+
+    \fill[fill=white-note-guide-color]
+      (0, \l_bottom_y_tl)
+      \foreach \octave in { \l_first_octave_int, ..., \l_last_octave_int } {
+        \l_tmpa_tl
+        rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) ++(2 * \l_tmpb_tl, \l_bottom_y_tl) % E
+        rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) ++(1,              \l_bottom_y_tl) % F
+        rectangle ++(1,              -\l_bottom_y_tl) ++(1,              \l_bottom_y_tl) % G
+      }
+      \l_tmpa_tl;
 
     % Draw black note guides.
-    \NewDocumentCommand\BFlatToCSharpGuidePaths{}{
-      rectangle ++(1, -\frequencyY) ++(2, \frequencyY) % A♯/B♭
-      rectangle ++(1, -\frequencyY) ++(1, \frequencyY) % C♯/D♭
-    }
-    \fill[fill=black-note-guide-color]
-      (1, \frequencyY)
-      \foreach \octave in { 0, ..., \lastOctave } {
-        \BFlatToCSharpGuidePaths
-        rectangle ++(1, -\frequencyY) ++(2, \frequencyY) % D♯/E♭
-        rectangle ++(1, -\frequencyY) ++(1, \frequencyY) % F♯/G♭
-        rectangle ++(1, -\frequencyY) ++(1, \frequencyY) % G♯/A♭
+    \tl_set:Nn \l_tmpa_tl
+      {
+        rectangle ++(1, -\l_bottom_y_tl) ++(2, \l_bottom_y_tl) % A♯/B♭
+        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % C♯/D♭
       }
-      \BFlatToCSharpGuidePaths;
+
+    \fill[fill=black-note-guide-color]
+      (1, \l_bottom_y_tl)
+      \foreach \octave in { \l_first_octave_int, ..., \l_last_octave_int } {
+        \l_tmpa_tl
+        rectangle ++(1, -\l_bottom_y_tl) ++(2, \l_bottom_y_tl) % D♯/E♭
+        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % F♯/G♭
+        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % G♯/A♭
+      }
+      \l_tmpa_tl;
   \end{scope}
-\end{tikzpicture}
+
+  \ExplSyntaxOff
+\end{instrumentationPicture}
+
 
 \clearpage
 \pagestyle{plain}
