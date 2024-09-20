@@ -428,72 +428,72 @@ Fab-Fil-ter
 
   \ExplSyntaxOff
 
-    \begin{instrumentFamily}
-      \ambitus  [Piccolo]             [Picc.]   {notes={74, 108}}
-      \ambitus  [Flute]               [Fl.]     {notes={60,  98}, secondary-notes=59}
-      \ambitus  [Alto Flute]          [A.Fl.]   {notes={55,  88}}
-      \ambitus  [Oboe]                [Ob.]     {notes={58,  91}, secondary-notes=96}
-      \ambitus  [English Horn]        [EH]      {notes={52,  83}}
-      \ambitus  [Heckelphone]         [Heck.]   {notes={45,  79}, secondary-notes=84}
-      \ambitus  [E♭ Clarinet]         [E♭ Cl.]  {notes={55,  95}}
-      \ambitus  [B♭ Clarinet]         [B♭ Cl.]  {notes={50,  91}}
-      \ambitus  [E♭ Alto Clarinet]    [A.Cl.]   {notes={43,  79}, secondary-notes={42, 84}}
-      \ambitus  [Bass Clarinet]       [B.Cl.]   {notes={34,  79}, secondary-notes=83}
-      \begin{scope}[instrument label/.append style={anchor=north west, xshift=0.5ex, yshift=-0.3ex}]
-        \ambitus[Contrabass Clarinet] [Cb. Cl.] {notes={22,  67}}
-      \end{scope}
-      \ambitus  [Bassoon]             [Bsn.]    {notes={34,  75}, secondary-notes=77}
-      \begin{scope}[instrument label/.append style={anchor=north west, xshift=0.5ex, yshift=-0.3ex}]
-        \ambitus[Contrabassoon]       [Cbsn.]   {notes={22,  60}, secondary-notes=21}
-      \end{scope}
-    \end{instrumentFamily}
+  \begin{instrumentFamily}
+    \ambitus  [Piccolo]             [Picc.]   {notes={74, 108}}
+    \ambitus  [Flute]               [Fl.]     {notes={60,  98}, secondary-notes=59}
+    \ambitus  [Alto Flute]          [A.Fl.]   {notes={55,  88}}
+    \ambitus  [Oboe]                [Ob.]     {notes={58,  91}, secondary-notes=96}
+    \ambitus  [English Horn]        [EH]      {notes={52,  83}}
+    \ambitus  [Heckelphone]         [Heck.]   {notes={45,  79}, secondary-notes=84}
+    \ambitus  [E♭ Clarinet]         [E♭ Cl.]  {notes={55,  95}}
+    \ambitus  [B♭ Clarinet]         [B♭ Cl.]  {notes={50,  91}}
+    \ambitus  [E♭ Alto Clarinet]    [A.Cl.]   {notes={43,  79}, secondary-notes={42, 84}}
+    \ambitus  [Bass Clarinet]       [B.Cl.]   {notes={34,  79}, secondary-notes=83}
+    \begin{scope}[instrument label/.append style={anchor=north west, xshift=0.5ex, yshift=-0.3ex}]
+      \ambitus[Contrabass Clarinet] [Cb. Cl.] {notes={22,  67}}
+    \end{scope}
+    \ambitus  [Bassoon]             [Bsn.]    {notes={34,  75}, secondary-notes=77}
+    \begin{scope}[instrument label/.append style={anchor=north west, xshift=0.5ex, yshift=-0.3ex}]
+      \ambitus[Contrabassoon]       [Cbsn.]   {notes={22,  60}, secondary-notes=21}
+    \end{scope}
+  \end{instrumentFamily}
 
-    \begin{instrumentFamily}
-      \ambitus[Soprano Saxophone]  [S. Sax.]   {notes={56, 94}}
-      \ambitus[Alto Saxophone]     [A. Sax.]   {notes={49, 87}}
-      \ambitus[Tenor Saxophone]    [T. Sax.]   {notes={44, 82}}
-      \ambitus[Baritone Saxophone] [Bar. Sax.] {notes={37, 75}, secondary-notes=36}
+  \begin{instrumentFamily}
+    \ambitus[Soprano Saxophone]  [S. Sax.]   {notes={56, 94}}
+    \ambitus[Alto Saxophone]     [A. Sax.]   {notes={49, 87}}
+    \ambitus[Tenor Saxophone]    [T. Sax.]   {notes={44, 82}}
+    \ambitus[Baritone Saxophone] [Bar. Sax.] {notes={37, 75}, secondary-notes=36}
 
-      \ExplSyntaxOn
-      \node[
+    \ExplSyntaxOn
+    \node[
+      annotation,
+      anchor=mid~ west,
+      right=3.5 * \l_black_key_width_dim~ of~ Soprano~ Saxophone~ highest~ note,
+      text~ width=12.5 * \l_black_key_width_dim
+    ] {
+      Higher~ notes~ are~ possible~ on~ wind~ instruments,~ but~ increasingly~ difficult~ to~ sound~ and~ not~ always~ available~ in~ sample~ sets.
+    };
+    \ExplSyntaxOff
+  \end{instrumentFamily}
+
+  \begin{instrumentFamily}
+    \ambitus[French Horn]        [Hn.]           {notes={31, 77}}
+    \ambitus[B♭ Piccolo Trumpet] [B♭ Picc. Tpt.] {notes={64, 91}, secondary-notes=62}
+    \ambitus[C Trumpet]          [C Tpt.]        {notes={54, 84}, secondary-notes=53}
+    \ambitus[B♭ Trumpet]         [B♭ Tpt.]       {notes={52, 82}, secondary-notes=51}
+    \ambitus[B♭ Bass Trumpet]    [B♭ B. Tpt.]    {notes={40, 72}}
+    \ambitus[Trombone]           [Tbn.]          {notes={40, 77}}
+    \ambitus[Bass Trombone]      [B. Tbn.]       {notes={34, 77}}
+    \ambitus[B♭ Wagner Tuba]     [B♭ Wag.]       {notes={40, 77}}
+    \ambitus[F Wagner Tuba]      [F Wag.]        {notes={35, 77}}
+    \ambitus[B♭ Baritone]        [B♭ Bar.]       {notes={40, 72}}
+    \ambitus[B♭ Euphonium]       [B♭ Euph.]      {notes={35, 72}}
+    \ambitus[C Tuba]             [C Tuba]        {notes={26, 64}, secondary-notes=24}
+    \ambitus[B♭ Tuba]            [B♭ Tuba]       {notes={22, 63}}
+
+    \ExplSyntaxOn
+    \path
+      let \p1=(C~ Trumpet~ lowest~ note) in
+      (0, \y1)
+      node[
         annotation,
-        anchor=mid~ west,
-        right=3.5 * \l_black_key_width_dim~ of~ Soprano~ Saxophone~ highest~ note,
-        text~ width=12.5 * \l_black_key_width_dim
+        anchor=north~ west,
+        text~ width=7.5 * \l_black_key_width_dim
       ] {
-        Higher~ notes~ are~ possible~ on~ wind~ instruments,~ but~ increasingly~ difficult~ to~ sound~ and~ not~ always~ available~ in~ sample~ sets.
+        Lower~ pedal~ tones~ are~ possible~ on~ brass~ instruments.
       };
-      \ExplSyntaxOff
-    \end{instrumentFamily}
-
-    \begin{instrumentFamily}
-      \ambitus[French Horn]        [Hn.]           {notes={31, 77}}
-      \ambitus[B♭ Piccolo Trumpet] [B♭ Picc. Tpt.] {notes={64, 91}, secondary-notes=62}
-      \ambitus[C Trumpet]          [C Tpt.]        {notes={54, 84}, secondary-notes=53}
-      \ambitus[B♭ Trumpet]         [B♭ Tpt.]       {notes={52, 82}, secondary-notes=51}
-      \ambitus[B♭ Bass Trumpet]    [B♭ B. Tpt.]    {notes={40, 72}}
-      \ambitus[Trombone]           [Tbn.]          {notes={40, 77}}
-      \ambitus[Bass Trombone]      [B. Tbn.]       {notes={34, 77}}
-      \ambitus[B♭ Wagner Tuba]     [B♭ Wag.]       {notes={40, 77}}
-      \ambitus[F Wagner Tuba]      [F Wag.]        {notes={35, 77}}
-      \ambitus[B♭ Baritone]        [B♭ Bar.]       {notes={40, 72}}
-      \ambitus[B♭ Euphonium]       [B♭ Euph.]      {notes={35, 72}}
-      \ambitus[C Tuba]             [C Tuba]        {notes={26, 64}, secondary-notes=24}
-      \ambitus[B♭ Tuba]            [B♭ Tuba]       {notes={22, 63}}
-
-      \ExplSyntaxOn
-      \path
-        let \p1=(C~ Trumpet~ lowest~ note) in
-        (0, \y1)
-        node[
-          annotation,
-          anchor=north~ west,
-          text~ width=7.5 * \l_black_key_width_dim
-        ] {
-          Lower~ pedal~ tones~ are~ possible~ on~ brass~ instruments.
-        };
-      \ExplSyntaxOff
-    \end{instrumentFamily}
+    \ExplSyntaxOff
+  \end{instrumentFamily}
 
   \ExplSyntaxOn
 
@@ -565,87 +565,87 @@ Fab-Fil-ter
 
   \ExplSyntaxOff
 
-    \begin{instrumentFamily}
-      \begin{bracketedAmbitus}{Timpani}
-        \begin{compactAmbitus}
-          \ambitus{notes={53, 61}, color=secondary-ambitus-color}
-          \ambitus{notes={50, 57}}
-          \ambitus{notes={46, 53}}
-          \ambitus{notes={41, 48}}
-          \ambitus{notes={36, 45}, color=secondary-ambitus-color}
-        \end{compactAmbitus}
-      \end{bracketedAmbitus}
+  \begin{instrumentFamily}
+    \begin{bracketedAmbitus}{Timpani}
+      \begin{compactAmbitus}
+        \ambitus{notes={53, 61}, color=secondary-ambitus-color}
+        \ambitus{notes={50, 57}}
+        \ambitus{notes={46, 53}}
+        \ambitus{notes={41, 48}}
+        \ambitus{notes={36, 45}, color=secondary-ambitus-color}
+      \end{compactAmbitus}
+    \end{bracketedAmbitus}
 
-      % Move high pitched percussion up to save space.
+    % Move high pitched percussion up to save space.
+    \ExplSyntaxOn
+    \node[below=0~ of~ MIDI~ note~ label, overlay] {};
+    \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
+    \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } + 2 * \l_ambitus_bar_height_tl } }
+    \ExplSyntaxOff
+
+    \ambitus[Crotales]      [Crot.]    {notes={84, 108}}
+    \ambitus[Glockenspiel]  [Glck.]    {notes={79, 108}, secondary-notes=72}
+    \ambitus[Celesta]       [Cel.]     {notes={60, 108}}
+    \ambitus[Tubular Bells] [T. Bells] {notes={60,  77}, secondary-notes={52, 79}}
+    \ambitus[Vibraphone]    [Vib.]     {notes={53,  89}, secondary-notes=48}
+    \ambitus[Xylophone]     [Xyl.]     {notes={65, 108}, secondary-notes=58}
+    \ambitus[Marimba]       [Mar.]     {notes={48,  96}, secondary-notes=36}
+    \ambitus[Harp]          [Harp]     {notes={23, 104}, note-labels={C♭, G♯}}
+    \ambitus[Piano]         [Pno.]     {notes={21, 108}}
+  \end{instrumentFamily}
+
+  \begin{instrumentFamily}
+    \begin{bracketedAmbitus}{Violin}
+      \ambitusComponent[Vln. harmonics]{notes=67} \ambitusComponent{notes=74} \ambitus{notes={79, 108}, secondary-notes=110}
+      \begin{compactAmbitus}
+        \ambitus{notes={76, 100}}
+        \ambitus{notes={69,  93}}
+        \ambitus{notes={62,  86}}
+        \ambitus{notes={55,  79}}
+      \end{compactAmbitus}
+    \end{bracketedAmbitus}
+
+    \begin{bracketedAmbitus}{Viola}
+      \ambitusComponent[Vla. harmonics]{notes=60} \ambitusComponent{notes=67} \ambitus{notes={72, 100}, secondary-notes=101}
+      \begin{compactAmbitus}
+        \ambitus{notes={69, 93}}
+        \ambitus{notes={62, 86}}
+        \ambitus{notes={55, 79}}
+        \ambitus{notes={48, 72}}
+      \end{compactAmbitus}
+    \end{bracketedAmbitus}
+
+    \begin{bracketedAmbitus}{Cello}
+      \ambitusComponent[Vcl. harmonics]{notes=48} \ambitusComponent{notes=55} \ambitus{notes={60, 89}, secondary-notes=95}
+      \begin{compactAmbitus}
+        \ambitus{notes={57, 81}, secondary-notes=82}
+        \ambitus{notes={50, 67}, secondary-notes=74}
+        \ambitus{notes={43, 60}, secondary-notes=67}
+        \ambitus{notes={36, 53}, secondary-notes=60}
+      \end{compactAmbitus}
+
       \ExplSyntaxOn
-      \node[below=0~ of~ MIDI~ note~ label, overlay] {};
-      \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
-      \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } + 2 * \l_ambitus_bar_height_tl } }
+      \node[
+        annotation,
+        anchor=mid~ west,
+        right=47.5 * \l_black_key_width_dim~ of~ Cello~ highest~ note,
+        text~ width=14.5 * \l_black_key_width_dim
+      ] {
+        Higher~ harmonics~ are~ possible~ on~ stringed~ instruments,~ but~ not~ always~ available~ in~ sample~ sets.
+      };
       \ExplSyntaxOff
+    \end{bracketedAmbitus}
 
-      \ambitus[Crotales]      [Crot.]    {notes={84, 108}}
-      \ambitus[Glockenspiel]  [Glck.]    {notes={79, 108}, secondary-notes=72}
-      \ambitus[Celesta]       [Cel.]     {notes={60, 108}}
-      \ambitus[Tubular Bells] [T. Bells] {notes={60,  77}, secondary-notes={52, 79}}
-      \ambitus[Vibraphone]    [Vib.]     {notes={53,  89}, secondary-notes=48}
-      \ambitus[Xylophone]     [Xyl.]     {notes={65, 108}, secondary-notes=58}
-      \ambitus[Marimba]       [Mar.]     {notes={48,  96}, secondary-notes=36}
-      \ambitus[Harp]          [Harp]     {notes={23, 104}, note-labels={C♭, G♯}}
-      \ambitus[Piano]         [Pno.]     {notes={21, 108}}
-    \end{instrumentFamily}
-
-    \begin{instrumentFamily}
-      \begin{bracketedAmbitus}{Violin}
-        \ambitusComponent[Vln. harmonics]{notes=67} \ambitusComponent{notes=74} \ambitus{notes={79, 108}, secondary-notes=110}
-        \begin{compactAmbitus}
-          \ambitus{notes={76, 100}}
-          \ambitus{notes={69,  93}}
-          \ambitus{notes={62,  86}}
-          \ambitus{notes={55,  79}}
-        \end{compactAmbitus}
-      \end{bracketedAmbitus}
-
-      \begin{bracketedAmbitus}{Viola}
-        \ambitusComponent[Vla. harmonics]{notes=60} \ambitusComponent{notes=67} \ambitus{notes={72, 100}, secondary-notes=101}
-        \begin{compactAmbitus}
-          \ambitus{notes={69, 93}}
-          \ambitus{notes={62, 86}}
-          \ambitus{notes={55, 79}}
-          \ambitus{notes={48, 72}}
-        \end{compactAmbitus}
-      \end{bracketedAmbitus}
-
-      \begin{bracketedAmbitus}{Cello}
-        \ambitusComponent[Vcl. harmonics]{notes=48} \ambitusComponent{notes=55} \ambitus{notes={60, 89}, secondary-notes=95}
-        \begin{compactAmbitus}
-          \ambitus{notes={57, 81}, secondary-notes=82}
-          \ambitus{notes={50, 67}, secondary-notes=74}
-          \ambitus{notes={43, 60}, secondary-notes=67}
-          \ambitus{notes={36, 53}, secondary-notes=60}
-        \end{compactAmbitus}
-
-        \ExplSyntaxOn
-        \node[
-          annotation,
-          anchor=mid~ west,
-          right=47.5 * \l_black_key_width_dim~ of~ Cello~ highest~ note,
-          text~ width=14.5 * \l_black_key_width_dim
-        ] {
-          Higher~ harmonics~ are~ possible~ on~ stringed~ instruments,~ but~ not~ always~ available~ in~ sample~ sets.
-        };
-        \ExplSyntaxOff
-      \end{bracketedAmbitus}
-
-      \begin{bracketedAmbitus}{Contrabass}
-        \ambitusComponent[Cb. harmonics]{notes=40} \ambitusComponent{notes=45} \ambitusComponent{notes=47} \ambitusComponent{notes=50} \ambitus{notes={52, 84}, secondary-notes=89}
-        \begin{compactAmbitus}
-          \ambitus{notes={43, 55}, secondary-notes=67}
-          \ambitus{notes={38, 50}, secondary-notes=62}
-          \ambitus{notes={33, 45}, secondary-notes=57}
-          \ambitus{notes={28, 40}, secondary-notes={24, 52}}
-        \end{compactAmbitus}
-      \end{bracketedAmbitus}
-    \end{instrumentFamily}
+    \begin{bracketedAmbitus}{Contrabass}
+      \ambitusComponent[Cb. harmonics]{notes=40} \ambitusComponent{notes=45} \ambitusComponent{notes=47} \ambitusComponent{notes=50} \ambitus{notes={52, 84}, secondary-notes=89}
+      \begin{compactAmbitus}
+        \ambitus{notes={43, 55}, secondary-notes=67}
+        \ambitus{notes={38, 50}, secondary-notes=62}
+        \ambitus{notes={33, 45}, secondary-notes=57}
+        \ambitus{notes={28, 40}, secondary-notes={24, 52}}
+      \end{compactAmbitus}
+    \end{bracketedAmbitus}
+  \end{instrumentFamily}
 
   \ExplSyntaxOn
 
