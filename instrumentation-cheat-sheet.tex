@@ -153,11 +153,9 @@ Fab-Fil-ter
     \pitchClass{#1}\noteOctave{#1}
   }
 
-\int_new:N \l_labeled_note_minimum_octave_int
-
 \NewDocumentCommand { \labelCsAndConcertPitch } { o }
   {
-    \int_set:Nn \l_labeled_note_minimum_octave_int { \IfValueTF{#1}{#1}{-1} }
+    \int_set:Nn \l_tmpa_int { \IfValueTF{#1}{#1}{-1} }
 
     \begin{scope}[
       minimum~ width=\l_black_key_width_dim,
@@ -165,10 +163,8 @@ Fab-Fil-ter
     ]
       \foreach \noteNumber in { 24, 36, ..., 108, 69 } {
         \tl_set:Nn \l_tmpa_tl { \noteOctave{\noteNumber} }
-        \bool_if:nT { \int_compare_p:nNn \l_tmpa_tl > \l_labeled_note_minimum_octave_int } {
-          \node at (\noteNumber - 21, 0) {
-            \pitchClass{\noteNumber}\l_tmpa_tl
-          };
+        \int_compare:nNnT \l_tmpa_tl > \l_tmpa_int {
+          \node at (\noteNumber - 21, 0) { \pitchClass{\noteNumber}\l_tmpa_tl };
         }
       }
     \end{scope}
@@ -228,7 +224,7 @@ Fab-Fil-ter
 
     \keys_set_exclude_groups:nnn { ambitus } { primary-notes } { #3 }
 
-    \bool_if:nT { \int_compare_p:nNn { \clist_count:N \l_primary_note_labels_clist } > 0 }
+    \int_compare:nNnT { \clist_count:N \l_primary_note_labels_clist } > 0
       {
         \tl_set:Nn \l_primary_start_pitch_class_label_tl { \clist_item:Nn \l_primary_note_labels_clist 1 }
         \tl_set:Nn \l_primary_end_pitch_class_label_tl   { \clist_item:Nn \l_primary_note_labels_clist { -1 } }
@@ -244,7 +240,7 @@ Fab-Fil-ter
 
         { 1 }
           {
-            \bool_if:nTF { \int_compare_p:nNn { \clist_item:Nn \l_secondary_notes_clist 1 } < \l_primary_note_start_int }
+            \int_compare:nNnTF { \clist_item:Nn \l_secondary_notes_clist 1 } < \l_primary_note_start_int
               {
                 \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
                 \int_set_eq:NN \l_secondary_note_end_int \l_primary_note_start_int
@@ -323,7 +319,7 @@ Fab-Fil-ter
         }
 
       \node[note~ name] (\l_high_node_name_tl) at (\l_primary_note_end_int, \g_ambitus_y_tl) {
-        \int_compare:nNnT { \l_primary_note_start_int } < { \l_primary_note_end_int }
+        \int_compare:nNnT \l_primary_note_start_int < \l_primary_note_end_int
           {
             \tl_if_empty:NTF \l_primary_end_pitch_class_label_tl
               { \noteName{\l_primary_note_end_int} }
