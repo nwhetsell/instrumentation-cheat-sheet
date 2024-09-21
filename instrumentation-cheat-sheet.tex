@@ -353,9 +353,7 @@ Fab-Fil-ter
 
 \NewDocumentEnvironment { instrumentFamily } { }
   { }
-  {
-    \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \g_ambitus_y_tl + 1.5 * \l_ambitus_bar_height_tl } }
-  }
+  { \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \g_ambitus_y_tl + 1.5 * \l_ambitus_bar_height_tl } } }
 
 \NewDocumentEnvironment { bracketedAmbitus } { m }
   {
