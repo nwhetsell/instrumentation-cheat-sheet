@@ -14,7 +14,7 @@ $(instrumentation-cheat-sheets) : instrumentation-cheat-sheet.tex instrumentatio
 	else \
 	  echo '\def\octaveOffset{2}' > .octave-offset.tex; \
 	fi
-	for _ in {1..2}; do lualatex -interaction=errorstopmode --shell-escape $<; done
+	for _ in {1..2}; do lualatex --interaction=errorstopmode --shell-escape $<; done
 	mv $(basename $<).pdf $@
 
 instrumentation-cheat-sheet.bbl : instrumentation-cheat-sheet.bib instrumentation-cheat-sheet.tex $(notes)
