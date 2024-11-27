@@ -357,20 +357,22 @@ Ya-ma-ha
   { }
   { \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \g_ambitus_y_tl + 1.5 * \l_ambitus_bar_height_tl } } }
 
+\bool_new:N \l_ambitusComponent_did_run_bool
 \NewDocumentEnvironment { bracketedAmbitus } { m }
   {
+    \bool_set_false:N \l_ambitusComponent_did_run_bool
     \tl_set:Nn \l_ambitus_bar_separation_tl { 0.25 }
-
-    \newtoggle{didRun}
 
     \NewCommandCopy \ambitusComponentOriginal \ambitusComponent
     \RenewDocumentCommand { \ambitusComponent } { o o m }
       {
-        \iftoggle{didRun}
-          { \ambitusComponentOriginal[##1][##2]{##3, low-node-name=#1~ lowest~ note} }
+        \bool_if:NTF \l_ambitusComponent_did_run_bool
+          {
+            \ambitusComponentOriginal[##1][##2]{##3, low-node-name=#1~ lowest~ note}
+          }
           {
             \ambitusComponentOriginal[##1][##2]{##3, high-node-name=#1~ highest~ note}
-            \toggletrue{didRun}
+            \bool_set_true:N \l_ambitusComponent_did_run_bool
           }
       }
   }
@@ -677,7 +679,7 @@ Ya-ma-ha
 
   \tl_const:Nn \l_min_frequency_tl { 27.5 }
 
-  \newtoggle{didPrintFrequencyUnit}
+  \bool_new:N \g_did_print_frequency_unit_bool
   \foreach \frequency in {
     % Frequencies of A notes
     \l_min_frequency_tl, 55, 110, 220, 440, 880, 1760, 3520,
@@ -700,11 +702,11 @@ Ya-ma-ha
 
     \draw[frequency-label-color, overlay] (\l_tmpa_tl, \l_bottom_y_tl) -- ++(0, 0.05) node[anchor=north, yshift=-0.2ex] {
       \pgfmathprintnumber{\frequency}
-      \iftoggle{didPrintFrequencyUnit}
-        { }
+
+      \bool_if:NF \g_did_print_frequency_unit_bool
         {
           \c_space_tl Hz
-          \global\toggletrue{didPrintFrequencyUnit}
+          \bool_gset_true:N \g_did_print_frequency_unit_bool
         }
     };
   }
