@@ -690,11 +690,11 @@ Ya-ma-ha
     \tl_set:Nx \l_tmpa_tl
       {
         \fp_to_decimal:n
-        {
-          89 * ln(\frequency / \l_min_frequency_tl) / ln(\l_max_frequency_tl / \l_min_frequency_tl) + 0.5
-          % This is a simplification of
-          %   (ln(\frequency) - ln(\l_min_frequency_tl)) * (89.5 - 0.5) / (ln(\l_max_frequency_tl) - ln(\l_min_frequency_tl)) + 0.5
-        }
+          {
+            89 * ln(\frequency / \l_min_frequency_tl) / ln(\l_max_frequency_tl / \l_min_frequency_tl) + 0.5
+            % This is a simplification of
+            %   (ln(\frequency) - ln(\l_min_frequency_tl)) * (89.5 - 0.5) / (ln(\l_max_frequency_tl) - ln(\l_min_frequency_tl)) + 0.5
+          }
       }
 
     \draw[frequency-label-color, overlay] (\l_tmpa_tl, \l_bottom_y_tl) -- ++(0, 0.05) node[anchor=north, yshift=-0.2ex] {
