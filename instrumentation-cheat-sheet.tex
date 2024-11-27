@@ -504,6 +504,8 @@ Ya-ma-ha
   \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
   \begin{scope}[yshift=\l_tmpb_dim - \l_ambitus_bar_height_tl cm]
     \begin{scope}[draw=black-key-color]
+      % The outline of this path is drawn in the right margin by a miniscule
+      % amount, causing an “Overfull \hbox” warning.
       \draw[fill=white] (0, 0) rectangle (\l_total_note_count_tl, \l_keyboard_height_tl);
 
       \tl_set:Nn \l_tmpa_tl
@@ -729,7 +731,7 @@ Ya-ma-ha
         rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) ++(1,              \l_bottom_y_tl) % F
         rectangle ++(1,              -\l_bottom_y_tl) ++(1,              \l_bottom_y_tl) % G
       }
-      \l_tmpa_tl;
+      \l_tmpa_tl; % This causes a spurious “Overfull \hbox” warning.
 
     % Draw black note guides.
     \tl_set:Nn \l_tmpa_tl
