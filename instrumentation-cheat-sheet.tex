@@ -107,7 +107,7 @@ Ya-ma-ha
 \tikzset{midi~ note~ number/.style={anchor=mid~ west, minimum~ height=\l_ambitus_bar_height_tl cm, minimum~ width=\l_black_key_width_dim}}
 \tikzset{note~ name/.append~ style={minimum~ width=\l_black_key_width_dim}}
 
-\NewDocumentEnvironment { instrumentationPicture } { o }
+\NewDocumentEnvironment { instrumentationPicture } { }
   {
     \begin{tikzpicture}[
       every~ node/.style={
@@ -119,7 +119,8 @@ Ya-ma-ha
       % TikZ y-coordinates are flipped (increasing goes down the page, not up).
       % This only applies to *coordinates* without units. TikZ keys like xshift
       % and yshift must have units, which greatly complicates things.
-      x=\l_black_key_width_dim, y=-1cm
+      x=\l_black_key_width_dim,
+      y=-1cm
     ]
   }
   {
