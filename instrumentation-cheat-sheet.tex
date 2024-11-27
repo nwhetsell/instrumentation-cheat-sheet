@@ -313,7 +313,7 @@ Ya-ma-ha
           { \l_primary_start_pitch_class_label_tl \noteOctave{\l_primary_note_start_int} }
       };
 
-      \bool_if:nT { \l_secondary_note_start_is_below_primary_bool }
+      \bool_if:NT \l_secondary_note_start_is_below_primary_bool
         {
           \node[note~ name] (\l_low_node_name_tl) at (\l_secondary_note_start_int, \g_ambitus_y_tl) {
             \noteName{\l_secondary_note_start_int}
@@ -329,7 +329,7 @@ Ya-ma-ha
           }
       };
 
-      \bool_if:nT { \l_secondary_note_end_is_above_primary_bool }
+      \bool_if:NT \l_secondary_note_end_is_above_primary_bool
         {
           \node[note~ name] (\l_high_node_name_tl) at (\l_secondary_note_end_int, \g_ambitus_y_tl) {
             \noteName{\l_secondary_note_end_int}
