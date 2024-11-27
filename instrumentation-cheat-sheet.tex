@@ -554,7 +554,7 @@ Ya-ma-ha
   \end{scope}
 
   % Add percussion and string instrument ambitus.
-  \node[below=0~ of~ MIDI~ note~ label, overlay] {};
+  \node[below=0~ of~ MIDI~ note~ label, overlay] { };
   \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
   \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } + \l_ambitus_bar_height_tl } }
 
@@ -573,7 +573,7 @@ Ya-ma-ha
 
     % Move high pitched percussion up to save space.
     \ExplSyntaxOn
-    \node[below=0~ of~ MIDI~ note~ label, overlay] {};
+    \node[below=0~ of~ MIDI~ note~ label, overlay] { };
     \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
     \tl_gset:Nx \g_ambitus_y_tl { \fp_to_decimal:n { \dim_to_decimal_in_cm:n { -\l_tmpb_dim } + 2 * \l_ambitus_bar_height_tl } }
     \ExplSyntaxOff
