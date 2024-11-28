@@ -717,9 +717,9 @@ Ya-ma-ha
     % Draw white note guides.
     \tl_set:Nn \l_tmpa_tl
       {
-        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % A
-        rectangle ++(1, -\l_bottom_y_tl) ++(2, \l_bottom_y_tl) % B
-        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % D
+                              rectangle ++(1, -\l_bottom_y_tl) % A
+        ++(1, \l_bottom_y_tl) rectangle ++(1, -\l_bottom_y_tl) % B
+        ++(2, \l_bottom_y_tl) rectangle ++(1, -\l_bottom_y_tl) % D
       }
     \tl_set:Nn \l_tmpb_tl { 0.05 }
 
@@ -727,26 +727,28 @@ Ya-ma-ha
       (0, \l_bottom_y_tl)
       \foreach \octave in { \l_first_octave_int, ..., \l_last_octave_int } {
         \l_tmpa_tl
-        rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) ++(2 * \l_tmpb_tl, \l_bottom_y_tl) % E
-        rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) ++(1,              \l_bottom_y_tl) % F
-        rectangle ++(1,              -\l_bottom_y_tl) ++(1,              \l_bottom_y_tl) % G
+        ++(1,              \l_bottom_y_tl) rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) % E
+        ++(2 * \l_tmpb_tl, \l_bottom_y_tl) rectangle ++(1 - \l_tmpb_tl, -\l_bottom_y_tl) % F
+        ++(1,              \l_bottom_y_tl) rectangle ++(1,              -\l_bottom_y_tl) % G
+        ++(1,              \l_bottom_y_tl)
       }
-      \l_tmpa_tl; % This causes a spurious “Overfull \hbox” warning.
+      \l_tmpa_tl;
 
     % Draw black note guides.
     \tl_set:Nn \l_tmpa_tl
       {
-        rectangle ++(1, -\l_bottom_y_tl) ++(2, \l_bottom_y_tl) % A♯/B♭
-        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % C♯/D♭
+                              rectangle ++(1, -\l_bottom_y_tl) % A♯/B♭
+        ++(2, \l_bottom_y_tl) rectangle ++(1, -\l_bottom_y_tl) % C♯/D♭
       }
 
     \fill[fill=black-note-guide-color]
       (1, \l_bottom_y_tl)
       \foreach \octave in { \l_first_octave_int, ..., \l_last_octave_int } {
         \l_tmpa_tl
-        rectangle ++(1, -\l_bottom_y_tl) ++(2, \l_bottom_y_tl) % D♯/E♭
-        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % F♯/G♭
-        rectangle ++(1, -\l_bottom_y_tl) ++(1, \l_bottom_y_tl) % G♯/A♭
+        ++(1, \l_bottom_y_tl) rectangle ++(1, -\l_bottom_y_tl) % D♯/E♭
+        ++(2, \l_bottom_y_tl) rectangle ++(1, -\l_bottom_y_tl) % F♯/G♭
+        ++(1, \l_bottom_y_tl) rectangle ++(1, -\l_bottom_y_tl) % G♯/A♭
+        ++(1, \l_bottom_y_tl)
       }
       \l_tmpa_tl;
   \end{scope}
