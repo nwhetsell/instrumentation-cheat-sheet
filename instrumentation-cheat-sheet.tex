@@ -128,8 +128,8 @@ Ya-ma-ha
   }
 
 \input .note-metrics
-\tl_const:Nn \l_staff_scale_factor_tl { \fp_to_decimal:n { (87 * \l_black_key_width_dim) / (\maxNoteMidpoint - \minNoteMidpoint) } }
-\tl_const:Nn \l_staff_x_coordinate_tl { \fp_to_decimal:n { 0.5 - \minNoteMidpoint * \l_staff_scale_factor_tl / \l_black_key_width_dim } }
+\tl_const:Nx \l_staff_scale_factor_tl { \fp_to_decimal:n { (87 * \l_black_key_width_dim) / (\maxNoteMidpoint - \minNoteMidpoint) } }
+\tl_const:Nx \l_staff_x_coordinate_tl { \fp_to_decimal:n { 0.5 - \minNoteMidpoint * \l_staff_scale_factor_tl / \l_black_key_width_dim } }
 
 \NewDocumentCommand { \noteOctave } { m }
   {
