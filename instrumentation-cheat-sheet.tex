@@ -77,9 +77,6 @@ Ya-ma-ha
   % Don’t put extra space after a full stop.
   \frenchspacing
 
-  % Don’t number pages.
-  \pagenumbering{gobble}
-
   % Put the commit hash and current date in the footer.
   \pagestyle{fancyplain}
   \fancyhf{}
@@ -102,7 +99,9 @@ Ya-ma-ha
 \tl_const:Nn  \l_ambitus_bar_height_tl { 0.155 }
 \tl_const:Nn  \l_ambitus_bar_separation_tl { 0.45 } % This is a fraction of the ambitus bar height.
 \tl_new:N     \g_ambitus_y_tl
-\dim_const:Nn \l_black_key_width_dim { \textwidth / \l_total_note_count_tl }
+% TikZ uses 0.4pt for the default width of a line. Subtract this from \textwidth
+% so the cheat sheet doesn’t extend into the right margin.
+\dim_const:Nn \l_black_key_width_dim { (\textwidth - 0.4pt) / \l_total_note_count_tl }
 
 \tikzset{midi~ note~ number/.style={anchor=mid~ west, minimum~ height=\l_ambitus_bar_height_tl cm, minimum~ width=\l_black_key_width_dim}}
 \tikzset{note~ name/.append~ style={minimum~ width=\l_black_key_width_dim}}
@@ -504,8 +503,6 @@ Ya-ma-ha
   \pgfgetlastxy{\l_tmpa_dim}{\l_tmpb_dim}
   \begin{scope}[yshift=\l_tmpb_dim - \l_ambitus_bar_height_tl cm]
     \begin{scope}[draw=black-key-color]
-      % The outline of this path is drawn in the right margin by a miniscule
-      % amount, causing an “Overfull \hbox” warning.
       \draw[fill=white] (0, 0) rectangle (\l_total_note_count_tl, \l_keyboard_height_tl);
 
       \tl_set:Nn \l_tmpa_tl
