@@ -666,13 +666,13 @@ Ya-ma-ha
     precision=1              % Round to the nearest tenth.
   }
 
+  \tl_const:Nn \l_min_frequency_tl { 27.5 }
+
   % The highest note is the D five half-steps above the A at 3520 Hz, so in most
   % DAWs using 12-EDO tuning, the fundamental frequency of the D will be
   % 2^(5/12) * 3520 Hz. Use a LaTeX3 floating point expression because the PGF
   % math engine is a bit too imprecise to compute this.
   \tl_const:Nx \l_max_frequency_tl { \fp_to_decimal:n { 2^(5/12) * 3520 } }
-
-  \tl_const:Nn \l_min_frequency_tl { 27.5 }
 
   \bool_new:N \g_did_print_frequency_unit_bool
   \foreach \frequency in {
