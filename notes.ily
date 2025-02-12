@@ -1,4 +1,4 @@
-\version "2.25.3"
+\version "2.25.24"
 
 main-notes = \relative {
   \clef "bass"
@@ -48,7 +48,7 @@ supplemental-notes = \relative {
   \context {
     \Score
     \remove System_start_delimiter_engraver
-    proportionalNotationDuration = \musicLength 8
+    proportionalNotationDuration = #1/8
     \override SpacingSpanner.strict-note-spacing = ##t
     \override SpacingSpanner.uniform-stretching = ##t
   }
