@@ -145,6 +145,8 @@ Ya-ma-ha
       \end{scope}
   }
   {
+      \bool_gset_false:N \g_did_print_frequency_unit_bool
+
       % Label notes.
       \begin{scope}[anchor=south~ west, yshift=-\g_ambitus_y_tl cm + 0.1ex]
         \labelCsAndConcertPitch[2 - \octaveOffset]
@@ -750,7 +752,7 @@ Ya-ma-ha
 
   % Add the staff.
   \ExplSyntaxOn
-  \staff{top}%[yshift=1.75 * \l_ambitus_bar_height_tl cm]
+  \staff{top}[yshift=-0.5 * \l_ambitus_bar_height_tl cm]
   \ExplSyntaxOff
 \end{instrumentationPicture}
 
