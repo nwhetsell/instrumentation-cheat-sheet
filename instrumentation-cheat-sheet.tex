@@ -229,28 +229,20 @@ Ya-ma-ha
 \tl_const:Nx \l_staff_x_coordinate_tl { \fp_to_decimal:n { 0.5 - \minNoteMidpoint * \l_staff_scale_factor_tl / \l_black_key_width_dim } }
 
 \NewDocumentCommand { \noteOctave } { m }
-  {
-    \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset }
-  }
+  { \int_eval:n { \int_div_truncate:nn { #1 } { 12 } - \octaveOffset } }
 
 \int_const:Nn \l_first_octave_int { \noteOctave{21} }
 \int_const:Nn \l_last_octave_int  { \noteOctave{\l_total_note_count_tl} }
 
 \NewDocumentCommand { \pitchNumber } { m }
-  {
-    \int_mod:nn { #1 } { 12 } + 1
-  }
+  { \int_mod:nn { #1 } { 12 } + 1 }
 
 \seq_const_from_clist:Nn \pitch_classes { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
 \NewDocumentCommand { \pitchClass } { m }
-  {
-    \seq_item:Nn \pitch_classes { \pitchNumber{#1} }
-  }
+  { \seq_item:Nn \pitch_classes { \pitchNumber{#1} } }
 
 \NewDocumentCommand { \noteName } { m }
-  {
-    \pitchClass{#1}\noteOctave{#1}
-  }
+  { \pitchClass{#1}\noteOctave{#1} }
 
 \NewDocumentCommand { \labelCsAndConcertPitch } { o }
   {
@@ -429,13 +421,9 @@ Ya-ma-ha
         }
 
       \tl_if_empty:NF \l_long_name_tl
-        {
-          \node[base~ left=of~ \l_low_node_name_tl, xshift=-0.5ex, instrument~ label] { \l_long_name_tl };
-        }
+        { \node[base~ left=of~ \l_low_node_name_tl, xshift=-0.5ex, instrument~ label] { \l_long_name_tl }; }
       \tl_if_empty:NF \l_short_name_tl
-        {
-          \node[base~ right=of~ \l_high_node_name_tl, xshift=0.5ex] { \l_short_name_tl };
-        }
+        { \node[base~ right=of~ \l_high_node_name_tl, xshift=0.5ex] { \l_short_name_tl }; }
     \end{scope}
   }
 
@@ -732,7 +720,6 @@ Ya-ma-ha
   \staff{bottom}[yshift=1.75 * \l_ambitus_bar_height_tl cm]
   \ExplSyntaxOff
 \end{instrumentationPicture}
-
 
 \clearpage
 
