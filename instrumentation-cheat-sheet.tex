@@ -811,11 +811,19 @@ Ya-ma-ha
   \def\yamahaOctaves{“Yamaha” octaves used in FabFilter {\addfontfeature{Numbers=Lining}Pro‑Q} and Logic’s default (concert pitch is {\addfontfeature{Numbers=Lining}A4})}
 
   Note names have
-  \ifnum\octaveOffset>1\relax
-    \rolandOctaves. Add 1 for \yamahaOctaves.
-  \else
-    \yamahaOctaves. Subtract 1 for \rolandOctaves.
-  \fi
+  \ExplSyntaxOn
+  \msg_new:nnn { instrumentation-cheat-sheet } { invalid-octave-offset }
+    { \c_backslash_str octaveOffset~ is~ #1~ but~ should~ be~ 1~ or~ 2. }
+  \int_case:nnF \octaveOffset
+    {
+      { 1 }
+      { \yamahaOctaves.~ Subtract~ 1~ for~ \rolandOctaves. }
+
+      { 2 }
+      { \rolandOctaves.~ Add~ 1~ for~ \yamahaOctaves. }
+    }
+    { \msg_error:nne { instrumentation-cheat-sheet } { invalid-octave-offset } \octaveOffset }
+  \ExplSyntaxOff
 
 
   \columnbreak
