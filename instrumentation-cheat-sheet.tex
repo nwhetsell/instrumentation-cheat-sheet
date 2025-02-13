@@ -325,23 +325,23 @@ Ya-ma-ha
     \int_case:nnF { \clist_count:N \l_secondary_notes_clist }
       {
         { 0 }
-          {
-            \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
-            \int_set_eq:NN \l_secondary_note_end_int   \l_primary_note_start_int
-          }
+        {
+          \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
+          \int_set_eq:NN \l_secondary_note_end_int   \l_primary_note_start_int
+        }
 
         { 1 }
-          {
-            \int_compare:nNnTF { \clist_item:Nn \l_secondary_notes_clist 1 } < \l_primary_note_start_int
-              {
-                \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
-                \int_set_eq:NN \l_secondary_note_end_int \l_primary_note_start_int
-              }
-              {
-                \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
-                \int_set:Nn \l_secondary_note_end_int { \clist_item:Nn \l_secondary_notes_clist 1 }
-              }
-          }
+        {
+          \int_compare:nNnTF { \clist_item:Nn \l_secondary_notes_clist 1 } < \l_primary_note_start_int
+            {
+              \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+              \int_set_eq:NN \l_secondary_note_end_int \l_primary_note_start_int
+            }
+            {
+              \int_set_eq:NN \l_secondary_note_start_int \l_primary_note_end_int
+              \int_set:Nn \l_secondary_note_end_int { \clist_item:Nn \l_secondary_notes_clist 1 }
+            }
+        }
       }
       {
         \int_set:Nn \l_secondary_note_start_int { \clist_item:Nn \l_secondary_notes_clist 1 }
@@ -740,11 +740,11 @@ Ya-ma-ha
   \end{instrumentFamily}
 
   \begin{instrumentFamily}
-    \ambitus[B♭ Bass Trumpet]    [B♭ B. Tpt.]    {notes={40, 72}}
-    \ambitus[B♭ Wagner Tuba]     [B♭ Wag.]       {notes={40, 77}}
-    \ambitus[F Wagner Tuba]      [F Wag.]        {notes={35, 77}}
-    \ambitus[B♭ Baritone]        [B♭ Bar.]       {notes={40, 72}}
-    \ambitus[B♭ Euphonium]       [B♭ Euph.]      {notes={35, 72}}
+    \ambitus[B♭ Bass Trumpet] [B♭ B. Tpt.] {notes={40, 72}}
+    \ambitus[B♭ Wagner Tuba]  [B♭ Wag.]    {notes={40, 77}}
+    \ambitus[F Wagner Tuba]   [F Wag.]     {notes={35, 77}}
+    \ambitus[B♭ Baritone]     [B♭ Bar.]    {notes={40, 72}}
+    \ambitus[B♭ Euphonium]    [B♭ Euph.]   {notes={35, 72}}
   \end{instrumentFamily}
 
   % Draw the keyboard.
