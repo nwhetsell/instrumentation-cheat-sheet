@@ -255,7 +255,7 @@ Ya-ma-ha
       text=note-label-color
     ]
       \foreach \noteNumber in { 24, 36, ..., 108, 69 } {
-        \tl_set:Nn \l_tmpa_tl { \noteOctave{\noteNumber} }
+        \tl_set:Nx \l_tmpa_tl { \noteOctave{\noteNumber} }
         \int_compare:nNnT \l_tmpa_tl > \l_tmpa_int
           { \node at (\noteNumber - 21, 0) { \pitchClass{\noteNumber}\l_tmpa_tl }; }
       }
