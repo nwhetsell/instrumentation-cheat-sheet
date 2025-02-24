@@ -476,7 +476,7 @@ Ya-ma-ha
   }
 
 \NewDocumentEnvironment { compactAmbitus } { }
-  { \tl_set:Nn \l_ambitus_bar_separation_tl { 0 } }
+  { \tl_set:Nn \l_ambitus_bar_separation_tl 0 }
   { }
 
 \tl_const:Nx \l_keyboard_height_tl { \fp_to_decimal:n { 6 * \l_ambitus_bar_height_tl } }
@@ -818,7 +818,6 @@ Ya-ma-ha
     {
       { 1 }
       { \yamahaOctaves.~ Subtract~ 1~ for~ \rolandOctaves. }
-
       { 2 }
       { \rolandOctaves.~ Add~ 1~ for~ \yamahaOctaves. }
     }
