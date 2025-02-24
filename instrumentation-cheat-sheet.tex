@@ -239,9 +239,9 @@ Ya-ma-ha
 \NewDocumentCommand { \pitchNumber } { m }
   { \int_mod:nn { #1 } { 12 } + 1 }
 
-\seq_const_from_clist:Nn \pitch_classes { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
+\seq_const_from_clist:Nn \l_pitch_classes_seq { C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B }
 \NewDocumentCommand { \pitchClass } { m }
-  { \seq_item:Nn \pitch_classes { \pitchNumber{#1} } }
+  { \seq_item:Nn \l_pitch_classes_seq { \pitchNumber{#1} } }
 
 \NewDocumentCommand { \noteName } { m }
   { \pitchClass{#1}\noteOctave{#1} }
