@@ -4,7 +4,6 @@
 
 #(define min-note-head-X-extent '(+inf.0 . 0))
 #(define max-note-head-X-extent '(0 . -inf.0))
-#(define min-note-head-Y +inf.0)
 
 \layout {
   \context {
