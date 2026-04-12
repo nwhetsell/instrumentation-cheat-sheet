@@ -20,7 +20,7 @@ brew install biber texlive nwhetsell/lilypond/lilypond-unstable
 After either adding the `lilypond` executable to your `PATH` or linking it—
 
 ```sh
-brew link lilypond-unstable
+brew link --force lilypond-unstable
 ```
 
 —you should be able to create the cheat sheet by running:
